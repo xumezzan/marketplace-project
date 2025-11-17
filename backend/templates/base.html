@@ -22,16 +22,9 @@
     
     <!-- Apply theme before page load to prevent flash -->
     <script>
-        (function () {
-            const savedTheme = localStorage.getItem('theme');
-            const html = document.documentElement;
-            
-            if (savedTheme === 'dark') {
-                html.setAttribute('data-bs-theme', 'dark');
-                html.classList.add('theme-dark');
-            } else {
-                html.setAttribute('data-bs-theme', 'light');
-            }
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
         })();
     </script>
     
