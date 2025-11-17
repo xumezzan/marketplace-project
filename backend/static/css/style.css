@@ -19,6 +19,7 @@
 }
 
 /* Тёмная тема */
+html.theme-dark,
 body.theme-dark {
     --bg-body: #1a1a2e;
     --bg-card: #16213e;

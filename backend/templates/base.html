@@ -15,6 +15,25 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
+    <!-- Apply theme before page load to prevent flash -->
+    <script>
+        (function () {
+            const THEME_KEY = "service_theme";
+            const savedTheme = localStorage.getItem(THEME_KEY);
+            let theme = "light";
+            
+            if (savedTheme === "dark" || savedTheme === "light") {
+                theme = savedTheme;
+            } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                theme = "dark";
+            }
+            
+            if (theme === "dark") {
+                document.documentElement.classList.add("theme-dark");
+            }
+        })();
+    </script>
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -134,38 +153,47 @@
     
     <!-- Theme Toggle Script -->
     <script>
-        (function () {
+        document.addEventListener("DOMContentLoaded", function () {
             const body = document.body;
             const toggleBtn = document.getElementById("theme-toggle");
             const iconSpan = document.getElementById("theme-toggle-icon");
             const THEME_KEY = "service_theme";
 
+            // Проверяем, что элементы существуют
+            if (!toggleBtn || !iconSpan) {
+                console.error("Theme toggle elements not found");
+                return;
+            }
+
             function applyTheme(theme) {
+                const html = document.documentElement;
                 if (theme === "dark") {
+                    html.classList.add("theme-dark");
                     body.classList.add("theme-dark");
-                    iconSpan.textContent = "☀️";
+                    if (iconSpan) iconSpan.textContent = "☀️";
                 } else {
+                    html.classList.remove("theme-dark");
                     body.classList.remove("theme-dark");
-                    iconSpan.textContent = "🌙";
+                    if (iconSpan) iconSpan.textContent = "🌙";
                 }
             }
 
             function getInitialTheme() {
+                // Сначала проверяем сохраненную тему
                 const savedTheme = localStorage.getItem(THEME_KEY);
-                if (savedTheme) {
+                if (savedTheme === "dark" || savedTheme === "light") {
                     return savedTheme;
                 }
-                // Проверяем системную тему
+                // Если нет сохраненной темы, проверяем системную
                 if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
                     return "dark";
                 }
                 return "light";
             }
 
-            // Применяем начальную тему
+            // Применяем начальную тему сразу (до загрузки DOM)
             const initialTheme = getInitialTheme();
             applyTheme(initialTheme);
-            localStorage.setItem(THEME_KEY, initialTheme);
 
             // Обработчик клика на кнопку
             toggleBtn.addEventListener("click", function () {
@@ -179,12 +207,13 @@
             if (window.matchMedia) {
                 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
                     // Обновляем только если пользователь не выбрал тему вручную
-                    if (!localStorage.getItem(THEME_KEY)) {
+                    const savedTheme = localStorage.getItem(THEME_KEY);
+                    if (!savedTheme || savedTheme === "auto") {
                         applyTheme(e.matches ? "dark" : "light");
                     }
                 });
             }
-        })();
+        });
     </script>
     
     {% block extra_js %}{% endblock %}
