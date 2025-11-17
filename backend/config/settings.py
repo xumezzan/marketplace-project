@@ -147,27 +147,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Директория для collectstatic
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Директории, откуда собирать статику
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
 # WhiteNoise для обслуживания статических файлов в продакшене
-# Используем CompressedStaticFilesStorage вместо Manifest для более простой работы
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-# WhiteNoise дополнительные настройки
-# В production WhiteNoise будет обслуживать файлы из STATIC_ROOT
-if not DEBUG:
-    # Убеждаемся, что WhiteNoise обслуживает статику в production
-    WHITENOISE_USE_FINDERS = False
-    WHITENOISE_AUTOREFRESH = False
-else:
-    # В разработке можно использовать finders
-    WHITENOISE_USE_FINDERS = True
-    WHITENOISE_AUTOREFRESH = True
 
 # Media files (user uploads - avatars, etc.)
 MEDIA_URL = '/media/'
