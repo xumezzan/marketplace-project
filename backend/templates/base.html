@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Marketplace{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <!-- Bootstrap 5 Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-briefcase"></i>
+                Marketplace
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if user.is_authenticated %}
+                        {% if user.is_client %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:task_create' %}">
+                                    <i class="bi bi-plus-circle"></i> Создать задачу
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:my_tasks' %}">
+                                    <i class="bi bi-list-task"></i> Мои заявки
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:my_deals' %}">
+                                    <i class="bi bi-handshake"></i> Мои сделки
+                                </a>
+                            </li>
+                        {% elif user.is_specialist %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:tasks_list' %}">
+                                    <i class="bi bi-search"></i> Найти задачи
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:my_offers' %}">
+                                    <i class="bi bi-chat-dots"></i> Мои отклики
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'marketplace:my_deals' %}">
+                                    <i class="bi bi-handshake"></i> Мои сделки
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item d-flex align-items-center me-3">
+                        <button
+                            id="theme-toggle"
+                            type="button"
+                            class="btn btn-sm btn-light d-flex align-items-center justify-content-center theme-toggle-btn"
+                            aria-label="Переключить тему"
+                        >
+                            <span id="theme-toggle-icon">🌙</span>
+                        </button>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Профиль</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Выйти</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-box-arrow-in-right"></i> Войти
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-person-plus"></i> Регистрация
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Сообщения -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Основное содержимое -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Футер -->
+    <footer class="mt-5 py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 Marketplace. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Theme Toggle Script -->
+    <script>
+        (function () {
+            const body = document.body;
+            const toggleBtn = document.getElementById("theme-toggle");
+            const iconSpan = document.getElementById("theme-toggle-icon");
+            const THEME_KEY = "service_theme";
+
+            function applyTheme(theme) {
+                if (theme === "dark") {
+                    body.classList.add("theme-dark");
+                    iconSpan.textContent = "☀️";
+                } else {
+                    body.classList.remove("theme-dark");
+                    iconSpan.textContent = "🌙";
+                }
+            }
+
+            function getInitialTheme() {
+                const savedTheme = localStorage.getItem(THEME_KEY);
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                // Проверяем системную тему
+                if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                    return "dark";
+                }
+                return "light";
+            }
+
+            // Применяем начальную тему
+            const initialTheme = getInitialTheme();
+            applyTheme(initialTheme);
+            localStorage.setItem(THEME_KEY, initialTheme);
+
+            // Обработчик клика на кнопку
+            toggleBtn.addEventListener("click", function () {
+                const isDark = body.classList.contains("theme-dark");
+                const newTheme = isDark ? "light" : "dark";
+                applyTheme(newTheme);
+                localStorage.setItem(THEME_KEY, newTheme);
+            });
+
+            // Слушаем изменения системной темы (опционально)
+            if (window.matchMedia) {
+                window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+                    // Обновляем только если пользователь не выбрал тему вручную
+                    if (!localStorage.getItem(THEME_KEY)) {
+                        applyTheme(e.matches ? "dark" : "light");
+                    }
+                });
+            }
+        })();
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

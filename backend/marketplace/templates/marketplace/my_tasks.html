@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои заявки - Marketplace{% endblock %}
+
+{% block content %}
+<!-- Заголовок страницы -->
+<div class="page-header mb-5">
+    <div>
+        <h1 class="display-6 fw-bold mb-2">Мои заявки</h1>
+        <p class="text-muted mb-0">Здесь вы можете просмотреть все ваши созданные задачи и отслеживать их статус</p>
+    </div>
+</div>
+
+<!-- Фильтр по статусу -->
+<div class="filter-card mb-4">
+    <form method="get" action="{% url 'marketplace:my_tasks' %}" class="row g-3">
+        <div class="col-md-4">
+            <label for="status" class="form-label">Статус</label>
+            <select name="status" id="status" class="form-select">
+                <option value="">Все</option>
+                <option value="draft" {% if current_status == 'draft' %}selected{% endif %}>Черновик</option>
+                <option value="published" {% if current_status == 'published' %}selected{% endif %}>Опубликованные</option>
+                <option value="in_progress" {% if current_status == 'in_progress' %}selected{% endif %}>В работе</option>
+                <option value="completed" {% if current_status == 'completed' %}selected{% endif %}>Завершённые</option>
+                <option value="cancelled" {% if current_status == 'cancelled' %}selected{% endif %}>Отменённые</option>
+            </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-outline-primary">Применить</button>
+            <a href="{% url 'marketplace:my_tasks' %}" class="btn btn-light">Сбросить</a>
+        </div>
+    </form>
+</div>
+
+<!-- Список задач -->
+{% if tasks %}
+    <div class="row g-4">
+        {% for task in tasks %}
+            <div class="col-lg-4 col-md-6">
+                <div class="task-card">
+                    <!-- Заголовок задачи -->
+                    <h3 class="task-card-title">
+                        <a href="{% url 'marketplace:task_detail' task.id %}" class="text-decoration-none">
+                            {{ task.title }}
+                        </a>
+                    </h3>
+                    
+                    <!-- Категория, город и статус -->
+                    <div class="task-card-meta mb-3">
+                        <span class="badge badge-category">{{ task.category.name }}</span>
+                        <span class="task-location">
+                            <i class="bi bi-geo-alt"></i> {{ task.city }}
+                        </span>
+                        <span class="badge badge-status badge-{{ task.status }}">
+                            {{ task.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <!-- Описание -->
+                    <p class="task-card-description">
+                        {{ task.description|truncatewords:25 }}
+                    </p>
+                    
+                    <!-- Бюджет -->
+                    {% if task.budget_min or task.budget_max %}
+                    <div class="task-card-budget mb-3">
+                        <span class="budget-label">Бюджет:</span>
+                        <strong class="budget-value">{{ task.budget_display }}</strong>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Количество откликов -->
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="bi bi-chat-dots"></i> Откликов: <strong>{{ task.offers_count }}</strong>
+                        </small>
+                    </div>
+                    
+                    <!-- Дополнительная информация -->
+                    <div class="task-card-info mb-3">
+                        {% if task.preferred_date %}
+                            <span class="task-info-item">
+                                <i class="bi bi-calendar3"></i> {{ task.preferred_date|date:"d.m.Y" }}
+                            </span>
+                        {% endif %}
+                        {% if task.preferred_time %}
+                            <span class="task-info-item">
+                                <i class="bi bi-clock"></i> {{ task.preferred_time|time:"H:i" }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Футер карточки -->
+                    <div class="task-card-footer">
+                        <div class="task-card-date">
+                            {{ task.created_at|timesince }} назад
+                        </div>
+                    </div>
+                    
+                    <!-- Кнопка -->
+                    <div class="mt-3">
+                        <a href="{% url 'marketplace:task_detail' task.id %}" class="btn btn-accent-outline w-100">
+                            Открыть
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon mb-3">
+            <i class="bi bi-inbox display-1 text-muted"></i>
+        </div>
+        <h3 class="text-muted">Заявок пока нет</h3>
+        <p class="text-muted">Вы еще не создали ни одной заявки. Создайте свою первую задачу!</p>
+        <a href="{% url 'marketplace:task_create' %}" class="btn btn-accent mt-3">
+            <i class="bi bi-plus-circle"></i> Создать заявку
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои отклики - Marketplace{% endblock %}
+
+{% block content %}
+<!-- Заголовок страницы -->
+<div class="page-header mb-5">
+    <div>
+        <h1 class="display-6 fw-bold mb-2">Мои отклики</h1>
+        <p class="text-muted mb-0">Здесь вы можете просмотреть все задачи, на которые вы откликнулись</p>
+    </div>
+</div>
+
+<!-- Список откликов -->
+{% if offers %}
+    <div class="row g-4">
+        {% for offer in offers %}
+            <div class="col-lg-6 col-md-12">
+                <div class="offer-card">
+                    <!-- Заголовок -->
+                    <div class="offer-header mb-3">
+                        <div>
+                            <h4 class="mb-2">
+                                <a href="{% url 'marketplace:task_detail' offer.task.id %}" class="text-decoration-none" style="color: var(--text-main);">
+                                    {{ offer.task.title }}
+                                </a>
+                            </h4>
+                            <div class="d-flex gap-2 flex-wrap mb-2">
+                                <span class="badge badge-category">{{ offer.task.category.name }}</span>
+                                <span class="task-location">
+                                    <i class="bi bi-geo-alt"></i> {{ offer.task.city }}
+                                </span>
+                                <span class="badge badge-status badge-{{ offer.task.status }}">
+                                    {{ offer.task.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                        <span class="badge 
+                            {% if offer.status == 'accepted' %}bg-success
+                            {% elif offer.status == 'rejected' %}bg-danger
+                            {% elif offer.status == 'cancelled' %}bg-secondary
+                            {% else %}bg-warning{% endif %}">
+                            {{ offer.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <!-- Цена -->
+                    <div class="offer-price mb-3">
+                        💰 Предложенная цена: <strong>{{ offer.proposed_price }}</strong>
+                    </div>
+                    
+                    <!-- Сообщение -->
+                    <div class="offer-message mb-3">
+                        💬 {{ offer.message|truncatewords:30 }}
+                    </div>
+                    
+                    <!-- Информация о задаче -->
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="bi bi-person"></i> Клиент: {{ offer.task.client.username }}
+                        </small>
+                    </div>
+                    
+                    <!-- Дата -->
+                    <div class="offer-date mb-3">
+                        <i class="bi bi-clock"></i> Отклик отправлен {{ offer.created_at|date:"d.m.Y в H:i" }}
+                    </div>
+                    
+                    <!-- Кнопка -->
+                    <div class="mt-3">
+                        <a href="{% url 'marketplace:task_detail' offer.task.id %}" class="btn btn-accent-outline w-100">
+                            <i class="bi bi-arrow-right"></i> Перейти к задаче
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon mb-3">
+            <i class="bi bi-inbox display-1 text-muted"></i>
+        </div>
+        <h3 class="text-muted">Откликов пока нет</h3>
+        <p class="text-muted">Вы еще не откликались ни на одну задачу. Найдите подходящую задачу и отправьте свой отклик!</p>
+        <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-accent mt-3">
+            <i class="bi bi-search"></i> Найти задачи
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
+
