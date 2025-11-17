@@ -1940,3 +1940,507 @@ footer .text-muted {
     }
 }
 
+/* ============================================
+   CREATIVE.TSX STYLE - MODERN DESIGN SYSTEM
+   ============================================ */
+
+/* Updated CSS Variables inspired by creative.tsx */
+:root {
+    /* Creative gradient colors */
+    --gradient-purple-blue: linear-gradient(135deg, #9333ea 0%, #2563eb 100%);
+    --gradient-violet-indigo-blue: linear-gradient(135deg, #7c3aed 0%, #4f46e5 0%, #2563eb 100%);
+    --gradient-pink-red-orange: linear-gradient(135deg, #db2777 0%, #dc2626 0%, #ea580c 100%);
+    --gradient-teal-cyan-blue: linear-gradient(135deg, #14b8a6 0%, #06b6d4 0%, #2563eb 100%);
+    --gradient-green-emerald-teal: linear-gradient(135deg, #16a34a 0%, #10b981 0%, #14b8a6 100%);
+    --gradient-purple-violet-indigo: linear-gradient(135deg, #9333ea 0%, #7c3aed 0%, #4f46e5 100%);
+    
+    /* Border radius from creative.tsx */
+    --radius-sm: 0.5rem;   /* rounded-xl */
+    --radius-md: 1rem;     /* rounded-2xl */
+    --radius-lg: 1.5rem;   /* rounded-3xl */
+    
+    /* Shadows */
+    --shadow-creative: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-creative-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Modern Card Styles - rounded-3xl */
+.card,
+.task-card,
+.offer-card,
+.deal-card,
+.filter-card,
+.task-detail-card,
+.offer-form-card {
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--border-soft);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover,
+.task-card:hover,
+.offer-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-creative-lg);
+}
+
+/* Modern Buttons - rounded-2xl */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-outline-primary,
+.btn-accent {
+    border-radius: var(--radius-md) !important;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.75rem 1.5rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-creative-lg);
+}
+
+.btn-primary {
+    background: var(--gradient-purple-blue);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: var(--gradient-violet-indigo-blue);
+}
+
+/* Form Controls - rounded-2xl */
+.form-control,
+.form-select,
+.form-control:focus,
+.form-select:focus {
+    border-radius: var(--radius-md) !important;
+    border: 2px solid var(--border-soft);
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #9333ea;
+    box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.1);
+}
+
+/* Filter Card - rounded-3xl */
+.filter-card {
+    border-radius: var(--radius-lg) !important;
+    padding: 2rem;
+    background: var(--bg-card);
+    box-shadow: var(--shadow-creative);
+}
+
+/* Task Cards with Creative Style */
+.task-card {
+    border-radius: var(--radius-lg) !important;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.task-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-purple-blue);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.task-card:hover::before {
+    transform: scaleX(1);
+}
+
+.task-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-creative-lg);
+    border-color: rgba(147, 51, 234, 0.3);
+}
+
+/* Badge Styles - rounded-xl */
+.badge,
+.badge-category,
+.badge-status {
+    border-radius: var(--radius-sm) !important;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Navbar Brand with Gradient */
+.navbar-brand .brand-text {
+    background: var(--gradient-purple-blue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* Navbar Links - rounded-2xl */
+.navbar-nav .nav-link {
+    border-radius: var(--radius-md) !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(147, 51, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Form Card - rounded-3xl */
+.form-card {
+    border-radius: var(--radius-lg) !important;
+    padding: 2.5rem;
+    background: var(--bg-card);
+    box-shadow: var(--shadow-creative-lg);
+    border: 1px solid var(--border-soft);
+}
+
+/* Alert Modern - rounded-2xl */
+.alert-modern,
+.alert {
+    border-radius: var(--radius-md) !important;
+    border: none;
+    padding: 1rem 1.5rem;
+    box-shadow: var(--shadow-creative);
+}
+
+/* Pagination - rounded-xl */
+.pagination .page-link {
+    border-radius: var(--radius-sm) !important;
+    margin: 0 0.25rem;
+    border: 1px solid var(--border-soft);
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-creative);
+}
+
+/* Offer Cards - rounded-3xl */
+.offer-card {
+    border-radius: var(--radius-lg) !important;
+    padding: 1.5rem;
+    background: var(--bg-body);
+    border: 1px solid var(--border-soft);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.offer-card:hover {
+    background: var(--bg-card);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--shadow-creative-lg);
+}
+
+/* Task Detail Card - rounded-3xl */
+.task-detail-card {
+    border-radius: var(--radius-lg) !important;
+    padding: 2rem;
+    background: var(--bg-card);
+    box-shadow: var(--shadow-creative);
+    border: 1px solid var(--border-soft);
+}
+
+/* Deal Card - rounded-3xl with gradient border */
+.deal-card {
+    border-radius: var(--radius-lg) !important;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 2px solid transparent;
+    background-image: 
+        linear-gradient(var(--bg-card), var(--bg-card)),
+        var(--gradient-green-emerald-teal);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: var(--shadow-creative-lg);
+}
+
+/* Service Cards - rounded-3xl */
+.service-card {
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Hero Section Improvements */
+.hero-section {
+    background: var(--gradient-violet-indigo-blue);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Container padding for modern look */
+.container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* Smooth transitions for all interactive elements */
+a,
+button,
+.btn,
+.card,
+.task-card,
+.offer-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states */
+*:focus-visible {
+    outline: 2px solid #9333ea;
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .task-card,
+[data-bs-theme="dark"] .offer-card {
+    background: var(--bg-card);
+    border-color: var(--border-soft);
+}
+
+[data-bs-theme="dark"] .btn-primary {
+    background: var(--gradient-violet-indigo-blue);
+}
+
+[data-bs-theme="dark"] .navbar-modern {
+    background: rgba(30, 41, 59, 0.95) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Additional Creative.tsx inspired styles */
+
+/* Animated background gradient (subtle) */
+body {
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+[data-bs-theme="dark"] body::before {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+    opacity: 0.3;
+}
+
+/* Improved input groups */
+.input-group {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.input-group .form-control {
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.input-group .btn {
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* Dropdown improvements */
+.dropdown-menu {
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-creative-lg);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.dropdown-item {
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(147, 51, 234, 0.1);
+    transform: translateX(4px);
+}
+
+/* Modal improvements */
+.modal-content {
+    border-radius: var(--radius-lg) !important;
+    border: none;
+    box-shadow: var(--shadow-creative-lg);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-soft);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Table improvements */
+.table {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.table thead {
+    background: var(--bg-card);
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background: rgba(147, 51, 234, 0.05);
+    transform: scale(1.01);
+}
+
+/* List group improvements */
+.list-group-item {
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--border-soft);
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-creative);
+}
+
+/* Progress bar improvements */
+.progress {
+    border-radius: var(--radius-sm);
+    height: 0.5rem;
+    background: var(--bg-body);
+}
+
+.progress-bar {
+    border-radius: var(--radius-sm);
+    background: var(--gradient-purple-blue);
+}
+
+/* Tooltip improvements */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+.tooltip-inner {
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-main);
+    box-shadow: var(--shadow-creative-lg);
+}
+
+/* Scrollbar improvements (webkit) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-body);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-soft);
+    border-radius: var(--radius-sm);
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(147, 51, 234, 0.5);
+}
+
+/* Selection color */
+::selection {
+    background: rgba(147, 51, 234, 0.3);
+    color: var(--text-main);
+}
+
+/* Loading spinner improvements */
+.spinner-border {
+    border-width: 0.2em;
+}
+
+/* Card header improvements */
+.card-header {
+    border-bottom: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--bg-card);
+    padding: 1.25rem 1.5rem;
+}
+
+.card-footer {
+    border-top: 1px solid var(--border-soft);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--bg-card);
+    padding: 1.25rem 1.5rem;
+}
+
+/* Navbar brand icon animation */
+.navbar-brand:hover .d-flex.rounded-2xl {
+    transform: scale(1.1) rotate(5deg);
+    transition: transform 0.3s ease;
+}
+
+/* Smooth page transitions */
+.main-content {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
