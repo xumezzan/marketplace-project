@@ -154,7 +154,18 @@ STATICFILES_DIRS = [
 ]
 
 # WhiteNoise для обслуживания статических файлов в продакшене
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# В продакшене (DEBUG=False) используем CompressedManifestStaticFilesStorage
+# В разработке используем стандартный storage
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    WHITENOISE_USE_FINDERS = False  # В продакшене не использовать finders
+    WHITENOISE_AUTOREFRESH = False  # В продакшене не автообновлять
+    WHITENOISE_MANIFEST_STRICT = True  # Строго требовать manifest.json
+else:
+    # В разработке используем стандартный storage и finders
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    WHITENOISE_USE_FINDERS = True
+    WHITENOISE_AUTOREFRESH = True
 
 # Media files (user uploads - avatars, etc.)
 MEDIA_URL = '/media/'
