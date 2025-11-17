@@ -77,7 +77,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -175,8 +175,7 @@ LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Настройка директории для шаблонов
-TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
+# Настройка директории для шаблонов уже указана выше в TEMPLATES
 
 # Django REST Framework настройки
 REST_FRAMEWORK = {

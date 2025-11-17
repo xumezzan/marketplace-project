@@ -13,18 +13,20 @@ A marketplace platform for connecting clients with service providers (like TaskR
 
 ```
 services-marketplace/
-├── marketplace/          # Main Django project settings
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── users/                # User model and authentication
-├── categories/           # Service categories
-├── tasks/                # Client task requests
-├── offers/               # Specialist offers
-├── specialists/          # Specialist profiles
-├── deals/                # Completed deals/bookings
-├── manage.py
-├── requirements.txt
+├── backend/              # Main Django project
+│   ├── config/           # Project settings (Django config)
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── accounts/         # User model and authentication
+│   ├── marketplace/      # Main marketplace app (tasks, offers, deals, reviews)
+│   ├── templates/        # HTML templates
+│   ├── static/           # Static files (CSS, JS, images)
+│   ├── manage.py
+│   └── requirements.txt
+├── requirements.txt      # Root requirements (for deployment)
+├── Procfile             # For Render.com deployment
+├── render.yaml          # Render.com configuration
 ├── Dockerfile
 └── docker-compose.yml
 ```
@@ -51,16 +53,17 @@ services-marketplace/
    ```
 
 3. **Set up environment variables:**
-   Create a `.env` file in the project root:
+   Copy `.env.example` to `.env` and update values:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` file:
    ```env
-   SECRET_KEY=your-secret-key-here
-   DEBUG=True
-   ALLOWED_HOSTS=localhost,127.0.0.1
-   DB_NAME=marketplace_db
-   DB_USER=postgres
-   DB_PASSWORD=postgres
-   DB_HOST=localhost
-   DB_PORT=5432
+   DJANGO_SECRET_KEY=your-secret-key-here
+   DJANGO_DEBUG=True
+   DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+   DATABASE_URL=  # Leave empty for SQLite, or set PostgreSQL URL
    ```
 
 4. **Create PostgreSQL database:**
@@ -70,17 +73,20 @@ services-marketplace/
 
 5. **Run migrations:**
    ```bash
+   cd backend
    python manage.py makemigrations
    python manage.py migrate
    ```
 
 6. **Create superuser:**
    ```bash
+   cd backend
    python manage.py createsuperuser
    ```
 
 7. **Run development server:**
    ```bash
+   cd backend
    python manage.py runserver
    ```
 
@@ -132,6 +138,9 @@ After setting up the project:
 ## Development Commands
 
 ```bash
+# Navigate to backend directory
+cd backend
+
 # Make migrations
 python manage.py makemigrations
 
@@ -144,17 +153,19 @@ python manage.py createsuperuser
 # Run development server
 python manage.py runserver
 
-# Run tests (when implemented)
+# Run tests
 python manage.py test
 
-# Collect static files
-python manage.py collectstatic
+# Collect static files (for production)
+python manage.py collectstatic --noinput
 ```
 
 ## Notes
 
-- The project uses a custom User model (`users.User`)
+- The project uses a custom User model (`accounts.User`)
 - All models are registered in Django admin for easy management
-- REST API endpoints will be added in the next phase
-- Frontend templates will use Bootstrap or Tailwind CSS for responsive design
+- REST API endpoints are available at `/api/`
+- Frontend templates use Bootstrap 5 for responsive design
+- The project defaults to SQLite for local development
+- PostgreSQL is used automatically on Render.com via `DATABASE_URL` environment variable
 
