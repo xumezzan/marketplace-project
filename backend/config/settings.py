@@ -155,7 +155,19 @@ STATICFILES_DIRS = [
 ]
 
 # WhiteNoise для обслуживания статических файлов в продакшене
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# Используем CompressedStaticFilesStorage вместо Manifest для более простой работы
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+# WhiteNoise дополнительные настройки
+# В production WhiteNoise будет обслуживать файлы из STATIC_ROOT
+if not DEBUG:
+    # Убеждаемся, что WhiteNoise обслуживает статику в production
+    WHITENOISE_USE_FINDERS = False
+    WHITENOISE_AUTOREFRESH = False
+else:
+    # В разработке можно использовать finders
+    WHITENOISE_USE_FINDERS = True
+    WHITENOISE_AUTOREFRESH = True
 
 # Media files (user uploads - avatars, etc.)
 MEDIA_URL = '/media/'
