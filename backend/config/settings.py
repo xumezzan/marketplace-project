@@ -106,11 +106,11 @@ DATABASES = {
 
 # Если в окружении есть DATABASE_URL (например, на Render), переключаемся на PostgreSQL
 DATABASE_URL = os.environ.get("DATABASE_URL")
-if DATABASE_URL:
+if DATABASE_URL and DATABASE_URL.strip():
     DATABASES["default"] = dj_database_url.parse(
         DATABASE_URL,
         conn_max_age=600,
-        ssl_require=False,  # для Render free плана SSL можно не требовать
+        ssl_require=False,
     )
 
 
