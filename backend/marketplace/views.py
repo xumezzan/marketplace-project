@@ -40,8 +40,8 @@ class TaskListView(ListView):
     """
     Представление для отображения списка опубликованных задач.
     
-    Показывает только задачи со статусом PUBLISHED,
-    с поддержкой фильтрации по городу и категории.
+    Показывает только задачи со статусом PUBLISHED (по умолчанию),
+    с поддержкой фильтрации по городу, категории, поиску, бюджету и статусу.
     Для специалистов по умолчанию показывает задачи их категорий и города.
     """
     model = Task
@@ -50,24 +50,43 @@ class TaskListView(ListView):
     paginate_by = 12  # Количество задач на странице
     
     def get_queryset(self):
-        """Возвращает отфильтрованные опубликованные задачи."""
-        queryset = Task.objects.filter(
-            status=Task.Status.PUBLISHED
-        ).select_related('client', 'category').order_by('-created_at')
+        """Возвращает отфильтрованные задачи."""
+        # Начальный queryset - по умолчанию только опубликованные
+        queryset = Task.objects.select_related('client', 'category').order_by('-created_at')
         
-        # Получаем GET-параметры
+        # Получаем все GET-параметры
         city_filter = self.request.GET.get('city', '').strip()
         category_filter = self.request.GET.get('category', '').strip()
+        query = self.request.GET.get('q', '').strip()
+        price_min = self.request.GET.get('price_min', '').strip()
+        price_max = self.request.GET.get('price_max', '').strip()
+        status_filter = self.request.GET.get('status', '').strip()
         
         # Проверяем, есть ли явные фильтры в GET-параметрах
-        has_explicit_filters = bool(city_filter or category_filter)
+        has_explicit_filters = bool(
+            city_filter or category_filter or query or price_min or price_max or status_filter
+        )
         
-        # Если есть явные фильтры - применяем их (они имеют приоритет)
+        # Фильтр по статусу (если не указан явно, показываем только PUBLISHED)
+        if status_filter and status_filter in [s[0] for s in Task.Status.choices]:
+            queryset = queryset.filter(status=status_filter)
+        elif not has_explicit_filters:
+            # Если нет явных фильтров, показываем только опубликованные
+            queryset = queryset.filter(status=Task.Status.PUBLISHED)
+        
+        # Текстовый поиск (q)
+        if query:
+            from django.db.models import Q
+            queryset = queryset.filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            )
+        
+        # Фильтр по городу
         if city_filter:
             queryset = queryset.filter(city__icontains=city_filter)
         
+        # Фильтр по категории
         if category_filter:
-            # Пробуем найти категорию по slug или по названию (icontains)
             from .models import Category
             try:
                 # Сначала пробуем найти по slug
@@ -79,8 +98,40 @@ class TaskListView(ListView):
                 if category:
                     queryset = queryset.filter(category=category)
             except Exception:
-                # Если что-то пошло не так, просто игнорируем фильтр
                 pass
+        
+        # Фильтр по бюджету (price_min / price_max)
+        from django.db.models import Q
+        budget_filters = Q()
+        
+        if price_min:
+            try:
+                price_min_value = float(price_min)
+                # Задачи, где максимальный бюджет >= указанного минимума
+                # или минимальный бюджет >= указанного минимума
+                budget_filters &= (
+                    Q(budget_max__gte=price_min_value) | 
+                    Q(budget_min__gte=price_min_value) |
+                    (Q(budget_min__isnull=True) & Q(budget_max__gte=price_min_value))
+                )
+            except (ValueError, TypeError):
+                pass
+        
+        if price_max:
+            try:
+                price_max_value = float(price_max)
+                # Задачи, где минимальный бюджет <= указанного максимума
+                # или максимальный бюджет <= указанного максимума
+                budget_filters &= (
+                    Q(budget_min__lte=price_max_value) | 
+                    Q(budget_max__lte=price_max_value) |
+                    (Q(budget_max__isnull=True) & Q(budget_min__lte=price_max_value))
+                )
+            except (ValueError, TypeError):
+                pass
+        
+        if budget_filters:
+            queryset = queryset.filter(budget_filters)
         
         # Если нет явных фильтров и пользователь - специалист, применяем фильтры по умолчанию
         if not has_explicit_filters and self.request.user.is_authenticated and self.request.user.is_specialist:
@@ -96,7 +147,6 @@ class TaskListView(ListView):
                     category_ids = specialist_profile.categories.values_list('id', flat=True)
                     queryset = queryset.filter(category_id__in=category_ids)
             except Exception:
-                # Если профиль специалиста не создан, показываем все задачи
                 pass
         
         return queryset
@@ -110,16 +160,17 @@ class TaskListView(ListView):
         context['categories'] = Category.objects.all().order_by('name')
         
         # Текущие значения фильтров
-        city_filter = self.request.GET.get('city', '').strip()
-        category_filter = self.request.GET.get('category', '').strip()
+        context['current_city'] = self.request.GET.get('city', '').strip()
+        context['current_category'] = self.request.GET.get('category', '').strip()
+        context['current_query'] = self.request.GET.get('q', '').strip()
+        context['current_price_min'] = self.request.GET.get('price_min', '').strip()
+        context['current_price_max'] = self.request.GET.get('price_max', '').strip()
+        context['current_status'] = self.request.GET.get('status', '').strip()
         
-        context['current_city'] = city_filter
-        context['current_category'] = category_filter
-        
-        # Для обратной совместимости оставляем current_filters
+        # Для обратной совместимости
         context['current_filters'] = {
-            'city': city_filter,
-            'category': category_filter,
+            'city': context['current_city'],
+            'category': context['current_category'],
         }
         
         return context

@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: services-marketplace
+    env: python
+    buildCommand: "pip install -r requirements.txt && cd backend && python manage.py collectstatic --noinput && python manage.py migrate"
+    startCommand: "cd backend && gunicorn config.wsgi:application"
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "services-marketplace.onrender.com,localhost,127.0.0.1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: services-marketplace-db
+          property: connectionString
+    autoDeploy: true
+
+  - type: postgresql
+    name: services-marketplace-db
+    plan: free
+
