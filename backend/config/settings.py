@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Default (SQLite for local dev)
+# По умолчанию — локальная SQLite
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -104,13 +104,13 @@ DATABASES = {
     }
 }
 
-# Если есть DATABASE_URL (на Render), подменяем конфиг на PostgreSQL
+# Если в окружении есть DATABASE_URL (например, на Render), переключаемся на PostgreSQL
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
     DATABASES["default"] = dj_database_url.parse(
         DATABASE_URL,
         conn_max_age=600,
-        ssl_require=False,  # для Render free-плана ssl не нужен
+        ssl_require=False,  # для Render free плана SSL можно не требовать
     )
 
 
