@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,18 +18,14 @@
     <!-- Apply theme before page load to prevent flash -->
     <script>
         (function () {
-            const THEME_KEY = "service_theme";
-            const savedTheme = localStorage.getItem(THEME_KEY);
-            let theme = "light";
+            const savedTheme = localStorage.getItem('theme');
+            const html = document.documentElement;
             
-            if (savedTheme === "dark" || savedTheme === "light") {
-                theme = savedTheme;
-            } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                theme = "dark";
-            }
-            
-            if (theme === "dark") {
-                document.documentElement.classList.add("theme-dark");
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-bs-theme', 'dark');
+                html.classList.add('theme-dark');
+            } else {
+                html.setAttribute('data-bs-theme', 'light');
             }
         })();
     </script>
@@ -152,69 +148,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     
     <!-- Theme Toggle Script -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const body = document.body;
-            const toggleBtn = document.getElementById("theme-toggle");
-            const iconSpan = document.getElementById("theme-toggle-icon");
-            const THEME_KEY = "service_theme";
-
-            // Проверяем, что элементы существуют
-            if (!toggleBtn || !iconSpan) {
-                console.error("Theme toggle elements not found");
-                return;
-            }
-
-            function applyTheme(theme) {
-                const html = document.documentElement;
-                if (theme === "dark") {
-                    html.classList.add("theme-dark");
-                    body.classList.add("theme-dark");
-                    if (iconSpan) iconSpan.textContent = "☀️";
-                } else {
-                    html.classList.remove("theme-dark");
-                    body.classList.remove("theme-dark");
-                    if (iconSpan) iconSpan.textContent = "🌙";
-                }
-            }
-
-            function getInitialTheme() {
-                // Сначала проверяем сохраненную тему
-                const savedTheme = localStorage.getItem(THEME_KEY);
-                if (savedTheme === "dark" || savedTheme === "light") {
-                    return savedTheme;
-                }
-                // Если нет сохраненной темы, проверяем системную
-                if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                    return "dark";
-                }
-                return "light";
-            }
-
-            // Применяем начальную тему сразу (до загрузки DOM)
-            const initialTheme = getInitialTheme();
-            applyTheme(initialTheme);
-
-            // Обработчик клика на кнопку
-            toggleBtn.addEventListener("click", function () {
-                const isDark = body.classList.contains("theme-dark");
-                const newTheme = isDark ? "light" : "dark";
-                applyTheme(newTheme);
-                localStorage.setItem(THEME_KEY, newTheme);
-            });
-
-            // Слушаем изменения системной темы (опционально)
-            if (window.matchMedia) {
-                window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
-                    // Обновляем только если пользователь не выбрал тему вручную
-                    const savedTheme = localStorage.getItem(THEME_KEY);
-                    if (!savedTheme || savedTheme === "auto") {
-                        applyTheme(e.matches ? "dark" : "light");
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="{% static 'js/theme.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

@@ -151,7 +151,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # Директория для collectsta
 
 # Директории, откуда собирать статику
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 ]
 
 # WhiteNoise для обслуживания статических файлов в продакшене
