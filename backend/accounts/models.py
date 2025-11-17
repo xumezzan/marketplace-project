@@ -72,6 +72,15 @@ class User(AbstractUser):
         help_text="Средний рейтинг пользователя (от 0.00 до 5.00)"
     )
     
+    # Аватар
+    avatar = models.ImageField(
+        'аватар',
+        upload_to='avatars/',
+        blank=True,
+        null=True,
+        help_text="Фото профиля пользователя"
+    )
+    
     # Временные метки
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)

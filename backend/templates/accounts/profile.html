@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Профиль - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <h2 class="card-title mb-0">Профиль пользователя</h2>
+                    <a href="{% url 'accounts:profile_edit' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil"></i> Редактировать
+                    </a>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Аватар" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                                <i class="bi bi-person-circle text-white" style="font-size: 100px;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <h4>{{ user.get_full_name|default:user.username }}</h4>
+                        <p class="text-muted">@{{ user.username }}</p>
+                        
+                        <div class="mb-3">
+                            <strong>Роль:</strong>
+                            <span class="badge bg-primary">{{ user.get_role_display }}</span>
+                        </div>
+                        
+                        {% if user.is_specialist and user.rating > 0 %}
+                        <div class="mb-3">
+                            <strong>Рейтинг:</strong>
+                            <span class="text-warning">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= user.rating|floatformat:0|add:"0" %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="ms-2">{{ user.rating|floatformat:1 }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Контактная информация</h5>
+                        <dl class="row">
+                            <dt class="col-sm-4">Email:</dt>
+                            <dd class="col-sm-8">{{ user.email|default:"Не указан" }}</dd>
+                            
+                            <dt class="col-sm-4">Телефон:</dt>
+                            <dd class="col-sm-8">{{ user.phone|default:"Не указан" }}</dd>
+                            
+                            <dt class="col-sm-4">Город:</dt>
+                            <dd class="col-sm-8">{{ user.city|default:"Не указан" }}</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Дополнительная информация</h5>
+                        <dl class="row">
+                            <dt class="col-sm-5">Дата регистрации:</dt>
+                            <dd class="col-sm-7">{{ user.date_joined|date:"d.m.Y" }}</dd>
+                            
+                            <dt class="col-sm-5">Последний вход:</dt>
+                            <dd class="col-sm-7">{{ user.last_login|date:"d.m.Y H:i"|default:"Никогда" }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

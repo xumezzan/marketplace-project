@@ -159,6 +159,10 @@ STATICFILES_DIRS = [
 # WhiteNoise для обслуживания статических файлов в продакшене
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# Media files (user uploads - avatars, etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -166,6 +170,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Кастомная модель пользователя
 AUTH_USER_MODEL = 'accounts.User'
+
+# Настройки аутентификации
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 # Настройка директории для шаблонов
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'templates')]
