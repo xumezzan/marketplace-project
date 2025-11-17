@@ -1,239 +1,89 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Marketplace - Платформа услуг{% endblock %}
+{% block title %}ServiceHub - Маркетплейс специалистов{% endblock %}
 
 {% block content %}
-<!-- Hero-блок -->
-<section class="hero-section py-5 mb-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">Найдите проверенного специалиста для любой задачи</h1>
-                <p class="lead mb-4">Тысячи профессионалов готовы помочь вам с ремонтом, обучением, красотой и многим другим</p>
+<!-- Hero Section - Full Screen with Dark Overlay -->
+<section class="hero hero--fullscreen">
+    <div class="hero__background">
+        <div class="hero__overlay"></div>
+    </div>
+    <div class="hero__content">
+        <div class="container">
+            <div class="hero__text">
+                <h1 class="hero__headline">Найдите идеального специалиста для вашей задачи</h1>
+                <p class="hero__subheadline">Тысячи проверенных профессионалов готовы помочь вам прямо сейчас</p>
                 
-                <!-- Форма поиска -->
-                <form method="get" action="{% url 'marketplace:tasks_list' %}" class="search-form">
-                    <div class="input-group input-group-lg">
+                <!-- Search Bar -->
+                <form method="get" action="{% url 'marketplace:tasks_list' %}" class="hero__search">
+                    <div class="hero__search-wrapper">
+                        <i class="bi bi-search hero__search-icon"></i>
                         <input 
                             type="text" 
-                            class="form-control" 
-                            placeholder="Услуга или специалист..." 
+                            class="hero__search-input" 
+                            placeholder="Что вам нужно сделать?" 
                             name="q"
                             aria-label="Поиск задач"
                         >
-                        <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i> Найти
+                        <button class="hero__search-button" type="submit">
+                            Найти
                         </button>
                     </div>
                 </form>
                 
-                <div class="mt-4">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'marketplace:task_create' %}" class="btn btn-success btn-lg me-2">
-                            <i class="bi bi-plus-circle"></i> Создать заявку
+                <!-- Popular Categories Pills -->
+                {% if categories %}
+                <div class="hero__categories">
+                    <span class="hero__categories-label">Популярные категории:</span>
+                    <div class="hero__categories-list">
+                        {% for category in categories|slice:":8" %}
+                        <a href="{% url 'marketplace:tasks_list' %}?category={{ category.slug }}" class="hero__category-pill">
+                            {{ category.name }}
                         </a>
-                    {% else %}
-                        <a href="#" class="btn btn-success btn-lg me-2">
-                            <i class="bi bi-person-plus"></i> Зарегистрироваться
-                        </a>
-                    {% endif %}
-                    <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-outline-primary btn-lg">
-                        <i class="bi bi-list-ul"></i> Все задачи
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <div class="hero-stats p-4 bg-light rounded">
-                    <div class="row g-4">
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-primary mb-0">{{ tasks_count|default:"0" }}+</h3>
-                                <p class="text-muted mb-0">Активных задач</p>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-success mb-0">{{ specialists_count|default:"0" }}+</h3>
-                                <p class="text-muted mb-0">Специалистов</p>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-info mb-0">{{ cities_count|default:"0" }}+</h3>
-                                <p class="text-muted mb-0">Городов</p>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-warning mb-0">24/7</h3>
-                                <p class="text-muted mb-0">Поддержка</p>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </section>
 
-<!-- Блок преимуществ -->
-<section class="features-section py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">Почему выбирают нас</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-shield-check display-4 text-primary"></i>
-                    </div>
-                    <h4>Проверенные специалисты</h4>
-                    <p class="text-muted">Все специалисты проходят верификацию и имеют отзывы от реальных клиентов</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-cash-coin display-4 text-success"></i>
-                    </div>
-                    <h4>Прозрачные цены</h4>
-                    <p class="text-muted">Специалисты предлагают цены заранее, без скрытых платежей</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-clock-history display-4 text-info"></i>
-                    </div>
-                    <h4>Быстрый отклик</h4>
-                    <p class="text-muted">Получайте предложения от специалистов в течение нескольких часов</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Популярные категории -->
+<!-- Popular Services Section -->
 {% if categories %}
-<section class="categories-section py-5">
+<section class="services services--popular">
     <div class="container">
-        <h2 class="text-center mb-5">Популярные категории</h2>
-        <div class="row g-4">
+        <div class="services__header">
+            <h2 class="services__title">Популярные услуги</h2>
+            <p class="services__subtitle">Выберите категорию и найдите идеального специалиста</p>
+        </div>
+        
+        <div class="services__grid">
             {% for category in categories %}
-            <div class="col-md-3 col-sm-6">
-                <a href="{% url 'marketplace:tasks_list' %}?category={{ category.id }}" class="text-decoration-none">
-                    <div class="category-card card h-100 shadow-sm hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="category-icon mb-3">
-                                <i class="bi bi-briefcase display-6 text-primary"></i>
-                            </div>
-                            <h5 class="card-title">{{ category.name }}</h5>
-                            {% if category.description %}
-                            <p class="card-text text-muted small">{{ category.description|truncatewords:10 }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </a>
-            </div>
+            <a href="{% url 'marketplace:tasks_list' %}?category={{ category.slug }}" class="service-card">
+                <div class="service-card__icon">
+                    <i class="bi bi-briefcase-fill"></i>
+                </div>
+                <h3 class="service-card__title">{{ category.name }}</h3>
+                {% if category.description %}
+                <p class="service-card__description">{{ category.description|truncatewords:12 }}</p>
+                {% endif %}
+                <span class="service-card__arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+            </a>
             {% endfor %}
         </div>
-        <div class="text-center mt-5">
-            <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-outline-primary btn-lg">
-                Посмотреть все категории
+        
+        <div class="services__footer">
+            <a href="{% url 'marketplace:tasks_list' %}" class="services__link">
+                Посмотреть все услуги
+                <i class="bi bi-arrow-right"></i>
             </a>
         </div>
     </div>
 </section>
 {% endif %}
-
-<!-- Блок отзывов (заглушка) -->
-<section class="reviews-section py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">Отзывы клиентов</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="review-card card h-100 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="review-rating me-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </div>
-                        </div>
-                        <p class="card-text">"Отличный сервис! Нашла мастера по ремонту за один день. Работа выполнена качественно и в срок."</p>
-                        <div class="review-author">
-                            <strong>Анна К.</strong>
-                            <small class="text-muted d-block">Клиент</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="review-card card h-100 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="review-rating me-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </div>
-                        </div>
-                        <p class="card-text">"Платформа очень удобная. Много заказов, быстро нахожу подходящие задачи. Рекомендую!"</p>
-                        <div class="review-author">
-                            <strong>Иван П.</strong>
-                            <small class="text-muted d-block">Специалист</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="review-card card h-100 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="review-rating me-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </div>
-                        </div>
-                        <p class="card-text">"Использую платформу регулярно. Всегда нахожу хороших специалистов для разных задач."</p>
-                        <div class="review-author">
-                            <strong>Мария С.</strong>
-                            <small class="text-muted d-block">Клиент</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA блок -->
-<section class="cta-section py-5 bg-primary text-white">
-    <div class="container text-center">
-        <h2 class="display-5 mb-4">Готовы начать?</h2>
-        <p class="lead mb-4">Создайте задачу или станьте специалистом уже сегодня</p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            {% if user.is_authenticated %}
-                <a href="{% url 'marketplace:task_create' %}" class="btn btn-light btn-lg">
-                    <i class="bi bi-plus-circle"></i> Создать задачу
-                </a>
-            {% else %}
-                <a href="#" class="btn btn-light btn-lg">
-                    <i class="bi bi-person-plus"></i> Зарегистрироваться
-                </a>
-            {% endif %}
-            <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-outline-light btn-lg">
-                <i class="bi bi-list-ul"></i> Посмотреть задачи
-            </a>
-        </div>
-    </div>
-</section>
 {% endblock %}
 
