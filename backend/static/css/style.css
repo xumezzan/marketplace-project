@@ -1118,3 +1118,339 @@ body.theme-dark .pagination .page-item.active .page-link {
     color: white;
 }
 
+/* ============================================
+   СОВРЕМЕННЫЕ СТИЛИ - NAVBAR, FOOTER, ФОРМЫ
+   ============================================ */
+
+/* Шрифт */
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Современная навигация */
+.navbar-modern {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+}
+
+.navbar-modern.navbar-scrolled {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 0;
+}
+
+[data-bs-theme="dark"] .navbar-modern {
+    background: rgba(26, 26, 46, 0.95) !important;
+}
+
+[data-bs-theme="dark"] .navbar-modern.navbar-scrolled {
+    background: rgba(26, 26, 46, 0.98) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-main) !important;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.brand-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-main) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 0 0.25rem;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    color: #667eea !important;
+    transform: translateY(-2px);
+}
+
+.btn-nav-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-nav-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white !important;
+}
+
+/* Основной контент */
+.main-content {
+    min-height: calc(100vh - 200px);
+    padding: 2rem 0;
+}
+
+/* Современный футер */
+.footer-modern {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #e4e4e4;
+    margin-top: 4rem;
+    padding: 3rem 0 1.5rem;
+}
+
+[data-bs-theme="dark"] .footer-modern {
+    background: linear-gradient(135deg, #0f0f1e 0%, #0a1625 100%);
+}
+
+.footer-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.footer-heading {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.footer-links a:hover {
+    color: white;
+    transform: translateX(4px);
+}
+
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+    margin: 2rem 0 1rem;
+}
+
+/* Современные формы */
+.form-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-soft);
+    animation: fadeInUp 0.5s ease;
+}
+
+[data-bs-theme="dark"] .form-card {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.form-card .card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-card .form-label {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.form-card .form-control,
+.form-card .form-select {
+    border-radius: 12px;
+    border: 2px solid var(--border-soft);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+}
+
+.form-card .form-control:focus,
+.form-card .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+.form-card .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.form-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Современные алерты */
+.alert-modern {
+    border-radius: 12px;
+    border: none;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: slideInDown 0.4s ease;
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Улучшенные карточки */
+.card-custom,
+.task-card,
+.offer-card,
+.deal-card {
+    animation: fadeInUp 0.5s ease;
+    animation-fill-mode: both;
+}
+
+.card-custom:nth-child(1) { animation-delay: 0.1s; }
+.card-custom:nth-child(2) { animation-delay: 0.2s; }
+.card-custom:nth-child(3) { animation-delay: 0.3s; }
+.card-custom:nth-child(4) { animation-delay: 0.4s; }
+.card-custom:nth-child(5) { animation-delay: 0.5s; }
+.card-custom:nth-child(6) { animation-delay: 0.6s; }
+
+/* Улучшенные кнопки */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Улучшенные карточки задач */
+.task-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 12px 40px var(--shadow-md) !important;
+}
+
+/* Hero section улучшения */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .form-card {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .navbar-modern {
+        padding: 0.5rem 0;
+    }
+    
+    .footer-modern {
+        padding: 2rem 0 1rem;
+    }
+    
+    .main-content {
+        padding: 1rem 0;
+    }
+}
+

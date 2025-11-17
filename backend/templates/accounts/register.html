@@ -4,11 +4,11 @@
 {% block title %}Регистрация - Marketplace{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm">
-            <div class="card-body p-5">
-                <h2 class="card-title text-center mb-4">Регистрация</h2>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="form-card">
+                <h2 class="card-title">Регистрация</h2>
                 
                 <form method="post" novalidate>
                     {% csrf_token %}
@@ -101,7 +101,7 @@
                 </form>
                 
                 <div class="text-center mt-4">
-                    <p class="mb-0">Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
+                    <p class="mb-0 text-muted">Уже есть аккаунт? <a href="{% url 'accounts:login' %}" class="text-decoration-none fw-semibold">Войти</a></p>
                 </div>
             </div>
         </div>

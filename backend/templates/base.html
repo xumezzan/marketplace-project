@@ -4,13 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Marketplace{% endblock %}</title>
+    <title>{% block title %}ServiceHub - Маркетплейс специалистов{% endblock %}</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     
     <!-- Bootstrap 5 Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -33,49 +38,49 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Шапка сайта -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Фиксированная навигация -->
+    <nav class="navbar navbar-expand-lg navbar-modern sticky-top" id="mainNavbar">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="bi bi-briefcase"></i>
-                Marketplace
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-briefcase-fill me-2"></i>
+                <span class="brand-text">ServiceHub</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'marketplace:tasks_list' %}">
+                            <i class="bi bi-list-task me-1"></i> Задачи
+                        </a>
+                    </li>
                     {% if user.is_authenticated %}
                         {% if user.is_client %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'marketplace:task_create' %}">
-                                    <i class="bi bi-plus-circle"></i> Создать задачу
+                                    <i class="bi bi-plus-circle me-1"></i> Создать задачу
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'marketplace:my_tasks' %}">
-                                    <i class="bi bi-list-task"></i> Мои заявки
+                                    <i class="bi bi-inbox me-1"></i> Мои заявки
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'marketplace:my_deals' %}">
-                                    <i class="bi bi-handshake"></i> Мои сделки
+                                    <i class="bi bi-handshake me-1"></i> Мои сделки
                                 </a>
                             </li>
                         {% elif user.is_specialist %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'marketplace:tasks_list' %}">
-                                    <i class="bi bi-search"></i> Найти задачи
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'marketplace:my_offers' %}">
-                                    <i class="bi bi-chat-dots"></i> Мои отклики
+                                    <i class="bi bi-chat-dots me-1"></i> Мои отклики
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'marketplace:my_deals' %}">
-                                    <i class="bi bi-handshake"></i> Мои сделки
+                                    <i class="bi bi-handshake me-1"></i> Мои сделки
                                 </a>
                             </li>
                         {% endif %}
@@ -86,32 +91,38 @@
                         <button
                             id="theme-toggle"
                             type="button"
-                            class="btn btn-sm btn-light d-flex align-items-center justify-content-center theme-toggle-btn"
+                            class="btn btn-sm theme-toggle-btn"
                             aria-label="Переключить тему"
+                            title="Переключить тему"
                         >
                             <span id="theme-toggle-icon">🌙</span>
                         </button>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> {{ user.username }}
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-2"></i>
+                                <span>{{ user.username }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Профиль</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                    <i class="bi bi-person me-2"></i>Профиль
+                                </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Выйти</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                                </a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:login' %}">
-                                <i class="bi bi-box-arrow-in-right"></i> Войти
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Войти
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:register' %}">
-                                <i class="bi bi-person-plus"></i> Регистрация
+                            <a class="nav-link btn-nav-primary" href="{% url 'accounts:register' %}">
+                                <i class="bi bi-person-plus me-1"></i> Регистрация
                             </a>
                         </li>
                     {% endif %}
@@ -122,9 +133,10 @@
 
     <!-- Сообщения -->
     {% if messages %}
-        <div class="container mt-3">
+        <div class="container mt-4">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-modern" role="alert">
+                    <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -133,19 +145,77 @@
     {% endif %}
 
     <!-- Основное содержимое -->
-    <main class="container my-4">
+    <main class="main-content">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Футер -->
-    <footer class="mt-5 py-4">
-        <div class="container text-center">
-            <p class="text-muted mb-0">&copy; 2024 Marketplace. Все права защищены.</p>
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="row py-5">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="footer-brand mb-3">
+                        <i class="bi bi-briefcase-fill me-2"></i>ServiceHub
+                    </h5>
+                    <p class="text-muted">Маркетплейс для поиска специалистов и выполнения задач. Связываем клиентов с профессионалами.</p>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                    <h6 class="footer-heading mb-3">Навигация</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="{% url 'home' %}">Главная</a></li>
+                        <li><a href="{% url 'marketplace:tasks_list' %}">Задачи</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'accounts:profile' %}">Профиль</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                    <h6 class="footer-heading mb-3">Аккаунт</h6>
+                    <ul class="footer-links list-unstyled">
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'accounts:profile' %}">Профиль</a></li>
+                            <li><a href="{% url 'accounts:logout' %}">Выйти</a></li>
+                        {% else %}
+                            <li><a href="{% url 'accounts:login' %}">Войти</a></li>
+                            <li><a href="{% url 'accounts:register' %}">Регистрация</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="footer-heading mb-3">Контакты</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><i class="bi bi-envelope me-2"></i>support@servicehub.com</li>
+                        <li><i class="bi bi-telephone me-2"></i>+7 (999) 123-45-67</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-muted mb-0">&copy; 2024 ServiceHub. Все права защищены.</p>
+                </div>
+            </div>
         </div>
     </footer>
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Navbar scroll effect -->
+    <script>
+        (function() {
+            const navbar = document.getElementById('mainNavbar');
+            if (navbar) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('navbar-scrolled');
+                    } else {
+                        navbar.classList.remove('navbar-scrolled');
+                    }
+                });
+            }
+        })();
+    </script>
     
     <!-- Theme Toggle Script -->
     <script src="{% static 'js/theme.js' %}"></script>

@@ -37,7 +37,7 @@
     <div class="row g-4">
         {% for task in tasks %}
             <div class="col-lg-4 col-md-6">
-                <div class="task-card">
+                <div class="task-card card-custom">
                     <!-- Заголовок задачи -->
                     <h3 class="task-card-title">
                         <a href="{% url 'marketplace:task_detail' task.id %}" class="text-decoration-none">
