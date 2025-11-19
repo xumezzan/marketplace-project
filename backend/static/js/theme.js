@@ -5,7 +5,7 @@
     // Получаем элементы
     const html = document.documentElement;
     const toggleBtn = document.getElementById('theme-toggle');
-    const iconSpan = document.getElementById('theme-toggle-icon');
+    const icon = document.getElementById('theme-icon');
 
     // Безопасная работа с localStorage
     function getStoredTheme() {
@@ -29,10 +29,16 @@
     function applyTheme(theme) {
       if (theme === 'dark') {
         html.setAttribute('data-bs-theme', 'dark');
-        if (iconSpan) iconSpan.textContent = '☀️';
+        if (icon) {
+          icon.classList.remove('bi-moon-fill');
+          icon.classList.add('bi-sun-fill');
+        }
       } else {
         html.setAttribute('data-bs-theme', 'light');
-        if (iconSpan) iconSpan.textContent = '🌙';
+        if (icon) {
+          icon.classList.remove('bi-sun-fill');
+          icon.classList.add('bi-moon-fill');
+        }
       }
     }
 
@@ -52,11 +58,15 @@
         applyTheme(next);
         setStoredTheme(next);
 
-        // Визуальная обратная связь
-        toggleBtn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-          toggleBtn.style.transform = '';
-        }, 150);
+        // Анимация иконки
+        if (icon) {
+          icon.style.transform = 'rotate(360deg)';
+          icon.style.transition = 'transform 0.5s ease';
+          setTimeout(() => {
+            icon.style.transform = '';
+            icon.style.transition = '';
+          }, 500);
+        }
       });
     } else {
       console.warn('Theme toggle button not found');
