@@ -58,13 +58,18 @@ services-marketplace/
    cp .env.example .env
    ```
    
-   Edit `.env` file:
-   ```env
-   DJANGO_SECRET_KEY=your-secret-key-here
-   DJANGO_DEBUG=True
-   DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
-   DATABASE_URL=  # Leave empty for SQLite, or set PostgreSQL URL
-   ```
+   Edit `.env` file with your settings. See `.env.example` for all available options.
+   
+   **Required variables:**
+   - `DJANGO_SECRET_KEY` - Secret key for Django (generate a secure one for production)
+   - `DJANGO_DEBUG=True` - Set to `False` in production
+   - `DJANGO_ALLOWED_HOSTS` - Comma-separated list of allowed hosts
+   
+   **Optional variables:**
+   - `DATABASE_URL` - PostgreSQL connection string (leave empty for SQLite)
+   - `GEMINI_API_KEY` - For AI task analysis feature
+   - `EMAIL_*` - For email notifications
+   - `CACHE_URL` - For Redis/Memcached caching
 
 4. **Create PostgreSQL database:**
    ```bash
