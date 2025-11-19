@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   function initTheme() {
@@ -6,7 +6,7 @@
     const html = document.documentElement;
     const toggleBtn = document.getElementById('theme-toggle');
     const iconSpan = document.getElementById('theme-toggle-icon');
-    
+
     // Функция для применения темы
     function applyTheme(theme) {
       if (theme === 'dark') {
@@ -17,23 +17,23 @@
         if (iconSpan) iconSpan.textContent = '🌙';
       }
     }
-    
+
     // Применяем сохраненную тему
     const savedTheme = localStorage.getItem('theme') || 'light';
     applyTheme(savedTheme);
-    
+
     // Обработчик клика на кнопку переключения
     if (toggleBtn) {
-      toggleBtn.addEventListener('click', function(e) {
+      toggleBtn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         const current = html.getAttribute('data-bs-theme') || 'light';
         const next = current === 'light' ? 'dark' : 'light';
-        
+
         applyTheme(next);
         localStorage.setItem('theme', next);
-        
+
         // Визуальная обратная связь
         toggleBtn.style.transform = 'scale(0.9)';
         setTimeout(() => {
