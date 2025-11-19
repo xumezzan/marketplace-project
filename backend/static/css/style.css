@@ -152,15 +152,15 @@ body {
         padding-top: 40px !important;
         text-align: center;
     }
-    
+
     .hero-section h1 {
         font-size: 2rem;
     }
-    
+
     .search-form .input-group {
         flex-direction: column;
     }
-    
+
     .search-form .btn {
         border-radius: 0 0 50px 50px;
         width: 100%;
@@ -948,20 +948,20 @@ section {
     .task-detail-title {
         font-size: 1.5rem;
     }
-    
+
     .task-details-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .offers-sidebar {
         position: static;
         margin-top: 24px;
     }
-    
+
     .filter-form .row {
         gap: 12px;
     }
-    
+
     .task-card {
         margin-bottom: 20px;
     }
@@ -986,6 +986,8 @@ section {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0;
     line-height: 1;
+    position: relative;
+    z-index: 1050;
 }
 
 .theme-toggle-btn:hover {
@@ -1149,7 +1151,7 @@ footer .text-muted {
 
 .navbar-brand {
     font-weight: 700;
-    font-size: 1.5rem;ом
+    font-size: 1.5rem;
     color: var(--text-main) !important;
     transition: transform 0.3s ease;
 }
@@ -1334,6 +1336,7 @@ footer .text-muted {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1345,6 +1348,7 @@ footer .text-muted {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1364,12 +1368,29 @@ footer .text-muted {
     animation-fill-mode: both;
 }
 
-.card-custom:nth-child(1) { animation-delay: 0.1s; }
-.card-custom:nth-child(2) { animation-delay: 0.2s; }
-.card-custom:nth-child(3) { animation-delay: 0.3s; }
-.card-custom:nth-child(4) { animation-delay: 0.4s; }
-.card-custom:nth-child(5) { animation-delay: 0.5s; }
-.card-custom:nth-child(6) { animation-delay: 0.6s; }
+.card-custom:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card-custom:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card-custom:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.card-custom:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.card-custom:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.card-custom:nth-child(6) {
+    animation-delay: 0.6s;
+}
 
 /* Улучшенные кнопки */
 .btn-primary {
@@ -1450,17 +1471,16 @@ footer .text-muted {
         padding: 1.5rem;
         margin: 1rem;
     }
-    
+
     .navbar-modern {
         padding: 0.5rem 0;
     }
-    
+
     .footer-modern {
         padding: 2rem 0 1rem;
     }
-    
+
     .main-content {
         padding: 1rem 0;
     }
 }
-

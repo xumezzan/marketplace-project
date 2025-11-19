@@ -7,6 +7,24 @@
     const toggleBtn = document.getElementById('theme-toggle');
     const iconSpan = document.getElementById('theme-toggle-icon');
 
+    // Безопасная работа с localStorage
+    function getStoredTheme() {
+      try {
+        return localStorage.getItem('theme');
+      } catch (e) {
+        console.warn('LocalStorage access denied', e);
+        return null;
+      }
+    }
+
+    function setStoredTheme(theme) {
+      try {
+        localStorage.setItem('theme', theme);
+      } catch (e) {
+        console.warn('LocalStorage access denied', e);
+      }
+    }
+
     // Функция для применения темы
     function applyTheme(theme) {
       if (theme === 'dark') {
@@ -19,7 +37,7 @@
     }
 
     // Применяем сохраненную тему
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = getStoredTheme() || 'light';
     applyTheme(savedTheme);
 
     // Обработчик клика на кнопку переключения
@@ -32,7 +50,7 @@
         const next = current === 'light' ? 'dark' : 'light';
 
         applyTheme(next);
-        localStorage.setItem('theme', next);
+        setStoredTheme(next);
 
         // Визуальная обратная связь
         toggleBtn.style.transform = 'scale(0.9)';
@@ -40,6 +58,8 @@
           toggleBtn.style.transform = '';
         }, 150);
       });
+    } else {
+      console.warn('Theme toggle button not found');
     }
   }
 
