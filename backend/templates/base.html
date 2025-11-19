@@ -1,7 +1,8 @@
 {% load static %}
 {% load i18n %}
+{% get_current_language as CURRENT_LANG %}
 <!DOCTYPE html>
-<html lang="{% get_current_language %}" data-bs-theme="light">
+<html lang="{{ CURRENT_LANG|default:'ru' }}" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
