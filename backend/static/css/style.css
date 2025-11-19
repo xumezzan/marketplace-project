@@ -1438,3 +1438,45 @@ footer .text-muted {
         padding: 1rem 0;
     }
 }
+
+/* Global Transitions */
+body,
+.navbar,
+.card,
+.dropdown-menu,
+.form-control,
+.btn {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* HTMX Indicator */
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}
+
+/* HTMX Progress Bar */
+.htmx-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background-color: var(--accent);
+    z-index: 9999;
+    transition: width 300ms ease-out, opacity 200ms ease-in;
+    width: 0;
+    opacity: 0;
+}
+
+.htmx-request .htmx-progress-bar {
+    opacity: 1;
+    width: 100%;
+}
