@@ -5,7 +5,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .viewsets import (
     CategoryViewSet, TaskViewSet, OfferViewSet,
-    UserViewSet, ReviewViewSet, DealViewSet
+    UserViewSet, ReviewViewSet, DealViewSet, TimeSlotViewSet
 )
 from .views import analyze_task_ai
 
@@ -17,6 +17,7 @@ router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'offers', OfferViewSet, basename='offer')
 router.register(r'reviews', ReviewViewSet, basename='review')
 router.register(r'deals', DealViewSet, basename='deal')
+router.register(r'slots', TimeSlotViewSet, basename='timeslot')
 
 app_name = 'marketplace_api'
 

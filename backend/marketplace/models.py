@@ -733,6 +733,52 @@ class Deal(models.Model):
             self.task.save()
 
 
+class TimeSlot(models.Model):
+    """
+    Модель временного слота в расписании специалиста.
+    
+    Позволяет специалистам управлять своим временем, а клиентам - бронировать слоты.
+    """
+    specialist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='time_slots',
+        verbose_name='специалист'
+    )
+    date = models.DateField('дата')
+    time_start = models.TimeField('время начала')
+    time_end = models.TimeField('время окончания')
+    is_available = models.BooleanField('свободен', default=True)
+    
+    # Если слот забронирован под сделку
+    deal = models.ForeignKey(
+        'Deal',
+        on_delete=models.SET_NULL,
+        related_name='time_slots',
+        verbose_name='сделка',
+        null=True,
+        blank=True,
+        help_text="Сделка, под которую забронирован этот слот"
+    )
+    
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+
+    class Meta:
+        db_table = 'time_slots'
+        verbose_name = 'временной слот'
+        verbose_name_plural = 'временные слоты'
+        ordering = ['date', 'time_start']
+        unique_together = ['specialist', 'date', 'time_start']
+        indexes = [
+            models.Index(fields=['specialist', 'date', 'is_available']),
+            models.Index(fields=['date', 'is_available']),
+        ]
+
+    def __str__(self):
+        status = "Свободен" if self.is_available else "Занят"
+        return f"{self.specialist.username}: {self.date} {self.time_start}-{self.time_end} ({status})"
+
 class PortfolioItem(models.Model):
     """
     Модель элемента портфолио специалиста.

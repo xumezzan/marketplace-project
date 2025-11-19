@@ -3,7 +3,7 @@
 """
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Category, Task, Offer, Review, Deal
+from .models import Category, Task, Offer, Review, Deal, TimeSlot
 
 User = get_user_model()
 
@@ -300,3 +300,24 @@ class DealSerializer(serializers.ModelSerializer):
         
         return super().create(validated_data)
 
+
+class TimeSlotSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели TimeSlot."""
+    
+    specialist_username = serializers.CharField(source='specialist.username', read_only=True)
+    
+    class Meta:
+        model = TimeSlot
+        fields = [
+            'id',
+            'specialist',
+            'specialist_username',
+            'date',
+            'time_start',
+            'time_end',
+            'is_available',
+            'deal',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'specialist', 'is_available', 'deal', 'created_at', 'updated_at']

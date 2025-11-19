@@ -6,10 +6,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.db import models
-from .models import Category, Task, Offer, Review, Deal
+from django.utils import timezone
+from .models import Category, Task, Offer, Review, Deal, TimeSlot
 from .serializers import (
     CategorySerializer, TaskSerializer, OfferSerializer,
-    UserSerializer, ReviewSerializer, DealSerializer
+    UserSerializer, ReviewSerializer, DealSerializer, TimeSlotSerializer
 )
 
 User = get_user_model()
@@ -478,5 +479,57 @@ class DealViewSet(viewsets.ModelViewSet):
         deal.mark_as_completed()
         
         serializer = self.get_serializer(deal)
+        return Response(serializer.data)
+
+class TimeSlotViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet для временных слотов.
+    
+    - list, retrieve: доступно всем авторизованным
+    - create: только специалистам (генерация слотов)
+    - book: бронирование слота (для клиентов)
+    """
+    queryset = TimeSlot.objects.all()
+    serializer_class = TimeSlotSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """Фильтрация слотов."""
+        queryset = super().get_queryset()
+        
+        # Фильтр по специалисту
+        specialist = self.request.query_params.get('specialist', None)
+        if specialist:
+            queryset = queryset.filter(specialist_id=specialist)
+            
+        # Фильтр по дате
+        date = self.request.query_params.get('date', None)
+        if date:
+            queryset = queryset.filter(date=date)
+            
+        # Фильтр по доступности
+        is_available = self.request.query_params.get('is_available', None)
+        if is_available is not None:
+            is_available = is_available.lower() == 'true'
+            queryset = queryset.filter(is_available=is_available)
+            
+        return queryset.order_by('date', 'time_start')
+        
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def generate(self, request):
+        """Генерация слотов для текущего специалиста."""
+        if not request.user.is_specialist:
+            return Response(
+                {'error': 'Только специалисты могут генерировать слоты.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        days = int(request.data.get('days', 30))
+        start_date = timezone.now().date()
+        
+        from .services.schedule_service import ScheduleService
+        slots = ScheduleService.generate_slots(request.user, start_date, days)
+        
+        serializer = self.get_serializer(slots, many=True)
         return Response(serializer.data)
 

@@ -4,7 +4,7 @@
 from django.contrib import admin
 from .models import (
     Category, Subcategory, ClientProfile, SpecialistProfile, 
-    Task, Offer, Review, Deal, PortfolioItem, Escrow, AIRequest
+    Task, Offer, Review, Deal, PortfolioItem, Escrow, AIRequest, TimeSlot
 )
 
 
@@ -338,4 +338,23 @@ class AIRequestAdmin(admin.ModelAdmin):
             'fields': ('created_at',)
         }),
     )
+
+
+@admin.register(TimeSlot)
+class TimeSlotAdmin(admin.ModelAdmin):
+    """Админ-интерфейс для модели TimeSlot."""
+    list_display = [
+        'specialist',
+        'date',
+        'time_start',
+        'time_end',
+        'is_available',
+        'deal'
+    ]
+    list_filter = ['date', 'is_available', 'specialist']
+    search_fields = [
+        'specialist__username',
+        'specialist__email'
+    ]
+    date_hierarchy = 'date'
 
