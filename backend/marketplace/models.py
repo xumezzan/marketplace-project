@@ -871,3 +871,76 @@ class Escrow(models.Model):
         if self.status in [self.Status.RESERVED, self.Status.LOCKED]:
             self.status = self.Status.REFUNDED
             self.save()
+
+
+class AIRequest(models.Model):
+    """
+    Модель для логирования AI запросов.
+    
+    Сохраняет все запросы к AI сервису для анализа и отладки.
+    """
+    
+    class RequestType(models.TextChoices):
+        """Типы AI запросов."""
+        PARSE = 'parse', 'Парсинг текста'
+        ESTIMATE = 'estimate', 'Оценка стоимости'
+        RANK = 'rank', 'Ранжирование'
+        SCHEDULE = 'schedule', 'Подбор расписания'
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name='ai_requests',
+        verbose_name='пользователь',
+        blank=True,
+        null=True,
+        help_text="Пользователь, сделавший запрос"
+    )
+    request_type = models.CharField(
+        'тип запроса',
+        max_length=20,
+        choices=RequestType.choices,
+        help_text="Тип AI запроса"
+    )
+    input_data = models.JSONField(
+        'входные данные',
+        help_text="JSON с входными данными запроса"
+    )
+    output_data = models.JSONField(
+        'выходные данные',
+        default=dict,
+        blank=True,
+        help_text="JSON с результатом AI обработки"
+    )
+    model_used = models.CharField(
+        'модель',
+        max_length=50,
+        default='gemini-1.5-flash',
+        help_text="Название использованной AI модели"
+    )
+    success = models.BooleanField(
+        'успешно',
+        default=True,
+        help_text="Успешно ли выполнен запрос"
+    )
+    error_message = models.TextField(
+        'сообщение об ошибке',
+        blank=True,
+        null=True,
+        help_text="Сообщение об ошибке если запрос не удался"
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    
+    class Meta:
+        db_table = 'ai_requests'
+        verbose_name = 'AI запрос'
+        verbose_name_plural = 'AI запросы'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['request_type', 'created_at']),
+            models.Index(fields=['user', 'created_at']),
+        ]
+    
+    def __str__(self) -> str:
+        user_str = self.user.username if self.user else 'Анонимный'
+        return f"{self.get_request_type_display()} - {user_str} ({self.created_at.strftime('%Y-%m-%d %H:%M')})"

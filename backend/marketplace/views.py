@@ -516,17 +516,18 @@ def analyze_task_ai(request):
     
     Принимает:
     - description: текст описания задачи
-    - language: 'ru' или 'uz' (опционально, по умолчанию 'ru')
     
     Возвращает:
-    - suggested_title: предложенный заголовок
-    - suggested_category: предложенная категория
-    - refined_description: улучшенное описание
-    - estimated_budget_min: минимальный бюджет
-    - estimated_budget_max: максимальный бюджет
+    - title: заголовок
+    - category_id: ID категории
+    - description: улучшенное описание
+    - format: формат (online/offline)
+    - budget_min: мин бюджет
+    - budget_max: макс бюджет
+    - city: город
+    - preferred_date: дата
     """
     description = request.data.get('description', '').strip()
-    language = request.data.get('language', 'ru')
     
     if not description:
         return Response(
@@ -534,12 +535,23 @@ def analyze_task_ai(request):
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    result = analyze_task_description(description, language)
+    from .services.ai_service import AIService
     
-    if result:
-        return Response(result.to_dict(), status=status.HTTP_200_OK)
-    else:
+    # Используем новый сервис
+    result = AIService.parse_task_text(description, user=request.user)
+    
+    if result.get('error'):
         return Response(
-            {'error': 'Не удалось проанализировать задачу. Попробуйте позже.'},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            {'error': result['error']},
+            status=status.HTTP_400_BAD_REQUEST
         )
+    
+    # Если бюджет не определен, пробуем оценить его
+    if not result.get('budget_min') and result.get('category_id'):
+        estimate = AIService.estimate_price(result)
+        if estimate['estimated_min'] > 0:
+            result['budget_min'] = estimate['estimated_min']
+            result['budget_max'] = estimate['estimated_max']
+            result['price_estimated'] = True
+    
+    return Response(result, status=status.HTTP_200_OK)

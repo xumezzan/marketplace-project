@@ -213,10 +213,6 @@
         background-size: 1.5em 1.5em;
     }
 
-    background-color: #1e293b;
-    border-color: #334155;
-    color: #ffffff;
-    }
 
     select:focus {
         background-color: #ffffff;
@@ -236,4 +232,68 @@
         border-color: #818cf8;
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const analyzeBtn = document.getElementById('analyze-task-btn');
+        const rawInput = document.getElementById('raw-task-input');
+
+        if (analyzeBtn && rawInput) {
+            analyzeBtn.addEventListener('click', async function () {
+                const text = rawInput.value.trim();
+                if (!text) return;
+
+                // Show loading state
+                const originalText = analyzeBtn.innerHTML;
+                analyzeBtn.disabled = true;
+                analyzeBtn.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i> Анализирую...';
+
+                try {
+                    const response = await fetch('/api/marketplace/ai/analyze-task/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify({ description: text })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Populate form fields
+                        if (data.title) document.getElementById('id_title').value = data.title;
+                        if (data.description) document.getElementById('id_description').value = data.description;
+                        if (data.city) document.getElementById('id_city').value = data.city;
+
+                        if (data.budget_min) document.querySelector('[name="budget_min"]').value = data.budget_min;
+                        if (data.budget_max) document.querySelector('[name="budget_max"]').value = data.budget_max;
+
+                        if (data.preferred_date) document.getElementById('id_preferred_date').value = data.preferred_date;
+
+                        // Handle Category Select
+                        if (data.category_id) {
+                            const categorySelect = document.getElementById('id_category');
+                            if (categorySelect) {
+                                categorySelect.value = data.category_id;
+                            }
+                        }
+
+                        // Scroll to form
+                        document.getElementById('wizard-step-2').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        alert('Ошибка: ' + (data.error || 'Не удалось проанализировать задачу'));
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при обращении к AI сервису');
+                } finally {
+                    // Restore button state
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.innerHTML = originalText;
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

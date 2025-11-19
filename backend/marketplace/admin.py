@@ -4,7 +4,7 @@
 from django.contrib import admin
 from .models import (
     Category, Subcategory, ClientProfile, SpecialistProfile, 
-    Task, Offer, Review, Deal, PortfolioItem, Escrow
+    Task, Offer, Review, Deal, PortfolioItem, Escrow, AIRequest
 )
 
 
@@ -303,3 +303,39 @@ class EscrowAdmin(admin.ModelAdmin):
             'fields': ('created_at', 'updated_at')
         }),
     )
+
+
+@admin.register(AIRequest)
+class AIRequestAdmin(admin.ModelAdmin):
+    """Админ-интерфейс для модели AIRequest."""
+    list_display = [
+        'request_type',
+        'user',
+        'model_used',
+        'success',
+        'created_at'
+    ]
+    list_filter = ['request_type', 'success', 'model_used', 'created_at']
+    search_fields = [
+        'user__username',
+        'user__email',
+        'error_message'
+    ]
+    readonly_fields = ['created_at']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('Запрос', {
+            'fields': ('user', 'request_type', 'model_used')
+        }),
+        ('Данные', {
+            'fields': ('input_data', 'output_data')
+        }),
+        ('Результат', {
+            'fields': ('success', 'error_message')
+        }),
+        ('Временные метки', {
+            'fields': ('created_at',)
+        }),
+    )
+
