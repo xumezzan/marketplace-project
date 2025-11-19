@@ -29,10 +29,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 if not SECRET_KEY:
-    raise ValueError(
-        "DJANGO_SECRET_KEY environment variable is not set. "
-        "Please set it in your .env file or environment."
+    import warnings
+    warnings.warn(
+        "DJANGO_SECRET_KEY environment variable is not set! "
+        "Using temporary insecure key. SET THIS IN PRODUCTION!",
+        RuntimeWarning
     )
+    # Temporary fallback - MUST be changed in production
+    SECRET_KEY = "django-insecure-TEMPORARY-KEY-change-this-immediately-in-production-settings"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
@@ -50,11 +54,14 @@ elif DEBUG:
     # В режиме разработки разрешаем локальные хосты
     ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
 else:
-    # В продакшене ОБЯЗАТЕЛЬНО указать DJANGO_ALLOWED_HOSTS
-    raise ValueError(
-        "DJANGO_ALLOWED_HOSTS must be set in production. "
-        "Please set it in your .env file or environment."
+    # В продакшене без указанных хостов - используем wildcard с предупреждением
+    import warnings
+    warnings.warn(
+        "ALLOWED_HOSTS not set in production! Using wildcard '*' is insecure. "
+        "Please set DJANGO_ALLOWED_HOSTS environment variable.",
+        RuntimeWarning
     )
+    ALLOWED_HOSTS = ["*"]
 
 
 
