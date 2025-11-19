@@ -102,14 +102,14 @@
                         <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="ru">
-                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                             <button type="submit"
-                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">RU</button>
+                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' or not CURRENT_LANGUAGE %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">RU</button>
                         </form>
                         <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="uz">
-                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                             <button type="submit"
                                 class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">UZ</button>
                         </form>

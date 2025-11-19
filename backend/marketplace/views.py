@@ -1,7 +1,10 @@
 """
 Views для marketplace приложения.
 """
+import logging
 from django.views.generic import ListView, CreateView, DetailView
+
+logger = logging.getLogger(__name__)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -101,53 +104,25 @@ class TaskListView(ListView):
             except Exception:
                 pass
         
-        # Фильтр по бюджету (price_min / price_max)
-        from django.db.models import Q
-        budget_filters = Q()
-        
+        # Фильтр по бюджету
         if price_min:
             try:
-                price_min_value = float(price_min)
-                # Задачи, где максимальный бюджет >= указанного минимума
-                # или минимальный бюджет >= указанного минимума
-                budget_filters &= (
-                    Q(budget_max__gte=price_min_value) | 
-                    Q(budget_min__gte=price_min_value) |
-                    (Q(budget_min__isnull=True) & Q(budget_max__gte=price_min_value))
+                from django.db.models import Q
+                price_min_float = float(price_min)
+                queryset = queryset.filter(
+                    Q(budget_max__gte=price_min_float) | Q(budget_min__gte=price_min_float)
                 )
             except (ValueError, TypeError):
                 pass
         
         if price_max:
             try:
-                price_max_value = float(price_max)
-                # Задачи, где минимальный бюджет <= указанного максимума
-                # или максимальный бюджет <= указанного максимума
-                budget_filters &= (
-                    Q(budget_min__lte=price_max_value) | 
-                    Q(budget_max__lte=price_max_value) |
-                    (Q(budget_max__isnull=True) & Q(budget_min__lte=price_max_value))
+                from django.db.models import Q
+                price_max_float = float(price_max)
+                queryset = queryset.filter(
+                    Q(budget_min__lte=price_max_float) | Q(budget_max__lte=price_max_float)
                 )
             except (ValueError, TypeError):
-                pass
-        
-        if budget_filters:
-            queryset = queryset.filter(budget_filters)
-        
-        # Если нет явных фильтров и пользователь - специалист, применяем фильтры по умолчанию
-        if not has_explicit_filters and self.request.user.is_authenticated and self.request.user.is_specialist:
-            try:
-                specialist_profile = self.request.user.specialist_profile
-                
-                # Фильтр по городу специалиста
-                if specialist_profile.user.city:
-                    queryset = queryset.filter(city__icontains=specialist_profile.user.city)
-                
-                # Фильтр по категориям специалиста
-                if specialist_profile.categories.exists():
-                    category_ids = specialist_profile.categories.values_list('id', flat=True)
-                    queryset = queryset.filter(category_id__in=category_ids)
-            except Exception:
                 pass
         
         return queryset
@@ -179,324 +154,273 @@ class TaskListView(ListView):
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
     """
-    Представление для создания новой задачи.
+    Представление для создания новой задачи клиентом.
     
-    Доступно только авторизованным пользователям с ролью CLIENT.
-    Автоматически устанавливает клиента и статус DRAFT.
+    Требует аутентификации и проверяет, что пользователь является клиентом.
     """
     model = Task
     form_class = TaskCreateForm
     template_name = 'marketplace/task_create.html'
-    success_url = reverse_lazy('marketplace:tasks_list')
+    success_url = reverse_lazy('marketplace:my_tasks')
     
     def dispatch(self, request, *args, **kwargs):
-        """Проверка, что пользователь является клиентом."""
+        """Проверяет, что пользователь является клиентом."""
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-        
         if not request.user.is_client:
-            messages.error(
-                request,
-                'Только клиенты могут создавать задачи. '
-                'Если вы специалист, создайте профиль специалиста.'
-            )
+            messages.error(request, 'Только клиенты могут создавать задачи.')
             return redirect('marketplace:tasks_list')
-        
         return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):
-        """Устанавливает клиента и статус при сохранении формы."""
+        """Устанавливает клиента и статус DRAFT при создании."""
         form.instance.client = self.request.user
         form.instance.status = Task.Status.DRAFT
-        messages.success(
-            self.request,
-            'Задача успешно создана! Вы можете опубликовать её позже.'
-        )
+        messages.success(self.request, 'Задача успешно создана! Теперь вы можете опубликовать её.')
         return super().form_valid(form)
 
 
 class TaskDetailView(DetailView):
     """
-    Представление для отображения деталей задачи.
+    Представление для отображения детальной информации о задаче.
     
-    Показывает:
-    - Детали задачи
-    - Форму для создания оффера (для специалистов)
-    - Список всех офферов по задаче
+    Показывает задачу, все предложения от специалистов и форму для создания предложения.
     """
     model = Task
     template_name = 'marketplace/task_detail.html'
     context_object_name = 'task'
     
     def get_queryset(self):
-        """Оптимизация запросов к БД."""
-        return Task.objects.select_related('client', 'category').prefetch_related('offers__specialist')
+        """Возвращает queryset с оптимизацией запросов."""
+        return Task.objects.select_related('client', 'category').prefetch_related(
+            'offers__specialist',
+            'reviews__client'
+        )
     
     def get_context_data(self, **kwargs):
-        """Добавляет форму оффера и список офферов в контекст."""
+        """Добавляет предложения и форму в контекст."""
         context = super().get_context_data(**kwargs)
         task = self.get_object()
+        user = self.request.user
         
-        # Получаем все офферы для этой задачи с информацией о рейтингах
-        from .models import Review
-        offers = Offer.objects.filter(task=task).select_related('specialist').order_by('-created_at')
+        # Получаем все предложения для этой задачи
+        offers = task.offers.select_related('specialist').order_by('-created_at')
         
-        # Добавляем информацию о рейтинге и количестве отзывов для каждого специалиста
+        # Для каждого предложения проверяем, есть ли отзыв
         offers_with_ratings = []
         for offer in offers:
-            reviews_count = Review.objects.filter(specialist=offer.specialist).count()
-            # Проверяем, оставлен ли уже отзыв от текущего пользователя для этого специалиста
             has_review = False
-            if self.request.user.is_authenticated and self.request.user.is_client:
+            reviews_count = 0
+            if user.is_authenticated and task.status == Task.Status.COMPLETED:
+                # Проверяем, есть ли отзыв от этого клиента для этого специалиста
                 has_review = Review.objects.filter(
                     task=task,
                     specialist=offer.specialist,
-                    client=self.request.user
+                    client=user
                 ).exists()
+                reviews_count = Review.objects.filter(specialist=offer.specialist).count()
             
             offers_with_ratings.append({
                 'offer': offer,
-                'reviews_count': reviews_count,
                 'has_review': has_review,
+                'reviews_count': reviews_count,
             })
         
+        context['offers'] = offers
         context['offers_with_ratings'] = offers_with_ratings
-        context['offers'] = offers  # Для обратной совместимости
         
-        # Проверяем, есть ли сделка для этой задачи
-        deal = Deal.objects.filter(task=task).first()
+        # Проверяем, есть ли уже сделка для этой задачи
+        deal = task.deals.first()
         context['deal'] = deal
         
-        # Проверяем, может ли текущий пользователь создать оффер
-        can_create_offer = False
-        has_existing_offer = False
-        
-        # Если сделка есть, нельзя создавать новые офферы
-        if not deal and self.request.user.is_authenticated:
-            if self.request.user.is_specialist:
-                # Проверяем, может ли задача принимать офферы
-                can_create_offer = task.can_receive_offers()
-                # Проверяем, есть ли уже оффер от этого специалиста
-                has_existing_offer = Offer.objects.filter(
-                    task=task,
-                    specialist=self.request.user
-                ).exists()
-        
-        context['can_create_offer'] = can_create_offer and not has_existing_offer
-        context['has_existing_offer'] = has_existing_offer
-        
-        # Форма для создания оффера
-        if self.request.method == 'POST' and 'offer_form' in self.request.POST:
-            context['offer_form'] = OfferCreateForm(self.request.POST)
-        else:
-            context['offer_form'] = OfferCreateForm()
+        # Форма для создания предложения (только для специалистов)
+        if user.is_authenticated and user.is_specialist:
+            from .forms import OfferCreateForm
+            from .models import Offer
+            
+            # Проверяем, может ли пользователь создать предложение
+            has_existing_offer = Offer.objects.filter(
+                task=task,
+                specialist=user
+            ).exists()
+            
+            can_create_offer = (
+                task.can_receive_offers() and
+                not has_existing_offer and
+                task.client != user
+            )
+            
+            context['can_create_offer'] = can_create_offer
+            context['has_existing_offer'] = has_existing_offer
+            
+            if can_create_offer:
+                context['offer_form'] = OfferCreateForm()
         
         return context
-    
-    def post(self, request, *args, **kwargs):
-        """Обработка POST-запроса для создания оффера."""
-        self.object = self.get_object()
-        task = self.object
-        
-        # Проверка авторизации
-        if not request.user.is_authenticated:
-            messages.error(request, 'Необходимо войти в систему для создания предложения.')
-            return redirect('marketplace:task_detail', pk=task.pk)
-        
-        # Проверка роли
-        if not request.user.is_specialist:
-            messages.error(request, 'Только специалисты могут создавать предложения.')
-            return redirect('marketplace:task_detail', pk=task.pk)
-        
-        # Проверка, может ли задача принимать офферы
-        if not task.can_receive_offers():
-            messages.error(request, 'Эта задача больше не принимает предложения.')
-            return redirect('marketplace:task_detail', pk=task.pk)
-        
-        # Проверка, нет ли уже оффера от этого специалиста
-        if Offer.objects.filter(task=task, specialist=request.user).exists():
-            messages.error(request, 'Вы уже отправили предложение по этой задаче.')
-            return redirect('marketplace:task_detail', pk=task.pk)
-        
-        # Обработка формы оффера
-        form = OfferCreateForm(request.POST)
-        if form.is_valid():
-            offer = form.save(commit=False)
-            offer.task = task
-            offer.specialist = request.user
-            offer.status = Offer.Status.PENDING
-            offer.save()
-            
-            messages.success(
-                request,
-                'Ваше предложение успешно отправлено! Клиент получит уведомление.'
-            )
-            return redirect('marketplace:task_detail', pk=task.pk)
-        else:
-            # Если форма невалидна, возвращаем страницу с ошибками
-            context = self.get_context_data()
-            context['offer_form'] = form
-            return self.render_to_response(context)
-    
-    def get(self, request, *args, **kwargs):
-        """Обработка GET-запроса."""
-        return super().get(request, *args, **kwargs)
-    
 
 
 class AcceptOfferView(LoginRequiredMixin, View):
     """
-    View для принятия оффера клиентом.
+    Представление для принятия предложения клиентом.
     
-    Создает Deal и изменяет статусы Task и Offer.
+    Создает сделку (Deal) и обновляет статусы задачи и предложения.
     """
-    
     def post(self, request, offer_id):
-        """Обработка принятия оффера."""
+        """Принимает предложение и создает сделку."""
         offer = get_object_or_404(Offer, id=offer_id)
         task = offer.task
         
-        # Проверка, что пользователь является клиентом
-        if not request.user.is_client:
-            messages.error(request, 'Только клиенты могут принимать предложения.')
-            return redirect('marketplace:task_detail', pk=task.pk)
+        # Проверяем права доступа
+        if not request.user.is_authenticated:
+            messages.error(request, 'Необходима авторизация.')
+            return redirect('accounts:login')
         
-        # Проверка, что пользователь является владельцем задачи
-        if request.user != task.client:
-            messages.error(request, 'Вы можете принимать предложения только по своим задачам.')
-            return redirect('marketplace:task_detail', pk=task.pk)
+        if task.client != request.user:
+            messages.error(request, 'Вы не можете принять это предложение.')
+            return redirect('marketplace:task_detail', pk=task.id)
         
-        # Проверка, можно ли принять оффер
         if not offer.can_be_accepted():
             messages.error(request, 'Это предложение нельзя принять.')
-            return redirect('marketplace:task_detail', pk=task.pk)
+            return redirect('marketplace:task_detail', pk=task.id)
         
-        # Проверка, нет ли уже сделки для этой задачи
-        if Deal.objects.filter(task=task).exists():
-            messages.error(request, 'По этой задаче уже создана сделка.')
-            return redirect('marketplace:task_detail', pk=task.pk)
+        # Принимаем предложение (это создаст Deal через сигнал или метод accept)
+        offer.accept()
         
         # Создаем сделку
+        from .models import Deal
         deal = Deal.objects.create(
             task=task,
             offer=offer,
             client=task.client,
             specialist=offer.specialist,
-            final_price=int(offer.proposed_price),  # Конвертируем Decimal в int
-            status=Deal.Status.PENDING
+            final_price=int(offer.proposed_price)
         )
         
-        # Принимаем оффер (это также обновит статус задачи и отклонит другие офферы)
-        offer.accept()
-        
-        messages.success(
-            request,
-            f'Предложение принято! Создана сделка на сумму {offer.proposed_price}.'
+        # Создаем Escrow для безопасной сделки
+        from .models import Escrow
+        from decimal import Decimal
+        Escrow.objects.create(
+            deal=deal,
+            amount=Decimal(str(deal.final_price))
         )
         
-        return redirect('marketplace:task_detail', pk=task.pk)
+        messages.success(request, f'Предложение принято! Сделка создана на сумму {deal.final_price} ₽.')
+        return redirect('marketplace:task_detail', pk=task.id)
 
 
 class MarkDealPaidView(LoginRequiredMixin, View):
-    """View для отметки сделки как оплаченной."""
+    """
+    Представление для отметки сделки как оплаченной.
     
+    Доступно только клиенту, который создал задачу.
+    """
     def post(self, request, deal_id):
-        """Обработка отметки оплаты."""
+        """Отмечает сделку как оплаченную."""
         deal = get_object_or_404(Deal, id=deal_id)
         
-        # Проверка прав (только клиент может отметить оплату)
-        if not request.user.is_client:
-            messages.error(request, 'Только клиенты могут отмечать оплату.')
-            return redirect('marketplace:task_detail', pk=deal.task.pk)
+        if deal.client != request.user:
+            messages.error(request, 'Вы не можете изменить статус этой сделки.')
+            return redirect('marketplace:task_detail', pk=deal.task.id)
         
-        if request.user != deal.client:
-            messages.error(request, 'Вы можете отмечать оплату только по своим сделкам.')
-            return redirect('marketplace:task_detail', pk=deal.task.pk)
+        if deal.status != Deal.Status.PENDING:
+            messages.error(request, 'Сделка уже имеет другой статус.')
+            return redirect('marketplace:task_detail', pk=deal.task.id)
         
         deal.mark_as_paid()
-        messages.success(request, 'Сделка отмечена как оплаченная.')
         
-        return redirect('marketplace:task_detail', pk=deal.task.pk)
+        # Резервируем средства в Escrow
+        try:
+            if hasattr(deal, 'escrow') and deal.escrow:
+                deal.escrow.reserve()
+                deal.escrow.lock()  # Блокируем средства (работа начата)
+        except Exception as e:
+            logger.error(f"Ошибка при работе с Escrow: {e}")
+            # Продолжаем выполнение даже если Escrow не работает
+        
+        messages.success(request, 'Сделка отмечена как оплаченная. Средства зарезервированы.')
+        return redirect('marketplace:task_detail', pk=deal.task.id)
 
 
 class MarkDealCompletedView(LoginRequiredMixin, View):
-    """View для отметки сделки как завершенной."""
+    """
+    Представление для отметки сделки как завершенной.
     
+    Доступно только клиенту, который создал задачу.
+    """
     def post(self, request, deal_id):
-        """Обработка отметки завершения."""
+        """Отмечает сделку как завершенную."""
         deal = get_object_or_404(Deal, id=deal_id)
         
-        # Проверка прав (только клиент может отметить завершение)
-        if not request.user.is_client:
-            messages.error(request, 'Только клиенты могут отмечать завершение.')
-            return redirect('marketplace:task_detail', pk=deal.task.pk)
+        if deal.client != request.user:
+            messages.error(request, 'Вы не можете изменить статус этой сделки.')
+            return redirect('marketplace:task_detail', pk=deal.task.id)
         
-        if request.user != deal.client:
-            messages.error(request, 'Вы можете отмечать завершение только по своим сделкам.')
-            return redirect('marketplace:task_detail', pk=deal.task.pk)
+        if deal.status not in [Deal.Status.PAID, Deal.Status.PENDING]:
+            messages.error(request, 'Сделка уже завершена или имеет другой статус.')
+            return redirect('marketplace:task_detail', pk=deal.task.id)
         
         deal.mark_as_completed()
-        messages.success(request, 'Сделка отмечена как завершенная.')
         
-        return redirect('marketplace:task_detail', pk=deal.task.pk)
+        # Переводим средства исполнителю через Escrow
+        try:
+            if hasattr(deal, 'escrow') and deal.escrow:
+                deal.escrow.release()
+        except Exception as e:
+            logger.error(f"Ошибка при освобождении Escrow: {e}")
+            # Продолжаем выполнение даже если Escrow не работает
+        
+        messages.success(request, 'Сделка завершена! Средства переведены исполнителю.')
+        return redirect('marketplace:task_detail', pk=deal.task.id)
 
 
 @login_required
 def create_review(request, task_id, specialist_id):
     """
-    View для создания отзыва клиентом о специалисте.
+    Представление для создания отзыва о специалисте.
     
-    Только залогиненный пользователь с ролью CLIENT может оставить отзыв.
-    Проверяет, что пользователь является клиентом задачи и что специалист откликался на задачу.
+    Доступно только клиенту после завершения задачи.
     """
-    # Проверка роли
-    if not request.user.is_client:
-        messages.error(request, 'Только клиенты могут оставлять отзывы.')
-        return redirect('marketplace:tasks_list')
-    
-    # Получаем задачу и специалиста
     task = get_object_or_404(Task, id=task_id)
-    specialist = get_object_or_404(User, id=specialist_id, role=User.Role.SPECIALIST)
+    specialist = get_object_or_404(User, id=specialist_id)
     
-    # Проверка, что пользователь является клиентом задачи
-    if request.user != task.client:
-        messages.error(request, 'Вы можете оставлять отзывы только по своим задачам.')
+    # Проверяем права доступа
+    if task.client != request.user:
+        messages.error(request, 'Вы можете оставить отзыв только по своим задачам.')
         return redirect('marketplace:task_detail', pk=task.id)
     
-    # Проверка, что специалист откликался на эту задачу
-    if not Offer.objects.filter(task=task, specialist=specialist).exists():
-        messages.error(request, 'Этот специалист не откликался на данную задачу.')
+    if task.status != Task.Status.COMPLETED:
+        messages.error(request, 'Отзыв можно оставить только после завершения задачи.')
         return redirect('marketplace:task_detail', pk=task.id)
     
-    # Проверка, не оставлен ли уже отзыв
+    # Проверяем, есть ли уже отзыв
     existing_review = Review.objects.filter(
         task=task,
         specialist=specialist,
         client=request.user
     ).first()
     
-    if existing_review:
-        messages.warning(request, 'Вы уже оставили отзыв по этой задаче для данного специалиста.')
-        return redirect('marketplace:task_detail', pk=task.id)
-    
     if request.method == 'POST':
-        form = ReviewCreateForm(request.POST)
+        from .forms import ReviewCreateForm
+        form = ReviewCreateForm(request.POST, instance=existing_review)
+        
         if form.is_valid():
             review = form.save(commit=False)
-            review.task = task
             review.specialist = specialist
             review.client = request.user
+            review.task = task
             review.save()
-            # Рейтинг пересчитается автоматически через метод save модели Review
-            messages.success(request, 'Отзыв успешно добавлен!')
+            
+            messages.success(request, 'Отзыв успешно сохранен!')
             return redirect('marketplace:task_detail', pk=task.id)
     else:
-        form = ReviewCreateForm()
+        from .forms import ReviewCreateForm
+        form = ReviewCreateForm(instance=existing_review)
     
     context = {
-        'form': form,
         'task': task,
         'specialist': specialist,
+        'form': form,
+        'existing_review': existing_review,
     }
     
     return render(request, 'marketplace/review_form.html', context)
@@ -505,40 +429,18 @@ def create_review(request, task_id, specialist_id):
 @login_required
 def my_tasks(request):
     """
-    View для отображения списка задач текущего клиента.
+    Страница "Мои задачи" для клиентов.
     
-    Доступно только для пользователей с ролью CLIENT.
-    Поддерживает фильтрацию по статусу через GET-параметр.
+    Показывает все задачи, созданные текущим пользователем.
     """
-    if not request.user.is_authenticated:
-        messages.error(request, 'Необходимо войти в систему.')
-        return redirect('marketplace:tasks_list')
-    
     if not request.user.is_client:
         messages.error(request, 'Эта страница доступна только для клиентов.')
         return redirect('marketplace:tasks_list')
     
-    # Получаем все задачи клиента
     tasks = Task.objects.filter(client=request.user).select_related('category').order_by('-created_at')
-    
-    # Фильтр по статусу
-    status_filter = request.GET.get('status', '').strip()
-    current_status = ''
-    
-    if status_filter:
-        # Проверяем, что статус валидный
-        valid_statuses = [Task.Status.PUBLISHED, Task.Status.IN_PROGRESS, Task.Status.COMPLETED, Task.Status.DRAFT, Task.Status.CANCELLED]
-        if status_filter in [s[0] for s in Task.Status.choices]:
-            tasks = tasks.filter(status=status_filter)
-            current_status = status_filter
-    
-    # Добавляем количество откликов для каждой задачи
-    from django.db.models import Count
-    tasks = tasks.annotate(offers_count=Count('offers'))
     
     context = {
         'tasks': tasks,
-        'current_status': current_status,
     }
     
     return render(request, 'marketplace/my_tasks.html', context)
@@ -547,22 +449,17 @@ def my_tasks(request):
 @login_required
 def my_offers(request):
     """
-    View для отображения списка откликов текущего специалиста.
+    Страница "Мои отклики" для специалистов.
     
-    Доступно только для пользователей с ролью SPECIALIST.
+    Показывает все предложения, созданные текущим специалистом.
     """
-    if not request.user.is_authenticated:
-        messages.error(request, 'Необходимо войти в систему.')
-        return redirect('marketplace:tasks_list')
-    
     if not request.user.is_specialist:
         messages.error(request, 'Эта страница доступна только для специалистов.')
         return redirect('marketplace:tasks_list')
     
-    # Получаем все отклики специалиста с связанными задачами
-    offers = Offer.objects.filter(
-        specialist=request.user
-    ).select_related('task', 'task__category', 'task__client').order_by('-created_at')
+    offers = Offer.objects.filter(specialist=request.user).select_related(
+        'task', 'task__client', 'task__category'
+    ).order_by('-created_at')
     
     context = {
         'offers': offers,
@@ -574,25 +471,19 @@ def my_offers(request):
 @login_required
 def my_deals(request):
     """
-    View для отображения списка сделок текущего пользователя.
+    Страница "Мои сделки" для клиентов и специалистов.
     
-    Для клиентов показывает сделки, где они являются клиентом.
-    Для специалистов показывает сделки, где они являются специалистом.
+    Показывает все сделки, в которых участвует текущий пользователь.
     """
-    if not request.user.is_authenticated:
-        messages.error(request, 'Необходимо войти в систему.')
-        return redirect('marketplace:tasks_list')
-    
-    # Определяем, какие сделки показывать
     if request.user.is_client:
-        deals = Deal.objects.filter(
-            client=request.user
-        ).select_related('task', 'task__category', 'specialist', 'offer').order_by('-created_at')
+        deals = Deal.objects.filter(client=request.user).select_related(
+            'task', 'specialist', 'offer'
+        ).order_by('-created_at')
         user_role = 'client'
     elif request.user.is_specialist:
-        deals = Deal.objects.filter(
-            specialist=request.user
-        ).select_related('task', 'task__category', 'client', 'offer').order_by('-created_at')
+        deals = Deal.objects.filter(specialist=request.user).select_related(
+            'task', 'client', 'offer'
+        ).order_by('-created_at')
         user_role = 'specialist'
     else:
         messages.error(request, 'Эта страница доступна только для клиентов и специалистов.')
@@ -610,9 +501,6 @@ def my_deals(request):
 # Новые функции из Profimatch
 # ============================================
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response

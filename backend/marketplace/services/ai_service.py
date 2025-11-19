@@ -103,18 +103,34 @@ def analyze_task_description(user_input: str, language: str = 'ru') -> Optional[
 """
         
         # Генерация ответа
-        response = model.generate_content(
-            prompt,
-            generation_config={
-                "temperature": 0.7,
-                "top_p": 0.8,
-                "top_k": 40,
-                "max_output_tokens": 500,
-            }
-        )
+        response_text = None
+        try:
+            response = model.generate_content(
+                prompt,
+                generation_config={
+                    "temperature": 0.7,
+                    "top_p": 0.8,
+                    "top_k": 40,
+                    "max_output_tokens": 500,
+                }
+            )
+            
+            # Парсинг JSON ответа
+            if hasattr(response, 'text'):
+                response_text = response.text.strip()
+            elif hasattr(response, 'candidates') and response.candidates:
+                response_text = response.candidates[0].content.parts[0].text.strip()
+            else:
+                logger.error("Неожиданный формат ответа от Gemini")
+                return None
+        except Exception as e:
+            logger.error(f"Ошибка при генерации контента: {e}", exc_info=True)
+            return None
         
-        # Парсинг JSON ответа
-        response_text = response.text.strip()
+        # Проверяем что response_text определен
+        if not response_text:
+            logger.error("Пустой ответ от Gemini")
+            return None
         
         # Удаляем markdown code blocks если есть
         if response_text.startswith('```'):
