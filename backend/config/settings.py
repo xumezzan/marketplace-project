@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # наши приложения
     'accounts',
     'marketplace',
+    'payments',
 
     # сторонние
     'rest_framework',
@@ -198,3 +199,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
 }
+
+# Настройки платежей
+PLATFORM_FEE_PERCENTAGE = 10  # Комиссия платформы в процентах
