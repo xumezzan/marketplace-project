@@ -155,13 +155,12 @@ STATICFILES_DIRS = [
 ]
 
 # WhiteNoise для обслуживания статических файлов в продакшене
-# В продакшене (DEBUG=False) используем CompressedManifestStaticFilesStorage
+# В продакшене (DEBUG=False) используем CompressedStaticFilesStorage (без хеширования, чтобы избежать проблем с manifest)
 # В разработке используем стандартный storage
 if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
     WHITENOISE_USE_FINDERS = False  # В продакшене не использовать finders
     WHITENOISE_AUTOREFRESH = False  # В продакшене не автообновлять
-    WHITENOISE_MANIFEST_STRICT = True  # Строго требовать manifest.json
 else:
     # В разработке используем стандартный storage и finders
     STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
