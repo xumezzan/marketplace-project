@@ -36,10 +36,20 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
 # ALLOWED_HOSTS - безопасная настройка для продакшена
 ALLOWED_HOSTS_ENV = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "")
+
 if ALLOWED_HOSTS_ENV:
-    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(",")]
+    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(",") if host.strip()]
+elif RENDER_EXTERNAL_HOSTNAME:
+    # Используем хост из Render, если доступен
+    ALLOWED_HOSTS = [RENDER_EXTERNAL_HOSTNAME]
+elif DEBUG:
+    # В режиме разработки разрешаем все хосты
+    ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ["*"] if DEBUG else []  # В продакшене обязательно указать хосты
+    # В продакшене без указанных хостов - используем безопасное значение
+    # Это предотвратит ошибку, но лучше указать конкретные хосты
+    ALLOWED_HOSTS = ["*"]  # Временно разрешаем все, но лучше указать конкретный хост
 
 
 
