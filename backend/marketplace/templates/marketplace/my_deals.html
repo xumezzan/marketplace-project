@@ -4,135 +4,142 @@
 
 {% block content %}
 <!-- Заголовок страницы -->
-<div class="page-header mb-5">
-    <div>
-        <h1 class="display-6 fw-bold mb-2">Мои сделки</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-slate-900 mb-2 dark:text-white">Мои сделки</h1>
         {% if user_role == 'client' %}
-            <p class="text-muted mb-0">Вы — заказчик. Здесь ваши сделки с исполнителями.</p>
+        <p class="text-slate-500 dark:text-slate-400">Вы — заказчик. Здесь ваши сделки с исполнителями.</p>
         {% else %}
-            <p class="text-muted mb-0">Вы — исполнитель. Здесь ваши сделки с клиентами.</p>
+        <p class="text-slate-500 dark:text-slate-400">Вы — исполнитель. Здесь ваши сделки с клиентами.</p>
         {% endif %}
     </div>
-</div>
 
-<!-- Список сделок -->
-{% if deals %}
+    <!-- Список сделок -->
+    {% if deals %}
     <div class="row g-4">
         {% for deal in deals %}
-            <div class="col-lg-6 col-md-12">
-                <div class="deal-card card-custom">
-                    <!-- Заголовок -->
-                    <div class="deal-header mb-3">
-                        <div>
-                            <h4 class="mb-2">
-                                <a href="{% url 'marketplace:task_detail' deal.task.id %}" class="text-decoration-none" style="color: var(--text-main);">
-                                    {{ deal.task.title }}
-                                </a>
-                            </h4>
-                            <div class="d-flex gap-2 flex-wrap mb-2">
-                                <span class="badge badge-category">{{ deal.task.category.name }}</span>
-                                <span class="task-location">
-                                    <i class="bi bi-geo-alt"></i> {{ deal.task.city }}
-                                </span>
-                            </div>
-                        </div>
-                        <span class="badge badge-status badge-{{ deal.status }}">
-                            {{ deal.get_status_display }}
-                        </span>
-                    </div>
-                    
-                    <!-- Участник -->
-                    <div class="deal-info mb-3">
-                        <div class="deal-info-item">
-                            <span class="deal-info-label">
-                                {% if user_role == 'client' %}
-                                    <i class="bi bi-person-check"></i> Исполнитель:
-                                {% else %}
-                                    <i class="bi bi-person"></i> Клиент:
-                                {% endif %}
+        <div class="col-lg-6 col-md-12">
+            <div class="deal-card card-custom">
+                <!-- Заголовок -->
+                <div class="deal-header mb-3">
+                    <div>
+                        <h4 class="mb-2">
+                            <a href="{% url 'marketplace:task_detail' deal.task.id %}" class="text-decoration-none"
+                                style="color: var(--text-main);">
+                                {{ deal.task.title }}
+                            </a>
+                        </h4>
+                        <div class="d-flex gap-2 flex-wrap mb-2">
+                            <span class="badge badge-category">{{ deal.task.category.name }}</span>
+                            <span class="task-location">
+                                <i class="bi bi-geo-alt"></i> {{ deal.task.city }}
                             </span>
-                            <div>
-                                <strong>
-                                    {% if user_role == 'client' %}
-                                        {{ deal.specialist.username }}
-                                        {% if deal.specialist.rating and deal.specialist.rating > 0 %}
-                                            <span class="badge bg-warning text-dark ms-2">
-                                                ★ {{ deal.specialist.rating|floatformat:1 }}
-                                            </span>
-                                        {% endif %}
-                                    {% else %}
-                                        {{ deal.client.username }}
-                                    {% endif %}
-                                </strong>
-                            </div>
-                        </div>
-                        
-                        <!-- Цена -->
-                        <div class="deal-info-item">
-                            <span class="deal-info-label"><i class="bi bi-currency-exchange"></i> Финальная цена:</span>
-                            <strong class="deal-price">{{ deal.final_price }}</strong>
-                        </div>
-                        
-                        <!-- Дата -->
-                        <div class="deal-info-item">
-                            <span class="deal-info-label"><i class="bi bi-calendar"></i> Создано:</span>
-                            <span>{{ deal.created_at|date:"d.m.Y в H:i" }}</span>
                         </div>
                     </div>
-                    
-                    <!-- Кнопки действий (только для клиента) -->
-                    {% if user_role == 'client' %}
-                        <div class="deal-actions mt-3">
-                            {% if deal.status == 'pending' %}
-                                <form method="post" action="{% url 'marketplace:mark_deal_paid' deal.id %}" class="d-inline mb-2 w-100">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-accent w-100">
-                                        <i class="bi bi-check-circle"></i> Отметить как оплачено
-                                    </button>
-                                </form>
-                            {% elif deal.status == 'paid' %}
-                                <form method="post" action="{% url 'marketplace:mark_deal_completed' deal.id %}" class="d-inline mb-2 w-100">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-accent w-100">
-                                        <i class="bi bi-check2-circle"></i> Отметить как выполнено
-                                    </button>
-                                </form>
-                            {% elif deal.status == 'completed' %}
-                                <div class="alert alert-success mb-0">
-                                    <i class="bi bi-check-circle"></i> Сделка завершена
-                                </div>
+                    <span class="badge badge-status badge-{{ deal.status }}">
+                        {{ deal.get_status_display }}
+                    </span>
+                </div>
+
+                <!-- Участник -->
+                <div class="deal-info mb-3">
+                    <div class="deal-info-item">
+                        <span class="deal-info-label">
+                            {% if user_role == 'client' %}
+                            <i class="bi bi-person-check"></i> Исполнитель:
+                            {% else %}
+                            <i class="bi bi-person"></i> Клиент:
                             {% endif %}
+                        </span>
+                        <div>
+                            <strong>
+                                {% if user_role == 'client' %}
+                                {{ deal.specialist.username }}
+                                {% if deal.specialist.rating and deal.specialist.rating > 0 %}
+                                <span class="badge bg-warning text-dark ms-2">
+                                    ★ {{ deal.specialist.rating|floatformat:1 }}
+                                </span>
+                                {% endif %}
+                                {% else %}
+                                {{ deal.client.username }}
+                                {% endif %}
+                            </strong>
                         </div>
-                    {% endif %}
-                    
-                    <!-- Кнопка перехода к задаче -->
-                    <div class="mt-3">
-                        <a href="{% url 'marketplace:task_detail' deal.task.id %}" class="btn btn-accent-outline w-100">
-                            <i class="bi bi-arrow-right"></i> Перейти к задаче
-                        </a>
+                    </div>
+
+                    <!-- Цена -->
+                    <div class="deal-info-item">
+                        <span class="deal-info-label"><i class="bi bi-currency-exchange"></i> Финальная цена:</span>
+                        <strong class="deal-price">{{ deal.final_price }}</strong>
+                    </div>
+
+                    <!-- Дата -->
+                    <div class="deal-info-item">
+                        <span class="deal-info-label"><i class="bi bi-calendar"></i> Создано:</span>
+                        <span>{{ deal.created_at|date:"d.m.Y в H:i" }}</span>
                     </div>
                 </div>
+
+                <!-- Кнопки действий (только для клиента) -->
+                {% if user_role == 'client' %}
+                <div class="deal-actions mt-3">
+                    {% if deal.status == 'pending' %}
+                    <form method="post" action="{% url 'marketplace:mark_deal_paid' deal.id %}"
+                        class="d-inline mb-2 w-100">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-accent w-100">
+                            <i class="bi bi-check-circle"></i> Отметить как оплачено
+                        </button>
+                    </form>
+                    {% elif deal.status == 'paid' %}
+                    <form method="post" action="{% url 'marketplace:mark_deal_completed' deal.id %}"
+                        class="d-inline mb-2 w-100">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-accent w-100">
+                            <i class="bi bi-check2-circle"></i> Отметить как выполнено
+                        </button>
+                    </form>
+                    {% elif deal.status == 'completed' %}
+                    <div class="alert alert-success mb-0">
+                        <i class="bi bi-check-circle"></i> Сделка завершена
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Кнопка перехода к задаче -->
+                <div class="mt-3">
+                    <a href="{% url 'marketplace:task_detail' deal.task.id %}" class="btn btn-accent-outline w-100">
+                        <i class="bi bi-arrow-right"></i> Перейти к задаче
+                    </a>
+                </div>
             </div>
+        </div>
         {% endfor %}
     </div>
-{% else %}
-    <div class="empty-state">
-        <div class="empty-state-icon mb-3">
-            <i class="bi bi-inbox display-1 text-muted"></i>
+    {% else %}
+    <div
+        class="text-center py-16 bg-white rounded-2xl shadow-sm border border-slate-200 dark:bg-slate-800 dark:border-slate-700">
+        <div class="mb-4">
+            <i class="bi bi-inbox text-6xl text-slate-300 dark:text-slate-600"></i>
         </div>
-        <h3 class="text-muted">Сделок пока нет</h3>
+        <h3 class="text-xl font-semibold text-slate-900 mb-2 dark:text-white">Сделок пока нет</h3>
         {% if user_role == 'client' %}
-            <p class="text-muted">У вас пока нет активных сделок. Примите предложение специалиста, чтобы создать сделку!</p>
-            <a href="{% url 'marketplace:my_tasks' %}" class="btn btn-accent mt-3">
-                <i class="bi bi-list-task"></i> Мои заявки
-            </a>
+        <p class="text-slate-500 mb-6 dark:text-slate-400">У вас пока нет активных сделок. Примите предложение
+            специалиста, чтобы создать сделку!</p>
+        <a href="{% url 'marketplace:my_tasks' %}"
+            class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-sm no-underline">
+            <i class="bi bi-list-task"></i> Мои заявки
+        </a>
         {% else %}
-            <p class="text-muted">У вас пока нет активных сделок. Когда клиент примет ваше предложение, сделка появится здесь!</p>
-            <a href="{% url 'marketplace:my_offers' %}" class="btn btn-accent mt-3">
-                <i class="bi bi-chat-dots"></i> Мои отклики
-            </a>
+        <p class="text-slate-500 mb-6 dark:text-slate-400">У вас пока нет активных сделок. Когда клиент примет ваше
+            предложение, сделка появится здесь!</p>
+        <a href="{% url 'marketplace:my_offers' %}"
+            class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-sm no-underline">
+            <i class="bi bi-chat-dots"></i> Мои отклики
+        </a>
         {% endif %}
     </div>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}
-
