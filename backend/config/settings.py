@@ -26,10 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-v1b-n%bwdq6w7g9$od)(3kq63tws@*o8!skqsl3r5z%m(=6niv"  # Только для разработки
-)
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+
+if not SECRET_KEY:
+    raise ValueError(
+        "DJANGO_SECRET_KEY environment variable is not set. "
+        "Please set it in your .env file or environment."
+    )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
@@ -44,12 +47,14 @@ elif RENDER_EXTERNAL_HOSTNAME:
     # Используем хост из Render, если доступен
     ALLOWED_HOSTS = [RENDER_EXTERNAL_HOSTNAME]
 elif DEBUG:
-    # В режиме разработки разрешаем все хосты
-    ALLOWED_HOSTS = ["*"]
+    # В режиме разработки разрешаем локальные хосты
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
 else:
-    # В продакшене без указанных хостов - используем безопасное значение
-    # Это предотвратит ошибку, но лучше указать конкретные хосты
-    ALLOWED_HOSTS = ["*"]  # Временно разрешаем все, но лучше указать конкретный хост
+    # В продакшене ОБЯЗАТЕЛЬНО указать DJANGO_ALLOWED_HOSTS
+    raise ValueError(
+        "DJANGO_ALLOWED_HOSTS must be set in production. "
+        "Please set it in your .env file or environment."
+    )
 
 
 
@@ -262,11 +267,10 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
     
-    # HSTS только если используем HTTPS напрямую (не за прокси)
-    if USE_TLS and not IS_BEHIND_PROXY:
-        SECURE_HSTS_SECONDS = 31536000  # 1 год
-        SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-        SECURE_HSTS_PRELOAD = True
+    # HSTS настройки - включаем для production
+    SECURE_HSTS_SECONDS = 31536000  # 1 год
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 else:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
