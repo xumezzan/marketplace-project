@@ -39,6 +39,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -52,14 +53,22 @@
             }
         }
     </script>
+    <script>
+        // Check for dark mode preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 
     {% block extra_css %}{% endblock %}
 </head>
 
 <body hx-boost="true"
-    class="bg-slate-50 text-slate-900 antialiased">
+    class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm"
+    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 transition-colors duration-300"
         id="mainNavbar" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -74,20 +83,31 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
                     <a href="{% url 'marketplace:tasks_list' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Найти специалиста" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Найти
+                        специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Мои заказы" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Мои
+                        заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Стать специалистом" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Стать
+                        специалистом" %}</a>
                 </div>
 
                 <!-- Right Side -->
                 <div class="flex items-center gap-3">
                     <!-- Language Toggle -->
                     {% get_current_language as CURRENT_LANGUAGE %}
-                    <div class="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 mr-2">
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" type="button"
+                        class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-indigo-400 transition-colors mr-2">
+                        <i id="theme-toggle-dark-icon" class="bi bi-moon-stars-fill hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bi bi-sun-fill hidden"></i>
+                    </button>
+
+                    <div class="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 mr-2 dark:bg-slate-700">
                         <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="ru">
@@ -124,9 +144,11 @@
                             class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50"
                             style="display: none;">
                             <a href="{% url 'accounts:profile' %}"
-                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline">{% trans "Профиль" %}</a>
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline">{% trans
+                                "Профиль" %}</a>
                             <a href="{% url 'accounts:logout' %}"
-                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline">{% trans "Выйти" %}</a>
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline">{% trans
+                                "Выйти" %}</a>
                         </div>
                     </div>
                     {% else %}
@@ -137,35 +159,36 @@
                     {% endif %}
 
                     <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-full transition">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen"
+                        class="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-full transition">
                         <i x-show="!mobileMenuOpen" class="bi bi-list text-2xl"></i>
                         <i x-show="mobileMenuOpen" class="bi bi-x-lg text-2xl"></i>
                     </button>
                 </div>
             </div>
-            
+
             <!-- Mobile Menu -->
-            <div x-show="mobileMenuOpen" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 -translate-y-2"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="md:hidden border-t border-slate-200 py-4"
-                 style="display: none;">
+            <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+                class="md:hidden border-t border-slate-200 py-4" style="display: none;">
                 <div class="flex flex-col space-y-3 px-4">
                     <a href="{% url 'marketplace:tasks_list' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans "Найти специалиста" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans
+                        "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans "Мои заказы" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans
+                        "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans "Стать специалистом" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans
+                        "Стать специалистом" %}</a>
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}" @click="mobileMenuOpen = false"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{% trans "Создать заказ" %}</a>
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{%
+                        trans "Создать заказ" %}</a>
                     {% endif %}
                     <div class="flex items-center justify-between pt-2 border-t border-slate-200">
                         <span class="text-sm text-slate-500">{% trans "Язык" %}:</span>
@@ -220,20 +243,24 @@
                     <h4 class="footer-brand flex items-center gap-2">
                         <i class="bi bi-briefcase-fill"></i> ServiceHub
                     </h4>
-                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">{% trans "Сервис поиска специалистов №1. Надежно, быстро, удобно." %}</p>
+                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">{% trans "Сервис поиска
+                        специалистов №1. Надежно, быстро, удобно." %}</p>
                     <div class="flex gap-3">
-                        <a href="#" class="text-white hover:text-indigo-400 transition" style="color: rgba(255, 255, 255, 0.7);">
+                        <a href="#" class="text-white hover:text-indigo-400 transition"
+                            style="color: rgba(255, 255, 255, 0.7);">
                             <i class="bi bi-telegram text-xl"></i>
                         </a>
-                        <a href="#" class="text-white hover:text-indigo-400 transition" style="color: rgba(255, 255, 255, 0.7);">
+                        <a href="#" class="text-white hover:text-indigo-400 transition"
+                            style="color: rgba(255, 255, 255, 0.7);">
                             <i class="bi bi-instagram text-xl"></i>
                         </a>
-                        <a href="#" class="text-white hover:text-indigo-400 transition" style="color: rgba(255, 255, 255, 0.7);">
+                        <a href="#" class="text-white hover:text-indigo-400 transition"
+                            style="color: rgba(255, 255, 255, 0.7);">
                             <i class="bi bi-facebook text-xl"></i>
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Клиентам -->
                 <div>
                     <h4 class="footer-heading">{% trans "Клиентам" %}</h4>
@@ -244,7 +271,7 @@
                         <li><a href="#">{% trans "Как это работает" %}</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Специалистам -->
                 <div>
                     <h4 class="footer-heading">{% trans "Специалистам" %}</h4>
@@ -255,7 +282,7 @@
                         <li><a href="#">{% trans "Помощь" %}</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Контакты -->
                 <div>
                     <h4 class="footer-heading">{% trans "Контакты" %}</h4>
@@ -277,16 +304,19 @@
                     </ul>
                 </div>
             </div>
-            
+
             <!-- Footer Divider -->
             <div class="footer-divider"></div>
-            
+
             <!-- Copyright -->
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm" style="color: rgba(255, 255, 255, 0.5);">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm"
+                style="color: rgba(255, 255, 255, 0.5);">
                 <p>&copy; {% now "Y" %} ServiceHub. {% trans "Все права защищены." %}</p>
                 <div class="flex gap-6">
-                    <a href="#" class="hover:text-white transition no-underline" style="color: rgba(255, 255, 255, 0.7);">{% trans "Политика конфиденциальности" %}</a>
-                    <a href="#" class="hover:text-white transition no-underline" style="color: rgba(255, 255, 255, 0.7);">{% trans "Условия использования" %}</a>
+                    <a href="#" class="hover:text-white transition no-underline"
+                        style="color: rgba(255, 255, 255, 0.7);">{% trans "Политика конфиденциальности" %}</a>
+                    <a href="#" class="hover:text-white transition no-underline"
+                        style="color: rgba(255, 255, 255, 0.7);">{% trans "Условия использования" %}</a>
                 </div>
             </div>
         </div>
@@ -299,19 +329,48 @@
 
     <!-- Language Toggle Script -->
     <script src="{% static 'js/language-toggle.js' %}"></script>
-    
+
     <!-- Notifications System -->
     <script src="{% static 'js/notifications.js' %}"></script>
-    
+
     <!-- AI Wizard -->
     <script src="{% static 'js/ai-wizard.js' %}"></script>
-    
+
     <!-- Specialist Profile Modal -->
     <script src="{% static 'js/specialist-profile-modal.js' %}"></script>
-    
+
     <!-- Scroll to Top -->
     <script src="{% static 'js/scroll-to-top.js' %}"></script>
-    
+
+    <script>
+        var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        var themeToggleBtn = document.getElementById('theme-toggle');
+
+        // Change the icons inside the button based on previous settings
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', function () {
+                // toggle icons inside button
+                themeToggleDarkIcon.classList.toggle('hidden');
+                themeToggleLightIcon.classList.toggle('hidden');
+
+                // if set via local storage previously
+                if (localStorage.theme === 'dark') {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            });
+        }
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 
