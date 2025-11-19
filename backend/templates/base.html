@@ -77,22 +77,22 @@
                     <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                         <i class="bi bi-briefcase-fill text-white text-lg"></i>
                     </div>
-                    <span class="text-xl font-bold text-indigo-900 tracking-tight">ServiceHub</span>
+                    <span class="text-xl font-bold text-indigo-900 tracking-tight dark:text-white">ServiceHub</span>
                 </a>
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
                     <a href="{% url 'marketplace:tasks_list' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Найти
-                        специалиста" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Мои
-                        заказы" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Стать
-                        специалистом" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Стать специалистом" %}</a>
                 </div>
 
                 <!-- Right Side -->
@@ -136,24 +136,24 @@
                     {% if user.is_authenticated %}
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false"
-                            class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-full hover:bg-slate-100">
+                            class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-full hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700">
                             <i class="bi bi-person-circle text-xl"></i>
                         </button>
                         <!-- Dropdown -->
                         <div x-show="open" x-transition
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50 dark:bg-slate-800 dark:border-slate-700"
                             style="display: none;">
                             <a href="{% url 'accounts:profile' %}"
-                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline">{% trans
-                                "Профиль" %}</a>
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
+                                trans "Профиль" %}</a>
                             <a href="{% url 'accounts:logout' %}"
-                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline">{% trans
-                                "Выйти" %}</a>
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline dark:text-red-400 dark:hover:bg-slate-700">{%
+                                trans "Выйти" %}</a>
                         </div>
                     </div>
                     {% else %}
                     <a href="{% url 'accounts:login' %}"
-                        class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-full hover:bg-slate-100">
+                        class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-full hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700">
                         <i class="bi bi-box-arrow-in-right text-xl"></i>
                     </a>
                     {% endif %}
@@ -175,22 +175,22 @@
                 class="md:hidden border-t border-slate-200 py-4" style="display: none;">
                 <div class="flex flex-col space-y-3 px-4">
                     <a href="{% url 'marketplace:tasks_list' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans
-                        "Найти специалиста" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans
-                        "Мои заказы" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans
-                        "Стать специалистом" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Стать специалистом" %}</a>
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}" @click="mobileMenuOpen = false"
                         class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{%
                         trans "Создать заказ" %}</a>
                     {% endif %}
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
                         <span class="text-sm text-slate-500">{% trans "Язык" %}:</span>
                         <div class="flex items-center bg-slate-100 rounded-lg p-1">
                             <form method="post" action="{% url 'set_language' %}" class="flex items-center">
