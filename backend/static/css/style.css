@@ -1664,3 +1664,61 @@ a.bg-indigo-600:hover {
 [data-bs-theme="dark"] a.bg-indigo-600:hover {
     box-shadow: 0 10px 20px rgba(99, 102, 241, 0.5);
 }
+
+/* Scroll to Top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+}
+
+.scroll-to-top:active {
+    transform: translateY(-2px);
+}
+
+[data-bs-theme="dark"] .scroll-to-top {
+    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+    box-shadow: 0 4px 12px rgba(129, 140, 248, 0.4);
+}
+
+[data-bs-theme="dark"] .scroll-to-top:hover {
+    box-shadow: 0 8px 20px rgba(129, 140, 248, 0.6);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .scroll-to-top {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+    
+    .footer-modern {
+        padding: 2rem 0 1rem;
+    }
+    
+    .footer-brand {
+        font-size: 1.25rem;
+    }
+}
