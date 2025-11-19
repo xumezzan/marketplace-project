@@ -238,17 +238,35 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 # ============================================================================
 # БЕЗОПАСНОСТЬ ДЛЯ ПРОДАКШЕНА
 # ============================================================================
+# Проверяем, работаем ли мы за прокси (Render, Heroku и т.д.)
+USE_TLS = os.environ.get("USE_TLS", "False") == "True"
+IS_BEHIND_PROXY = os.environ.get("IS_BEHIND_PROXY", "True") == "True"  # Render работает за прокси
+
 if not DEBUG:
-    # HTTPS настройки
-    SECURE_SSL_REDIRECT = os.environ.get("SECURE_SSL_REDIRECT", "True") == "True"
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    # На Render HTTPS обрабатывается на уровне прокси, поэтому не нужно редиректить
+    # SECURE_SSL_REDIRECT должен быть False, если работаем за прокси
+    SECURE_SSL_REDIRECT = False if IS_BEHIND_PROXY else (os.environ.get("SECURE_SSL_REDIRECT", "False") == "True")
+    
+    # Настройки для работы за прокси (Render)
+    if IS_BEHIND_PROXY:
+        # Render передает информацию о HTTPS через заголовки
+        SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+        USE_TLS = True
+    
+    # Безопасные cookies (только если используем HTTPS)
+    SESSION_COOKIE_SECURE = USE_TLS
+    CSRF_COOKIE_SECURE = USE_TLS
+    
+    # Другие настройки безопасности
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-    SECURE_HSTS_SECONDS = 31536000  # 1 год
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    
+    # HSTS только если используем HTTPS напрямую (не за прокси)
+    if USE_TLS and not IS_BEHIND_PROXY:
+        SECURE_HSTS_SECONDS = 31536000  # 1 год
+        SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+        SECURE_HSTS_PRELOAD = True
 else:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
