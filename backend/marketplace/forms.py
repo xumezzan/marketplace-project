@@ -2,7 +2,7 @@
 Формы для marketplace приложения.
 """
 from django import forms
-from .models import Task, Category, Offer, Review
+from .models import Task, Category, Offer, Review, PortfolioItem
 
 
 class TaskCreateForm(forms.ModelForm):
@@ -202,4 +202,42 @@ class ReviewCreateForm(forms.ModelForm):
         if rating and (rating < 1 or rating > 5):
             raise forms.ValidationError('Оценка должна быть от 1 до 5.')
         return rating
+
+
+class PortfolioItemForm(forms.ModelForm):
+    """
+    Форма для создания/редактирования элемента портфолио.
+    """
+    
+    class Meta:
+        model = PortfolioItem
+        fields = ['title', 'description', 'image', 'order']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Название работы',
+                'required': True,
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Описание работы (необязательно)',
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+                'required': True,
+            }),
+            'order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'value': '0',
+            }),
+        }
+        labels = {
+            'title': 'Название',
+            'description': 'Описание',
+            'image': 'Изображение',
+            'order': 'Порядок отображения',
+        }
 

@@ -2,7 +2,7 @@
 Админ-панель для моделей marketplace.
 """
 from django.contrib import admin
-from .models import Category, SpecialistProfile, Task, Offer, Review, Deal
+from .models import Category, SpecialistProfile, Task, Offer, Review, Deal, PortfolioItem, Escrow
 
 
 @admin.register(Category)
@@ -185,6 +185,67 @@ class DealAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Детали сделки', {
             'fields': ('task', 'offer', 'client', 'specialist', 'final_price', 'status')
+        }),
+        ('Временные метки', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+
+@admin.register(PortfolioItem)
+class PortfolioItemAdmin(admin.ModelAdmin):
+    """Админ-интерфейс для модели PortfolioItem."""
+    list_display = [
+        'title',
+        'specialist',
+        'order',
+        'created_at'
+    ]
+    list_filter = ['created_at']
+    search_fields = [
+        'title',
+        'description',
+        'specialist__username'
+    ]
+    readonly_fields = ['created_at', 'updated_at']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('specialist', 'title', 'description', 'image', 'order')
+        }),
+        ('Временные метки', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+
+@admin.register(Escrow)
+class EscrowAdmin(admin.ModelAdmin):
+    """Админ-интерфейс для модели Escrow."""
+    list_display = [
+        'deal',
+        'amount',
+        'status',
+        'reserved_at',
+        'released_at',
+        'created_at'
+    ]
+    list_filter = ['status', 'created_at']
+    search_fields = [
+        'deal__task__title',
+        'deal__client__username',
+        'deal__specialist__username'
+    ]
+    readonly_fields = ['created_at', 'updated_at', 'reserved_at', 'released_at']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('Детали escrow', {
+            'fields': ('deal', 'amount', 'status')
+        }),
+        ('Даты', {
+            'fields': ('reserved_at', 'released_at')
         }),
         ('Временные метки', {
             'fields': ('created_at', 'updated_at')

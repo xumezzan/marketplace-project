@@ -7,6 +7,7 @@ from .viewsets import (
     CategoryViewSet, TaskViewSet, OfferViewSet,
     UserViewSet, ReviewViewSet, DealViewSet
 )
+from .views import analyze_task_ai
 
 # Создаем router
 router = DefaultRouter()
@@ -21,5 +22,6 @@ app_name = 'marketplace_api'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('ai/analyze-task/', analyze_task_ai, name='analyze_task_ai'),
 ]
 

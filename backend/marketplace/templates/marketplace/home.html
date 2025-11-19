@@ -1,239 +1,372 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Marketplace - Платформа услуг{% endblock %}
+{% block title %}ServiceHub - Поиск специалистов{% endblock %}
 
 {% block content %}
-<!-- Hero-блок -->
-<section class="hero-section py-5 mb-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">Найдите проверенного специалиста для любой задачи</h1>
-                <p class="lead mb-4">Тысячи профессионалов готовы помочь вам с ремонтом, обучением, красотой и многим другим</p>
-                
-                <!-- Форма поиска -->
-                <form method="get" action="{% url 'marketplace:tasks_list' %}" class="search-form">
-                    <div class="input-group input-group-lg">
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            placeholder="Услуга или специалист..." 
-                            name="q"
-                            aria-label="Поиск задач"
-                        >
-                        <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i> Найти
-                        </button>
+<!-- Hero Section -->
+<div class="relative bg-white dark:bg-slate-900 overflow-hidden transition-colors duration-300">
+    <div class="max-w-7xl mx-auto">
+        <div
+            class="relative z-10 pb-8 bg-white dark:bg-slate-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+            <main class="mt-10 mx-auto max-w-7xl sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
+                    <h1
+                        class="text-4xl tracking-tight font-extrabold text-slate-900 dark:text-white sm:text-5xl md:text-6xl">
+                        <span class="block xl:inline">Найдите профи</span>
+                        <span class="block text-indigo-600 dark:text-indigo-400 xl:inline"> для любой задачи</span>
+                    </h1>
+                    <p
+                        class="mt-3 text-base text-slate-500 dark:text-slate-400 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                        Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и многое
+                        другое. Быстро, безопасно и качественно.
+                    </p>
+
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4 sm:justify-center lg:justify-start">
+                        <div class="relative rounded-md shadow-sm flex-grow max-w-lg">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-search text-slate-400 text-lg"></i>
+                            </div>
+                            <input type="text"
+                                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 dark:border-slate-700 rounded-xl py-4 bg-slate-50 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+                                placeholder="Что нужно сделать?" />
+                        </div>
+                        <a href="{% url 'marketplace:task_create' %}"
+                            class="flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg shadow-lg shadow-indigo-200 dark:shadow-none transition transform hover:-translate-y-0.5 no-underline">
+                            Найти
+                        </a>
                     </div>
-                </form>
-                
-                <div class="mt-4">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'marketplace:task_create' %}" class="btn btn-success btn-lg me-2">
-                            <i class="bi bi-plus-circle"></i> Создать заявку
-                        </a>
-                    {% else %}
-                        <a href="#" class="btn btn-success btn-lg me-2">
-                            <i class="bi bi-person-plus"></i> Зарегистрироваться
-                        </a>
-                    {% endif %}
-                    <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-outline-primary btn-lg">
-                        <i class="bi bi-list-ul"></i> Все задачи
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <div class="hero-stats p-4 bg-light rounded">
-                    <div class="row g-4">
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-primary mb-0">{{ tasks_count|default:"0" }}+</h3>
-                                <p class="text-muted mb-0">Активных задач</p>
-                            </div>
+
+                    <div
+                        class="mt-8 flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400 sm:justify-center lg:justify-start">
+                        <div class="flex items-center gap-1.5">
+                            <i class="bi bi-shield-check text-green-500 text-lg"></i>
+                            <span>Проверенные профили</span>
                         </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-success mb-0">{{ specialists_count|default:"0" }}+</h3>
-                                <p class="text-muted mb-0">Специалистов</p>
-                            </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="bi bi-star-fill text-yellow-500 text-lg"></i>
+                            <span>Честные отзывы</span>
                         </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-info mb-0">{{ cities_count|default:"0" }}+</h3>
-                                <p class="text-muted mb-0">Городов</p>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item">
-                                <h3 class="display-6 text-warning mb-0">24/7</h3>
-                                <p class="text-muted mb-0">Поддержка</p>
-                            </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="bi bi-people-fill text-blue-500 text-lg"></i>
+                            <span>{{ specialists_count }}+ специалистов</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</section>
-
-<!-- Блок преимуществ -->
-<section class="features-section py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">Почему выбирают нас</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-shield-check display-4 text-primary"></i>
-                    </div>
-                    <h4>Проверенные специалисты</h4>
-                    <p class="text-muted">Все специалисты проходят верификацию и имеют отзывы от реальных клиентов</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-cash-coin display-4 text-success"></i>
-                    </div>
-                    <h4>Прозрачные цены</h4>
-                    <p class="text-muted">Специалисты предлагают цены заранее, без скрытых платежей</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card text-center p-4">
-                    <div class="feature-icon mb-3">
-                        <i class="bi bi-clock-history display-4 text-info"></i>
-                    </div>
-                    <h4>Быстрый отклик</h4>
-                    <p class="text-muted">Получайте предложения от специалистов в течение нескольких часов</p>
-                </div>
-            </div>
+    <div
+        class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
+        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-90 dark:opacity-60"
+            src="https://images.unsplash.com/photo-1581578731117-104f2a863a30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            alt="Repair specialist working" />
+        <div
+            class="absolute inset-0 bg-gradient-to-l from-transparent to-white dark:to-slate-900 lg:via-white/20 dark:via-slate-900/20">
         </div>
     </div>
-</section>
+</div>
 
-<!-- Популярные категории -->
-{% if categories %}
-<section class="categories-section py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Популярные категории</h2>
-        <div class="row g-4">
-            {% for category in categories %}
-            <div class="col-md-3 col-sm-6">
-                <a href="{% url 'marketplace:tasks_list' %}?category={{ category.id }}" class="text-decoration-none">
-                    <div class="category-card card h-100 shadow-sm hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="category-icon mb-3">
-                                <i class="bi bi-briefcase display-6 text-primary"></i>
-                            </div>
-                            <h5 class="card-title">{{ category.name }}</h5>
-                            {% if category.description %}
-                            <p class="card-text text-muted small">{{ category.description|truncatewords:10 }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="text-center mt-5">
-            <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-outline-primary btn-lg">
-                Посмотреть все категории
+<!-- Categories Section -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+    <div
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-6 sm:p-10 transition-colors duration-300">
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-6">Популярные категории</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <!-- Static Categories for Demo (matching Profimatch design) -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=repair"
+                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer group no-underline">
+                <div
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 group-hover:scale-110 transition duration-300 shadow-sm">
+                    <i class="bi bi-hammer text-2xl"></i>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white text-center">Ремонт</span>
+            </a>
+
+            <a href="{% url 'marketplace:tasks_list' %}?category=education"
+                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer group no-underline">
+                <div
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 group-hover:scale-110 transition duration-300 shadow-sm">
+                    <i class="bi bi-book text-2xl"></i>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white text-center">Обучение</span>
+            </a>
+
+            <a href="{% url 'marketplace:tasks_list' %}?category=beauty"
+                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer group no-underline">
+                <div
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400 group-hover:scale-110 transition duration-300 shadow-sm">
+                    <i class="bi bi-stars text-2xl"></i>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white text-center">Красота</span>
+            </a>
+
+            <a href="{% url 'marketplace:tasks_list' %}?category=transport"
+                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer group no-underline">
+                <div
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 group-hover:scale-110 transition duration-300 shadow-sm">
+                    <i class="bi bi-truck text-2xl"></i>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white text-center">Перевозки</span>
+            </a>
+
+            <a href="{% url 'marketplace:tasks_list' %}?category=it"
+                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer group no-underline">
+                <div
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 group-hover:scale-110 transition duration-300 shadow-sm">
+                    <i class="bi bi-display text-2xl"></i>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white text-center">IT
+                    услуги</span>
+            </a>
+
+            <a href="{% url 'marketplace:tasks_list' %}"
+                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer group no-underline">
+                <div
+                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 group-hover:scale-110 transition duration-300 shadow-sm">
+                    <i class="bi bi-grid text-2xl"></i>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white text-center">Все
+                    категории</span>
             </a>
         </div>
     </div>
-</section>
-{% endif %}
+</div>
 
-<!-- Блок отзывов (заглушка) -->
-<section class="reviews-section py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">Отзывы клиентов</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="review-card card h-100 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="review-rating me-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </div>
-                        </div>
-                        <p class="card-text">"Отличный сервис! Нашла мастера по ремонту за один день. Работа выполнена качественно и в срок."</p>
-                        <div class="review-author">
-                            <strong>Анна К.</strong>
-                            <small class="text-muted d-block">Клиент</small>
-                        </div>
+<!-- Specialists Section -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex justify-between items-end mb-8">
+        <div>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Рекомендуемые специалисты</h2>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Профессионалы с высоким рейтингом и отзывами</p>
+        </div>
+        <a href="#"
+            class="text-indigo-600 dark:text-indigo-400 font-medium hover:text-indigo-700 dark:hover:text-indigo-300 hidden sm:block no-underline">Все
+            специалисты &rarr;</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Mock Specialist 1 -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer">
+            <div
+                class="p-6 flex flex-col items-center text-center border-b border-slate-50 dark:border-slate-700 flex-grow">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+                        alt="Ашур Ахмедов"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-md mb-4 group-hover:scale-105 transition duration-300" />
+                    <div
+                        class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-700">
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="review-card card h-100 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="review-rating me-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </div>
-                        </div>
-                        <p class="card-text">"Платформа очень удобная. Много заказов, быстро нахожу подходящие задачи. Рекомендую!"</p>
-                        <div class="review-author">
-                            <strong>Иван П.</strong>
-                            <small class="text-muted d-block">Специалист</small>
-                        </div>
-                    </div>
+
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Ашур Ахмедов</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Дизайнер архитектур</p>
+
+                <div class="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md mb-4">
+                    <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                    <span class="font-bold text-slate-900 dark:text-amber-100 text-sm">4.9</span>
+                    <span class="text-slate-400 dark:text-slate-400 text-xs">(142 отзыва)</span>
+                </div>
+
+                <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-4">Лучший дизайнер из Зирабада.
+                    Делаю элитные проекты, проектирую дворцы и современные коттеджи.</p>
+
+                <div
+                    class="mt-auto flex gap-2 text-xs text-slate-400 dark:text-slate-500 w-full justify-center border-t border-slate-50 dark:border-slate-700 pt-3">
+                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 142</span>
+                    <span>•</span>
+                    <span>2 работы</span>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="review-card card h-100 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="review-rating me-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </div>
-                        </div>
-                        <p class="card-text">"Использую платформу регулярно. Всегда нахожу хороших специалистов для разных задач."</p>
-                        <div class="review-author">
-                            <strong>Мария С.</strong>
-                            <small class="text-muted d-block">Клиент</small>
-                        </div>
+
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
+                <span class="font-semibold text-slate-900 dark:text-white">от 5000 ₽/час</span>
+                <div
+                    class="p-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-full text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
+                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Specialist 2 -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer">
+            <div
+                class="p-6 flex flex-col items-center text-center border-b border-slate-50 dark:border-slate-700 flex-grow">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+                        alt="Нилюфар Каримова"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-md mb-4 group-hover:scale-105 transition duration-300" />
+                    <div
+                        class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-700">
                     </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Нилюфар Каримова</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Репетитор по английскому</p>
+
+                <div class="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md mb-4">
+                    <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                    <span class="font-bold text-slate-900 dark:text-amber-100 text-sm">5.0</span>
+                    <span class="text-slate-400 dark:text-slate-400 text-xs">(89 отзывов)</span>
+                </div>
+
+                <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-4">Преподаватель ВУЗа. Готовлю к
+                    IELTS, CEFR. Индивидуальный подход к каждому ученику.</p>
+
+                <div
+                    class="mt-auto flex gap-2 text-xs text-slate-400 dark:text-slate-500 w-full justify-center border-t border-slate-50 dark:border-slate-700 pt-3">
+                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 89</span>
+                    <span>•</span>
+                    <span>1 работа</span>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
+                <span class="font-semibold text-slate-900 dark:text-white">от 2000 ₽/час</span>
+                <div
+                    class="p-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-full text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
+                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Specialist 3 -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer">
+            <div
+                class="p-6 flex flex-col items-center text-center border-b border-slate-50 dark:border-slate-700 flex-grow">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+                        alt="Сардор Умаров"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-md mb-4 group-hover:scale-105 transition duration-300" />
+                    <div
+                        class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-700">
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Сардор Умаров</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Электрик профи</p>
+
+                <div class="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md mb-4">
+                    <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                    <span class="font-bold text-slate-900 dark:text-amber-100 text-sm">4.8</span>
+                    <span class="text-slate-400 dark:text-slate-400 text-xs">(215 отзывов)</span>
+                </div>
+
+                <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-4">Все виды электромонтажных работ.
+                    Замена проводки, установка розеток, люстр.</p>
+
+                <div
+                    class="mt-auto flex gap-2 text-xs text-slate-400 dark:text-slate-500 w-full justify-center border-t border-slate-50 dark:border-slate-700 pt-3">
+                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 215</span>
+                    <span>•</span>
+                    <span>1 работа</span>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
+                <span class="font-semibold text-slate-900 dark:text-white">от 1800 ₽/час</span>
+                <div
+                    class="p-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-full text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
+                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Specialist 4 -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer">
+            <div
+                class="p-6 flex flex-col items-center text-center border-b border-slate-50 dark:border-slate-700 flex-grow">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+                        alt="Зарина Юсупова"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-md mb-4 group-hover:scale-105 transition duration-300" />
+                    <div
+                        class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-700">
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Зарина Юсупова</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-3">Косметолог, Визажист</p>
+
+                <div class="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded-md mb-4">
+                    <i class="bi bi-star-fill text-amber-500 text-xs"></i>
+                    <span class="font-bold text-slate-900 dark:text-amber-100 text-sm">4.9</span>
+                    <span class="text-slate-400 dark:text-slate-400 text-xs">(56 отзывов)</span>
+                </div>
+
+                <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-4">Дипломированный специалист.
+                    Использую только профессиональную косметику.</p>
+
+                <div
+                    class="mt-auto flex gap-2 text-xs text-slate-400 dark:text-slate-500 w-full justify-center border-t border-slate-50 dark:border-slate-700 pt-3">
+                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 56</span>
+                    <span>•</span>
+                    <span>2 работы</span>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
+                <span class="font-semibold text-slate-900 dark:text-white">от 3000 ₽/час</span>
+                <div
+                    class="p-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-full text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
+                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
                 </div>
             </div>
         </div>
     </div>
-</section>
+    <div class="mt-6 sm:hidden text-center">
+        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-700 no-underline">Все специалисты &rarr;</a>
+    </div>
+</div>
 
-<!-- CTA блок -->
-<section class="cta-section py-5 bg-primary text-white">
-    <div class="container text-center">
-        <h2 class="display-5 mb-4">Готовы начать?</h2>
-        <p class="lead mb-4">Создайте задачу или станьте специалистом уже сегодня</p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            {% if user.is_authenticated %}
-                <a href="{% url 'marketplace:task_create' %}" class="btn btn-light btn-lg">
-                    <i class="bi bi-plus-circle"></i> Создать задачу
-                </a>
-            {% else %}
-                <a href="#" class="btn btn-light btn-lg">
-                    <i class="bi bi-person-plus"></i> Зарегистрироваться
-                </a>
-            {% endif %}
-            <a href="{% url 'marketplace:tasks_list' %}" class="btn btn-outline-light btn-lg">
-                <i class="bi bi-list-ul"></i> Посмотреть задачи
-            </a>
+<!-- Features Section -->
+<div class="bg-slate-50 dark:bg-slate-800/50 py-24 mt-12 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Как это работает</h2>
+            <p class="mt-4 text-lg text-slate-500 dark:text-slate-400">Всего 3 простых шага, чтобы решить вашу задачу
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-12">
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-md flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    1</div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Создайте задачу</h3>
+                <p class="text-slate-600 dark:text-slate-400">Опишите, что нужно сделать. Это бесплатно и займет пару
+                    минут.</p>
+            </div>
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-md flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    2</div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Получите отклики</h3>
+                <p class="text-slate-600 dark:text-slate-400">Специалисты предложат свои услуги и цены. Выберите
+                    лучшего.</p>
+            </div>
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-md flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    3</div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Договоритесь о работе</h3>
+                <p class="text-slate-600 dark:text-slate-400">Обсудите детали в чате и выберите исполнителя.</p>
+            </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}
-

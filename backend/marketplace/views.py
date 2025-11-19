@@ -9,6 +9,7 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
+from rest_framework import status
 from .models import Task, Offer, Deal, Category, Review
 from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm
 
@@ -603,3 +604,54 @@ def my_deals(request):
     }
     
     return render(request, 'marketplace/my_deals.html', context)
+
+
+# ============================================
+# Новые функции из Profimatch
+# ============================================
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .services.ai_service import analyze_task_description
+from .models import PortfolioItem, Escrow
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def analyze_task_ai(request):
+    """
+    API endpoint для AI-анализа описания задачи.
+    
+    Принимает:
+    - description: текст описания задачи
+    - language: 'ru' или 'uz' (опционально, по умолчанию 'ru')
+    
+    Возвращает:
+    - suggested_title: предложенный заголовок
+    - suggested_category: предложенная категория
+    - refined_description: улучшенное описание
+    - estimated_budget_min: минимальный бюджет
+    - estimated_budget_max: максимальный бюджет
+    """
+    description = request.data.get('description', '').strip()
+    language = request.data.get('language', 'ru')
+    
+    if not description:
+        return Response(
+            {'error': 'Описание задачи обязательно'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    result = analyze_task_description(description, language)
+    
+    if result:
+        return Response(result.to_dict(), status=status.HTTP_200_OK)
+    else:
+        return Response(
+            {'error': 'Не удалось проанализировать задачу. Попробуйте позже.'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

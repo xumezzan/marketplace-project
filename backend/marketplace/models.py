@@ -547,3 +547,143 @@ class Deal(models.Model):
             # Также обновляем статус задачи
             self.task.status = self.task.Status.COMPLETED
             self.task.save()
+
+
+class PortfolioItem(models.Model):
+    """
+    Модель элемента портфолио специалиста.
+    
+    Специалисты могут загружать изображения своих работ в портфолио.
+    """
+    specialist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='portfolio_items',
+        verbose_name='специалист',
+        help_text="Специалист, которому принадлежит это портфолио"
+    )
+    title = models.CharField(
+        'название',
+        max_length=200,
+        help_text="Название работы"
+    )
+    description = models.TextField(
+        'описание',
+        blank=True,
+        null=True,
+        help_text="Описание работы"
+    )
+    image = models.ImageField(
+        'изображение',
+        upload_to='portfolio/%Y/%m/%d/',
+        help_text="Изображение работы"
+    )
+    order = models.PositiveIntegerField(
+        'порядок',
+        default=0,
+        help_text="Порядок отображения (меньше = выше)"
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    
+    class Meta:
+        db_table = 'portfolio_items'
+        verbose_name = 'элемент портфолио'
+        verbose_name_plural = 'элементы портфолио'
+        ordering = ['order', '-created_at']
+        indexes = [
+            models.Index(fields=['specialist', 'order']),
+        ]
+    
+    def __str__(self) -> str:
+        return f"{self.title} - {self.specialist.username}"
+
+
+class Escrow(models.Model):
+    """
+    Модель escrow (резервирование средств) для безопасных сделок.
+    
+    Средства резервируются на счете и переводятся исполнителю
+    только после подтверждения выполнения работы клиентом.
+    """
+    
+    class Status(models.TextChoices):
+        """Статусы escrow."""
+        PENDING = 'pending', 'Ожидает резервирования'
+        RESERVED = 'reserved', 'Средства зарезервированы'
+        LOCKED = 'locked', 'Средства заблокированы'
+        RELEASED = 'released', 'Средства переведены'
+        REFUNDED = 'refunded', 'Средства возвращены'
+    
+    deal = models.OneToOneField(
+        Deal,
+        on_delete=models.CASCADE,
+        related_name='escrow',
+        verbose_name='сделка',
+        help_text="Сделка, для которой создан escrow"
+    )
+    amount = models.DecimalField(
+        'сумма',
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0)],
+        help_text="Сумма для резервирования"
+    )
+    status = models.CharField(
+        'статус',
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+        help_text="Текущий статус escrow"
+    )
+    reserved_at = models.DateTimeField(
+        'дата резервирования',
+        blank=True,
+        null=True,
+        help_text="Когда средства были зарезервированы"
+    )
+    released_at = models.DateTimeField(
+        'дата перевода',
+        blank=True,
+        null=True,
+        help_text="Когда средства были переведены исполнителю"
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    
+    class Meta:
+        db_table = 'escrows'
+        verbose_name = 'escrow'
+        verbose_name_plural = 'escrows'
+        ordering = ['-created_at']
+    
+    def __str__(self) -> str:
+        return f"Escrow для сделки {self.deal.id} - {self.amount} ({self.get_status_display()})"
+    
+    def reserve(self) -> None:
+        """Резервирует средства."""
+        if self.status == self.Status.PENDING:
+            self.status = self.Status.RESERVED
+            from django.utils import timezone
+            self.reserved_at = timezone.now()
+            self.save()
+    
+    def lock(self) -> None:
+        """Блокирует средства (работа начата)."""
+        if self.status == self.Status.RESERVED:
+            self.status = self.Status.LOCKED
+            self.save()
+    
+    def release(self) -> None:
+        """Переводит средства исполнителю."""
+        if self.status == self.Status.LOCKED:
+            self.status = self.Status.RELEASED
+            from django.utils import timezone
+            self.released_at = timezone.now()
+            self.save()
+    
+    def refund(self) -> None:
+        """Возвращает средства клиенту."""
+        if self.status in [self.Status.RESERVED, self.Status.LOCKED]:
+            self.status = self.Status.REFUNDED
+            self.save()

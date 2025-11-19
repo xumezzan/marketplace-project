@@ -1,6 +1,7 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="light">
+<html lang="{% get_current_language %}" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -33,113 +34,137 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['selector', '[data-bs-theme="dark"]'], // Use data-bs-theme for dark mode to match existing logic
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <!-- Apply theme before page load to prevent flash -->
     <script>
-        (function () {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-bs-theme', savedTheme);
-        })();
+            (function () {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            })();
     </script>
 
     {% block extra_css %}{% endblock %}
 </head>
 
-<body hx-boost="true">
-    <!-- Фиксированная навигация -->
-    <nav class="navbar navbar-expand-lg navbar-modern sticky-top" id="mainNavbar">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <i class="bi bi-briefcase-fill me-2"></i>
-                <span class="brand-text">ServiceHub</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'marketplace:tasks_list' %}">
-                            <i class="bi bi-list-task me-1"></i> Задачи
-                        </a>
-                    </li>
+<body hx-boost="true"
+    class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300"
+        id="mainNavbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <a href="{% url 'home' %}" class="flex items-center gap-2 cursor-pointer no-underline">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                        <i class="bi bi-briefcase-fill text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold text-indigo-900 dark:text-white tracking-tight">ServiceHub</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="{% url 'marketplace:tasks_list' %}"
+                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition no-underline">Найти
+                        специалиста</a>
                     {% if user.is_authenticated %}
-                    {% if user.is_client %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'marketplace:task_create' %}">
-                            <i class="bi bi-plus-circle me-1"></i> Создать задачу
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'marketplace:my_tasks' %}">
-                            <i class="bi bi-inbox me-1"></i> Мои заявки
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'marketplace:my_deals' %}">
-                            <i class="bi bi-handshake me-1"></i> Мои сделки
-                        </a>
-                    </li>
-                    {% elif user.is_specialist %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'marketplace:my_offers' %}">
-                            <i class="bi bi-chat-dots me-1"></i> Мои отклики
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'marketplace:my_deals' %}">
-                            <i class="bi bi-handshake me-1"></i> Мои сделки
-                        </a>
-                    </li>
+                    <a href="{% url 'marketplace:my_tasks' %}"
+                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition no-underline">Мои
+                        заказы</a>
                     {% endif %}
+                    <a href="{% url 'accounts:register' %}"
+                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition no-underline">Стать
+                        специалистом</a>
+                </div>
+
+                <!-- Right Side -->
+                <div class="flex items-center gap-3">
+                    <!-- Language Toggle -->
+                    {% get_current_language as CURRENT_LANGUAGE %}
+                    <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1 mr-2">
+                        <form method="post" action="{% url 'set_language' %}" class="flex items-center">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="ru">
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit"
+                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">RU</button>
+                        </form>
+                        <form method="post" action="{% url 'set_language' %}" class="flex items-center">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="uz">
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit"
+                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">UZ</button>
+                        </form>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle"
+                        class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition flex items-center justify-center">
+                        <i id="theme-icon" class="bi bi-moon-fill text-lg"></i>
+                    </button>
+
+                    <!-- Create Task Button -->
+                    {% if user.is_authenticated and user.is_client %}
+                    <a href="{% url 'marketplace:task_create' %}"
+                        class="hidden sm:block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 no-underline">
+                        Создать заказ
+                    </a>
                     {% endif %}
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item d-flex align-items-center me-3">
-                        <button id="theme-toggle" type="button" class="btn btn-link nav-link"
-                            aria-label="Переключить тему">
-                            <i id="theme-icon" class="bi bi-moon-fill fs-5"></i>
+
+                    <!-- User Menu -->
+                    {% if user.is_authenticated %}
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" @click.outside="open = false"
+                            class="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <i class="bi bi-person-circle text-xl"></i>
                         </button>
-                    </li>
-                    {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-2"></i>
-                            <span>{{ user.username }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
-                                    <i class="bi bi-person me-2"></i>Профиль
-                                </a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Выйти
-                                </a></li>
-                        </ul>
-                    </li>
+                        <!-- Dropdown -->
+                        <div x-show="open" x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg py-1 border border-slate-100 dark:border-slate-700 z-50"
+                            style="display: none;">
+                            <a href="{% url 'accounts:profile' %}"
+                                class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 no-underline">Профиль</a>
+                            <a href="{% url 'accounts:logout' %}"
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 dark:hover:bg-slate-700 no-underline">Выйти</a>
+                        </div>
+                    </div>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:login' %}">
-                            <i class="bi bi-box-arrow-in-right me-1"></i> Войти
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-nav-primary" href="{% url 'accounts:register' %}">
-                            <i class="bi bi-person-plus me-1"></i> Регистрация
-                        </a>
-                    </li>
+                    <a href="{% url 'accounts:login' %}"
+                        class="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="bi bi-box-arrow-in-right text-xl"></i>
+                    </a>
                     {% endif %}
-                </ul>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden p-2 text-slate-500 dark:text-slate-400">
+                        <i class="bi bi-list text-2xl"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Сообщения -->
     {% if messages %}
-    <div class="container mt-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-modern animate__animated animate__fadeInDown"
             role="alert">
@@ -153,56 +178,39 @@
     {% endif %}
 
     <!-- Основное содержимое -->
-    <main class="main-content animate__animated animate__fadeIn">
+    <main class="min-h-screen animate__animated animate__fadeIn">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Футер -->
-    <footer class="footer-modern">
-        <div class="container">
-            <div class="row py-5">
-                <div class="col-lg-4 mb-4 mb-lg-0">
-                    <h5 class="footer-brand mb-3">
-                        <i class="bi bi-briefcase-fill me-2"></i>ServiceHub
-                    </h5>
-                    <p class="text-muted">Маркетплейс для поиска специалистов и выполнения задач. Связываем клиентов с
-                        профессионалами.</p>
-                </div>
-                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                    <h6 class="footer-heading mb-3">Навигация</h6>
-                    <ul class="footer-links list-unstyled">
-                        <li><a href="{% url 'home' %}">Главная</a></li>
-                        <li><a href="{% url 'marketplace:tasks_list' %}">Задачи</a></li>
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'accounts:profile' %}">Профиль</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                    <h6 class="footer-heading mb-3">Аккаунт</h6>
-                    <ul class="footer-links list-unstyled">
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'accounts:profile' %}">Профиль</a></li>
-                        <li><a href="{% url 'accounts:logout' %}">Выйти</a></li>
-                        {% else %}
-                        <li><a href="{% url 'accounts:login' %}">Войти</a></li>
-                        <li><a href="{% url 'accounts:register' %}">Регистрация</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="col-lg-4 col-md-12">
-                    <h6 class="footer-heading mb-3">Контакты</h6>
-                    <ul class="footer-links list-unstyled">
-                        <li><i class="bi bi-envelope me-2"></i>support@servicehub.com</li>
-                        <li><i class="bi bi-telephone me-2"></i>+7 (999) 123-45-67</li>
-                    </ul>
-                </div>
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h4 class="text-white text-lg font-bold mb-4 flex items-center gap-2">
+                    <i class="bi bi-briefcase-fill"></i> ServiceHub
+                </h4>
+                <p class="text-sm">Сервис поиска специалистов №1. Надежно, быстро, удобно.</p>
             </div>
-            <hr class="footer-divider">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="text-muted mb-0">&copy; 2024 ServiceHub. Все права защищены.</p>
-                </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Клиентам</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{% url 'marketplace:task_create' %}"
+                            class="hover:text-white transition no-underline">Создать заказ</a></li>
+                    <li><a href="#" class="hover:text-white transition no-underline">Безопасная сделка</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Специалистам</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{% url 'marketplace:tasks_list' %}"
+                            class="hover:text-white transition no-underline">База заказов</a></li>
+                    <li><a href="#" class="hover:text-white transition no-underline">Тарифы</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Контакты</h4>
+                <p class="text-sm">support@servicehub.com</p>
+                <p class="text-sm mt-2">Москва, ул. Лесная 5</p>
             </div>
         </div>
     </footer>
@@ -212,25 +220,18 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 
-    <!-- Navbar scroll effect -->
-    <script>
-        (function () {
-            const navbar = document.getElementById('mainNavbar');
-            if (navbar) {
-                window.addEventListener('scroll', function () {
-                    if (window.scrollY > 50) {
-                        navbar.classList.add('navbar-scrolled');
-                    } else {
-                        navbar.classList.remove('navbar-scrolled');
-                    }
-                });
-            }
-        })();
-    </script>
-
     <!-- Theme Toggle Script -->
     <script src="{% static 'js/theme.js' %}"></script>
-
+    
+    <!-- Notifications System -->
+    <script src="{% static 'js/notifications.js' %}"></script>
+    
+    <!-- AI Wizard -->
+    <script src="{% static 'js/ai-wizard.js' %}"></script>
+    
+    <!-- Specialist Profile Modal -->
+    <script src="{% static 'js/specialist-profile-modal.js' %}"></script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 
