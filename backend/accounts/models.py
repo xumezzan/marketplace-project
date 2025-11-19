@@ -18,12 +18,9 @@ class User(AbstractUser):
     - phone: телефонный номер
     - city: город пользователя
     - rating: средний рейтинг (0.00 - 5.00)
+    - is_client: флаг клиента
+    - is_specialist: флаг специалиста
     """
-    
-    class Role(models.TextChoices):
-        """Роли пользователей в системе."""
-        CLIENT = 'client', 'Клиент'
-        SPECIALIST = 'specialist', 'Специалист'
     
     # Email делаем обязательным и уникальным
     email = models.EmailField(
@@ -32,13 +29,16 @@ class User(AbstractUser):
         help_text="Email адрес пользователя (обязательное поле)"
     )
     
-    # Роль пользователя
-    role = models.CharField(
-        'роль',
-        max_length=20,
-        choices=Role.choices,
-        default=Role.CLIENT,
-        help_text="Роль пользователя: клиент или специалист"
+    # Роли пользователя (может быть и клиентом, и специалистом одновременно)
+    is_client = models.BooleanField(
+        'клиент',
+        default=True,
+        help_text="Пользователь является клиентом"
+    )
+    is_specialist = models.BooleanField(
+        'специалист',
+        default=False,
+        help_text="Пользователь является специалистом"
     )
     
     # Телефон
@@ -93,14 +93,19 @@ class User(AbstractUser):
     
     def __str__(self) -> str:
         """Строковое представление пользователя."""
-        return f"{self.username} ({self.get_role_display()})"
+        roles = []
+        if self.is_client:
+            roles.append('Клиент')
+        if self.is_specialist:
+            roles.append('Специалист')
+        role_str = ', '.join(roles) if roles else 'Нет ролей'
+        return f"{self.username} ({role_str})"
     
-    @property
-    def is_specialist(self) -> bool:
-        """Проверка, является ли пользователь специалистом."""
-        return self.role == self.Role.SPECIALIST
-    
-    @property
-    def is_client(self) -> bool:
-        """Проверка, является ли пользователь клиентом."""
-        return self.role == self.Role.CLIENT
+    def get_role_display(self) -> str:
+        """Возвращает текстовое представление ролей для обратной совместимости."""
+        roles = []
+        if self.is_client:
+            roles.append('Клиент')
+        if self.is_specialist:
+            roles.append('Специалист')
+        return ', '.join(roles) if roles else 'Нет ролей'

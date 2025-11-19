@@ -11,7 +11,7 @@ class UserRegistrationForm(UserCreationForm):
     """
     Форма регистрации нового пользователя.
     
-    Поля: username, email, password1, password2, role, phone, city.
+    Поля: username, email, password1, password2, is_client, is_specialist, phone, city.
     """
     email = forms.EmailField(
         label='Email',
@@ -21,14 +21,23 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'example@mail.com',
         })
     )
-    role = forms.ChoiceField(
-        label='Роль',
-        choices=User.Role.choices,
-        required=True,
-        widget=forms.Select(attrs={
-            'class': 'form-select',
+    is_client = forms.BooleanField(
+        label='Я клиент (заказчик услуг)',
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
         }),
-        help_text='Выберите, будете ли вы клиентом или специалистом'
+        help_text='Отметьте, если хотите создавать задачи и искать исполнителей'
+    )
+    is_specialist = forms.BooleanField(
+        label='Я специалист (исполнитель)',
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        }),
+        help_text='Отметьте, если хотите откликаться на задачи'
     )
     phone = forms.CharField(
         label='Телефон',
@@ -51,7 +60,7 @@ class UserRegistrationForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'role', 'phone', 'city')
+        fields = ('username', 'email', 'password1', 'password2', 'is_client', 'is_specialist', 'phone', 'city')
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -77,6 +86,19 @@ class UserRegistrationForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise ValidationError('Пользователь с таким email уже существует.')
         return email
+    
+    def clean(self):
+        """Проверка, что выбрана хотя бы одна роль."""
+        cleaned_data = super().clean()
+        is_client = cleaned_data.get('is_client')
+        is_specialist = cleaned_data.get('is_specialist')
+        
+        if not is_client and not is_specialist:
+            raise ValidationError(
+                'Необходимо выбрать хотя бы одну роль: клиент или специалист.'
+            )
+        
+        return cleaned_data
 
 
 class UserLoginForm(AuthenticationForm):

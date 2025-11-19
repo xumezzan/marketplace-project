@@ -13,7 +13,8 @@ class UserAdmin(BaseUserAdmin):
     list_display = [
         'username',
         'email',
-        'role',
+        'is_client',
+        'is_specialist',
         'city',
         'rating',
         'is_active',
@@ -21,7 +22,8 @@ class UserAdmin(BaseUserAdmin):
         'created_at'
     ]
     list_filter = [
-        'role',
+        'is_client',
+        'is_specialist',
         'is_active',
         'is_staff',
         'is_superuser',
@@ -39,15 +41,21 @@ class UserAdmin(BaseUserAdmin):
     
     # Расширяем стандартные fieldsets
     fieldsets = BaseUserAdmin.fieldsets + (
+        ('Роли', {
+            'fields': ('is_client', 'is_specialist')
+        }),
         ('Дополнительная информация', {
-            'fields': ('role', 'phone', 'city', 'rating')
+            'fields': ('phone', 'city', 'rating', 'avatar')
         }),
     )
     
     # Расширяем add_fieldsets для формы создания пользователя
     add_fieldsets = BaseUserAdmin.add_fieldsets + (
+        ('Роли', {
+            'fields': ('is_client', 'is_specialist')
+        }),
         ('Дополнительная информация', {
-            'fields': ('role', 'phone', 'city', 'email')
+            'fields': ('phone', 'city', 'email')
         }),
     )
     

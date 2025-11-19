@@ -54,6 +54,106 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
+class Subcategory(models.Model):
+    """
+    Модель подкатегории услуг.
+    
+    Примеры: 'Репетитор по математике', 'Ремонт стиральных машин', 
+    'Уборка квартиры', 'Маникюр' и т.д.
+    """
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='subcategories',
+        verbose_name='категория',
+        help_text="Родительская категория"
+    )
+    name = models.CharField(
+        'название',
+        max_length=150,
+        help_text="Название подкатегории (например, 'Репетитор по математике')"
+    )
+    slug = models.SlugField(
+        'slug',
+        max_length=150,
+        unique=True,
+        blank=True,
+        help_text="URL-friendly версия названия"
+    )
+    description = models.TextField(
+        'описание',
+        blank=True,
+        null=True,
+        help_text="Описание подкатегории"
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    
+    class Meta:
+        db_table = 'subcategories'
+        verbose_name = 'подкатегория'
+        verbose_name_plural = 'подкатегории'
+        ordering = ['category', 'name']
+        unique_together = [['category', 'name']]
+    
+    def __str__(self) -> str:
+        return f"{self.category.name} → {self.name}"
+    
+    def save(self, *args, **kwargs):
+        """Автоматически генерирует slug из названия, если не указан."""
+        if not self.slug:
+            self.slug = slugify(f"{self.category.slug}-{self.name}")
+        super().save(*args, **kwargs)
+
+
+class ClientProfile(models.Model):
+    """
+    Профиль клиента с предпочтениями и адресом.
+    
+    Хранит информацию специфичную для клиентов: адрес, предпочитаемые
+    специалисты, историю заказов и т.д.
+    """
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='client_profile',
+        verbose_name='пользователь',
+        help_text="Пользователь, которому принадлежит этот профиль"
+    )
+    address = models.CharField(
+        'адрес',
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text="Основной адрес клиента"
+    )
+    preferences = models.JSONField(
+        'предпочтения',
+        default=dict,
+        blank=True,
+        help_text="JSON с предпочтениями клиента (например, {'preferred_time': 'morning', 'languages': ['ru', 'uz']})"
+    )
+    favorite_specialists = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='favorited_by',
+        blank=True,
+        verbose_name='избранные специалисты',
+        help_text="Список избранных специалистов"
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    
+    class Meta:
+        db_table = 'client_profiles'
+        verbose_name = 'профиль клиента'
+        verbose_name_plural = 'профили клиентов'
+        ordering = ['-created_at']
+    
+    def __str__(self) -> str:
+        return f"{self.user.username} - Профиль клиента"
+
+
+
 class SpecialistProfile(models.Model):
     """
     Профиль специалиста с категориями, опытом, тарифами и статусом верификации.
@@ -128,6 +228,41 @@ class SpecialistProfile(models.Model):
         default=True,
         help_text="Активен ли специалист в данный момент"
     )
+    # Новые поля для расписания и зоны обслуживания
+    working_days = models.JSONField(
+        'рабочие дни',
+        default=list,
+        blank=True,
+        help_text="Список рабочих дней (например, ['mon', 'tue', 'wed', 'thu', 'fri'])"
+    )
+    working_hours_start = models.TimeField(
+        'начало рабочего дня',
+        blank=True,
+        null=True,
+        help_text="Время начала рабочего дня (например, 09:00)"
+    )
+    working_hours_end = models.TimeField(
+        'конец рабочего дня',
+        blank=True,
+        null=True,
+        help_text="Время окончания рабочего дня (например, 18:00)"
+    )
+    service_radius_km = models.PositiveIntegerField(
+        'радиус выезда (км)',
+        default=0,
+        help_text="Радиус выезда в километрах (0 = не выезжает)"
+    )
+    works_online = models.BooleanField(
+        'работает онлайн',
+        default=False,
+        help_text="Специалист предоставляет услуги онлайн"
+    )
+    verification_documents = models.JSONField(
+        'документы верификации',
+        default=dict,
+        blank=True,
+        help_text="JSON с информацией о загруженных документах (паспорт, лицензии и т.д.)"
+    )
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
     
@@ -167,6 +302,12 @@ class Task(models.Model):
         COMPLETED = 'completed', 'Завершено'
         CANCELLED = 'cancelled', 'Отменено'
     
+    class Format(models.TextChoices):
+        """Формат выполнения услуги."""
+        ONLINE = 'online', 'Онлайн'
+        OFFLINE = 'offline', 'Выезд к клиенту'
+        AT_SPECIALIST = 'at_specialist', 'У специалиста'
+    
     client = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -180,6 +321,15 @@ class Task(models.Model):
         related_name='tasks',
         verbose_name='категория',
         help_text="Категория услуги для этой задачи"
+    )
+    subcategory = models.ForeignKey(
+        'Subcategory',
+        on_delete=models.SET_NULL,
+        related_name='tasks',
+        verbose_name='подкатегория',
+        blank=True,
+        null=True,
+        help_text="Подкатегория услуги (необязательно)"
     )
     title = models.CharField(
         'заголовок',
@@ -238,6 +388,40 @@ class Task(models.Model):
         choices=Status.choices,
         default=Status.DRAFT,
         help_text="Текущий статус задачи"
+    )
+    format = models.CharField(
+        'формат',
+        max_length=20,
+        choices=Format.choices,
+        default=Format.OFFLINE,
+        help_text="Формат выполнения услуги"
+    )
+    latitude = models.DecimalField(
+        'широта',
+        max_digits=9,
+        decimal_places=6,
+        blank=True,
+        null=True,
+        help_text="Широта местоположения задачи"
+    )
+    longitude = models.DecimalField(
+        'долгота',
+        max_digits=9,
+        decimal_places=6,
+        blank=True,
+        null=True,
+        help_text="Долгота местоположения задачи"
+    )
+    deadline_date = models.DateField(
+        'крайний срок',
+        blank=True,
+        null=True,
+        help_text="Дедлайн выполнения задачи (если отличается от preferred_date)"
+    )
+    auto_structured = models.BooleanField(
+        'создано через ИИ',
+        default=False,
+        help_text="Задача была создана/структурирована с помощью ИИ"
     )
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
