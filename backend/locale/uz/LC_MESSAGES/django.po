@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-19 11:27+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: marketplace/templates/marketplace/home.html:5
+#, fuzzy
+#| msgid "ServiceHub - Маркетплейс специалистов"
+msgid "ServiceHub - Поиск специалистов"
+msgstr "ServiceHub - Mutaxassislarni qidirish"
+
+#: marketplace/templates/marketplace/home.html:17
+msgid "Найдите профи"
+msgstr "Mutaxassis toping"
+
+#: marketplace/templates/marketplace/home.html:18
+msgid "для любой задачи"
+msgstr "har qanday vazifa uchun"
+
+#: marketplace/templates/marketplace/home.html:22
+msgid ""
+"Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, "
+"красота, IT и многое другое. Быстро, безопасно и качественно."
+msgstr ""
+"Minglab tekshirilgan mutaxassislar sizga yordam berishga tayyor. Ta'mirlash, "
+"o'qitish, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
+
+#: marketplace/templates/marketplace/home.html:32
+msgid "Что нужно сделать?"
+msgstr "Nima qilish kerak?"
+
+#: marketplace/templates/marketplace/home.html:36
+msgid "Найти"
+msgstr "Topish"
+
+#: templates/base.html:10
+msgid "ServiceHub - Маркетплейс специалистов"
+msgstr "ServiceHub - Mutaxassislar bozori"
+
+#: templates/base.html:99 templates/base.html:187 templates/base.html:270
+msgid "Найти специалиста"
+msgstr "Mutaxassis topish"
+
+#: templates/base.html:102 templates/base.html:190
+msgid "Мои заказы"
+msgstr "Mening buyurtmalarim"
+
+#: templates/base.html:105 templates/base.html:193 templates/base.html:281
+msgid "Стать специалистом"
+msgstr "Mutaxassis bo'lish"
+
+#: templates/base.html:139 templates/base.html:196 templates/base.html:269
+msgid "Создать заказ"
+msgstr "Buyurtma yaratish"
+
+#: templates/base.html:155
+msgid "Профиль"
+msgstr "Profil"
+
+#: templates/base.html:157
+msgid "Выйти"
+msgstr "Chiqish"
+
+#: templates/base.html:199
+msgid "Язык"
+msgstr "Til"
+
+#: templates/base.html:251
+msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
+msgstr "Mutaxassislarni topish bo'yicha №1 xizmat. Ishonchli, tez va qulay."
+
+#: templates/base.html:267
+msgid "Клиентам"
+msgstr "Mijozlar uchun"
+
+#: templates/base.html:271
+msgid "Безопасная сделка"
+msgstr "Xavfsiz shartnoma"
+
+#: templates/base.html:272
+msgid "Как это работает"
+msgstr "Qanday ishlaydi"
+
+#: templates/base.html:278
+msgid "Специалистам"
+msgstr "Mutaxassislar uchun"
+
+#: templates/base.html:280
+msgid "База заказов"
+msgstr "Buyurtmalar bazasi"
+
+#: templates/base.html:282
+msgid "Тарифы"
+msgstr "Tariflar"
+
+#: templates/base.html:283
+msgid "Помощь"
+msgstr "Yordam"
+
+#: templates/base.html:289
+msgid "Контакты"
+msgstr "Kontaktlar"
+
+#: templates/base.html:314
+msgid "Все права защищены."
+msgstr "Barcha huquqlar himoyalangan."
+
+#: templates/base.html:316
+msgid "Политика конфиденциальности"
+msgstr "Maxfiylik siyosati"
+
+#: templates/base.html:317
+msgid "Условия использования"
+msgstr "Foydalanish shartlari"

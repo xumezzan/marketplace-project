@@ -68,24 +68,5 @@
     // Проверяем при загрузке страницы
     toggleScrollButton();
     
-    // Поддержка темной темы
-    function updateButtonTheme() {
-        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
-        if (isDark) {
-            scrollButton.style.background = 'linear-gradient(135deg, #818cf8 0%, #6366f1 100%)';
-        } else {
-            scrollButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-        }
-    }
-    
-    // Обновляем тему при изменении
-    const observer = new MutationObserver(updateButtonTheme);
-    observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-bs-theme']
-    });
-    
-    // Инициализация темы
-    updateButtonTheme();
 })();
 

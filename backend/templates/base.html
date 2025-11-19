@@ -2,25 +2,12 @@
 {% load i18n %}
 {% get_current_language as CURRENT_LANG %}
 <!DOCTYPE html>
-<html lang="{{ CURRENT_LANG|default:'ru' }}" data-bs-theme="light" id="html-root">
+<html lang="{{ CURRENT_LANG|default:'ru' }}" id="html-root">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ServiceHub - Маркетплейс специалистов{% endblock %}</title>
-    
-    <!-- Early theme application to prevent flash -->
-    <script>
-        (function() {
-            try {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-bs-theme', savedTheme);
-                if (savedTheme === 'dark') {
-                    document.documentElement.classList.add('dark-theme');
-                }
-            } catch(e) {}
-        })();
-    </script>
+    <title>{% block title %}{% trans "ServiceHub - Маркетплейс специалистов" %}{% endblock %}</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -52,7 +39,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: ['selector', '[data-bs-theme="dark"]'], // Use data-bs-theme for dark mode to match existing logic
             theme: {
                 extend: {
                     colors: {
@@ -67,21 +53,13 @@
         }
     </script>
 
-    <!-- Apply theme before page load to prevent flash -->
-    <script>
-            (function () {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-bs-theme', savedTheme);
-            })();
-    </script>
-
     {% block extra_css %}{% endblock %}
 </head>
 
 <body hx-boost="true"
-    class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
+    class="bg-slate-50 text-slate-900 antialiased">
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300"
+    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm"
         id="mainNavbar" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -90,56 +68,47 @@
                     <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                         <i class="bi bi-briefcase-fill text-white text-lg"></i>
                     </div>
-                    <span class="text-xl font-bold text-indigo-900 dark:text-white tracking-tight">ServiceHub</span>
+                    <span class="text-xl font-bold text-indigo-900 tracking-tight">ServiceHub</span>
                 </a>
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
                     <a href="{% url 'marketplace:tasks_list' %}"
-                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition no-underline">Найти
-                        специалиста</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}"
-                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition no-underline">Мои
-                        заказы</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}"
-                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition no-underline">Стать
-                        специалистом</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline">{% trans "Стать специалистом" %}</a>
                 </div>
 
                 <!-- Right Side -->
                 <div class="flex items-center gap-3">
                     <!-- Language Toggle -->
                     {% get_current_language as CURRENT_LANGUAGE %}
-                    <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1 mr-2">
+                    <div class="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 mr-2">
                         <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="ru">
                             <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                             <button type="submit"
-                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' or not CURRENT_LANGUAGE %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">RU</button>
+                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' or not CURRENT_LANGUAGE %}bg-white shadow text-indigo-600{% else %}text-slate-500 hover:text-indigo-600{% endif %}">RU</button>
                         </form>
                         <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="uz">
                             <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                             <button type="submit"
-                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">UZ</button>
+                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white shadow text-indigo-600{% else %}text-slate-500 hover:text-indigo-600{% endif %}">UZ</button>
                         </form>
                     </div>
-
-                    <!-- Theme Toggle -->
-                    <button id="theme-toggle"
-                        class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition flex items-center justify-center">
-                        <i id="theme-icon" class="bi bi-moon-fill text-lg"></i>
-                    </button>
 
                     <!-- Create Task Button -->
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}"
                         class="hidden sm:block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 no-underline">
-                        Создать заказ
+                        {% trans "Создать заказ" %}
                     </a>
                     {% endif %}
 
@@ -147,28 +116,28 @@
                     {% if user.is_authenticated %}
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false"
-                            class="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                            class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-full hover:bg-slate-100">
                             <i class="bi bi-person-circle text-xl"></i>
                         </button>
                         <!-- Dropdown -->
                         <div x-show="open" x-transition
-                            class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg py-1 border border-slate-100 dark:border-slate-700 z-50"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50"
                             style="display: none;">
                             <a href="{% url 'accounts:profile' %}"
-                                class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 no-underline">Профиль</a>
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline">{% trans "Профиль" %}</a>
                             <a href="{% url 'accounts:logout' %}"
-                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 dark:hover:bg-slate-700 no-underline">Выйти</a>
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline">{% trans "Выйти" %}</a>
                         </div>
                     </div>
                     {% else %}
                     <a href="{% url 'accounts:login' %}"
-                        class="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                        class="p-2 text-slate-500 hover:text-indigo-600 transition rounded-full hover:bg-slate-100">
                         <i class="bi bi-box-arrow-in-right text-xl"></i>
                     </a>
                     {% endif %}
 
                     <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-full transition">
                         <i x-show="!mobileMenuOpen" class="bi bi-list text-2xl"></i>
                         <i x-show="mobileMenuOpen" class="bi bi-x-lg text-2xl"></i>
                     </button>
@@ -183,37 +152,37 @@
                  x-transition:leave="transition ease-in duration-150"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="md:hidden border-t border-slate-200 dark:border-slate-800 py-4"
+                 class="md:hidden border-t border-slate-200 py-4"
                  style="display: none;">
                 <div class="flex flex-col space-y-3 px-4">
                     <a href="{% url 'marketplace:tasks_list' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition py-2 no-underline">Найти специалиста</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition py-2 no-underline">Мои заказы</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition py-2 no-underline">Стать специалистом</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline">{% trans "Стать специалистом" %}</a>
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}" @click="mobileMenuOpen = false"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">Создать заказ</a>
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{% trans "Создать заказ" %}</a>
                     {% endif %}
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800">
-                        <span class="text-sm text-slate-500 dark:text-slate-400">Язык:</span>
-                        <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+                        <span class="text-sm text-slate-500">{% trans "Язык" %}:</span>
+                        <div class="flex items-center bg-slate-100 rounded-lg p-1">
                             <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                                 {% csrf_token %}
                                 <input type="hidden" name="language" value="ru">
                                 <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                                 <button type="submit"
-                                    class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' or not CURRENT_LANGUAGE %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">RU</button>
+                                    class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' or not CURRENT_LANGUAGE %}bg-white shadow text-indigo-600{% else %}text-slate-500 hover:text-indigo-600{% endif %}">RU</button>
                             </form>
                             <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                                 {% csrf_token %}
                                 <input type="hidden" name="language" value="uz">
                                 <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                                 <button type="submit"
-                                    class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white dark:bg-slate-700 shadow text-indigo-600 dark:text-indigo-400{% else %}text-slate-500 dark:text-slate-400 hover:text-indigo-600{% endif %}">UZ</button>
+                                    class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white shadow text-indigo-600{% else %}text-slate-500 hover:text-indigo-600{% endif %}">UZ</button>
                             </form>
                         </div>
                     </div>
@@ -251,7 +220,7 @@
                     <h4 class="footer-brand flex items-center gap-2">
                         <i class="bi bi-briefcase-fill"></i> ServiceHub
                     </h4>
-                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">Сервис поиска специалистов №1. Надежно, быстро, удобно.</p>
+                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">{% trans "Сервис поиска специалистов №1. Надежно, быстро, удобно." %}</p>
                     <div class="flex gap-3">
                         <a href="#" class="text-white hover:text-indigo-400 transition" style="color: rgba(255, 255, 255, 0.7);">
                             <i class="bi bi-telegram text-xl"></i>
@@ -267,29 +236,29 @@
                 
                 <!-- Клиентам -->
                 <div>
-                    <h4 class="footer-heading">Клиентам</h4>
+                    <h4 class="footer-heading">{% trans "Клиентам" %}</h4>
                     <ul class="footer-links">
-                        <li><a href="{% url 'marketplace:task_create' %}">Создать заказ</a></li>
-                        <li><a href="{% url 'marketplace:tasks_list' %}">Найти специалиста</a></li>
-                        <li><a href="#">Безопасная сделка</a></li>
-                        <li><a href="#">Как это работает</a></li>
+                        <li><a href="{% url 'marketplace:task_create' %}">{% trans "Создать заказ" %}</a></li>
+                        <li><a href="{% url 'marketplace:tasks_list' %}">{% trans "Найти специалиста" %}</a></li>
+                        <li><a href="#">{% trans "Безопасная сделка" %}</a></li>
+                        <li><a href="#">{% trans "Как это работает" %}</a></li>
                     </ul>
                 </div>
                 
                 <!-- Специалистам -->
                 <div>
-                    <h4 class="footer-heading">Специалистам</h4>
+                    <h4 class="footer-heading">{% trans "Специалистам" %}</h4>
                     <ul class="footer-links">
-                        <li><a href="{% url 'marketplace:tasks_list' %}">База заказов</a></li>
-                        <li><a href="{% url 'accounts:register' %}">Стать специалистом</a></li>
-                        <li><a href="#">Тарифы</a></li>
-                        <li><a href="#">Помощь</a></li>
+                        <li><a href="{% url 'marketplace:tasks_list' %}">{% trans "База заказов" %}</a></li>
+                        <li><a href="{% url 'accounts:register' %}">{% trans "Стать специалистом" %}</a></li>
+                        <li><a href="#">{% trans "Тарифы" %}</a></li>
+                        <li><a href="#">{% trans "Помощь" %}</a></li>
                     </ul>
                 </div>
                 
                 <!-- Контакты -->
                 <div>
-                    <h4 class="footer-heading">Контакты</h4>
+                    <h4 class="footer-heading">{% trans "Контакты" %}</h4>
                     <ul class="footer-links">
                         <li>
                             <a href="mailto:support@servicehub.com" class="flex items-center gap-2">
@@ -314,10 +283,10 @@
             
             <!-- Copyright -->
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm" style="color: rgba(255, 255, 255, 0.5);">
-                <p>&copy; {% now "Y" %} ServiceHub. Все права защищены.</p>
+                <p>&copy; {% now "Y" %} ServiceHub. {% trans "Все права защищены." %}</p>
                 <div class="flex gap-6">
-                    <a href="#" class="hover:text-white transition no-underline" style="color: rgba(255, 255, 255, 0.7);">Политика конфиденциальности</a>
-                    <a href="#" class="hover:text-white transition no-underline" style="color: rgba(255, 255, 255, 0.7);">Условия использования</a>
+                    <a href="#" class="hover:text-white transition no-underline" style="color: rgba(255, 255, 255, 0.7);">{% trans "Политика конфиденциальности" %}</a>
+                    <a href="#" class="hover:text-white transition no-underline" style="color: rgba(255, 255, 255, 0.7);">{% trans "Условия использования" %}</a>
                 </div>
             </div>
         </div>
@@ -328,9 +297,6 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 
-    <!-- Theme Toggle Script -->
-    <script src="{% static 'js/theme.js' %}"></script>
-    
     <!-- Language Toggle Script -->
     <script src="{% static 'js/language-toggle.js' %}"></script>
     

@@ -36,33 +36,33 @@
         
         modal.innerHTML = `
             <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeSpecialistModal()"></div>
-            <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-fade-in-up transition-colors duration-300">
-                <button onclick="closeSpecialistModal()" class="absolute top-4 right-4 z-10 p-2 bg-white/80 dark:bg-slate-800/80 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition">
-                    <i class="bi bi-x-lg text-slate-600 dark:text-slate-300"></i>
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-fade-in-up transition-colors duration-300">
+                <button onclick="closeSpecialistModal()" class="absolute top-4 right-4 z-10 p-2 bg-white/80 rounded-full hover:bg-red-50 hover:text-red-500 transition">
+                    <i class="bi bi-x-lg text-slate-600"></i>
                 </button>
                 
                 <div class="p-6 sm:p-8">
                     <!-- Header -->
-                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 pb-6 border-b border-slate-200 dark:border-slate-700">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 pb-6 border-b border-slate-200">
                         <div class="relative flex-shrink-0">
                             <img src="${avatarUrl}" 
                                  alt="${name}" 
-                                 class="w-32 h-32 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg">
-                            <div class="absolute bottom-2 right-2 bg-green-500 w-5 h-5 rounded-full border-2 border-white dark:border-slate-700"></div>
+                                 class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
+                            <div class="absolute bottom-2 right-2 bg-green-500 w-5 h-5 rounded-full border-2 border-white"></div>
                         </div>
                         
                         <div class="flex-1 text-center sm:text-left">
-                            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">${name}</h2>
-                            <p class="text-indigo-600 dark:text-indigo-400 font-medium mb-4">${profession}</p>
+                            <h2 class="text-2xl font-bold text-slate-900 mb-2">${name}</h2>
+                            <p class="text-indigo-600 font-medium mb-4">${profession}</p>
                             
                             <div class="flex flex-wrap items-center gap-4 justify-center sm:justify-start">
-                                <div class="flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 px-3 py-1.5 rounded-lg">
+                                <div class="flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-lg">
                                     ${stars}
-                                    <span class="font-bold text-slate-900 dark:text-amber-100">${rating}</span>
-                                    <span class="text-slate-500 dark:text-slate-400 text-sm">${reviewsText}</span>
+                                    <span class="font-bold text-slate-900">${rating}</span>
+                                    <span class="text-slate-500 text-sm">${reviewsText}</span>
                                 </div>
                                 
-                                <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                                <div class="flex items-center gap-2 text-slate-600">
                                     <i class="bi bi-briefcase-fill"></i>
                                     <span class="text-sm">${portfolioText}</span>
                                 </div>
@@ -72,19 +72,19 @@
                     
                     <!-- Description -->
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">О специалисте</h3>
-                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">${description}</p>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-3">О специалисте</h3>
+                        <p class="text-slate-600 leading-relaxed">${description}</p>
                     </div>
                     
                     <!-- Price & Actions -->
-                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 mb-6">
+                    <div class="bg-slate-50 rounded-xl p-6 mb-6">
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
-                                <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Стоимость услуг</p>
-                                <p class="text-2xl font-bold text-slate-900 dark:text-white">${price}</p>
+                                <p class="text-sm text-slate-500 mb-1">Стоимость услуг</p>
+                                <p class="text-2xl font-bold text-slate-900">${price}</p>
                             </div>
                             <div class="flex gap-3 w-full sm:w-auto">
-                                <button onclick="closeSpecialistModal()" class="flex-1 sm:flex-none px-6 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition">
+                                <button onclick="closeSpecialistModal()" class="flex-1 sm:flex-none px-6 py-3 bg-white border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition">
                                     Написать
                                 </button>
                                 <button onclick="closeSpecialistModal()" class="flex-1 sm:flex-none px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition shadow-md hover:shadow-lg">
@@ -96,26 +96,26 @@
                     
                     <!-- Additional Info -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
+                        <div class="bg-slate-50 rounded-lg p-4">
                             <div class="flex items-center gap-3 mb-2">
-                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
-                                    <i class="bi bi-shield-check text-indigo-600 dark:text-indigo-400"></i>
+                                <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                    <i class="bi bi-shield-check text-indigo-600"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Проверенный профиль</p>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Верифицирован администрацией</p>
+                                    <p class="text-sm font-semibold text-slate-900">Проверенный профиль</p>
+                                    <p class="text-xs text-slate-500">Верифицирован администрацией</p>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
+                        <div class="bg-slate-50 rounded-lg p-4">
                             <div class="flex items-center gap-3 mb-2">
-                                <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                                    <i class="bi bi-clock-history text-green-600 dark:text-green-400"></i>
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="bi bi-clock-history text-green-600"></i>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Быстрый отклик</p>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Обычно отвечает в течение часа</p>
+                                    <p class="text-sm font-semibold text-slate-900">Быстрый отклик</p>
+                                    <p class="text-xs text-slate-500">Обычно отвечает в течение часа</p>
                                 </div>
                             </div>
                         </div>
