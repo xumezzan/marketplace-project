@@ -261,8 +261,8 @@
                     <ul class="footer-links">
                         <li><a href="{% url 'marketplace:task_create' %}">Создать заказ</a></li>
                         <li><a href="{% url 'marketplace:tasks_list' %}">Найти специалиста</a></li>
-                        <li><a href="#">Безопасная сделка</a></li>
-                        <li><a href="#">Как это работает</a></li>
+                        <li><a href="{% url 'marketplace:safe_deal' %}">Безопасная сделка</a></li>
+                        <li><a href="{% url 'marketplace:how_it_works' %}">Как это работает</a></li>
                     </ul>
                 </div>
 
@@ -272,8 +272,8 @@
                     <ul class="footer-links">
                         <li><a href="{% url 'marketplace:tasks_list' %}">База заказов</a></li>
                         <li><a href="{% url 'accounts:register' %}">Стать специалистом</a></li>
-                        <li><a href="#">Тарифы</a></li>
-                        <li><a href="#">Помощь</a></li>
+                        <li><a href="{% url 'marketplace:pricing' %}">Тарифы</a></li>
+                        <li><a href="{% url 'marketplace:help' %}">Помощь</a></li>
                     </ul>
                 </div>
 
@@ -307,9 +307,9 @@
                 style="color: rgba(255, 255, 255, 0.5);">
                 <p>&copy; {% now "Y" %} ServiceHub. Все права защищены.</p>
                 <div class="flex gap-6">
-                    <a href="#" class="hover:text-white transition no-underline"
+                    <a href="{% url 'marketplace:privacy_policy' %}" class="hover:text-white transition no-underline"
                         style="color: rgba(255, 255, 255, 0.7);">Политика конфиденциальности</a>
-                    <a href="#" class="hover:text-white transition no-underline"
+                    <a href="{% url 'marketplace:terms_of_service' %}" class="hover:text-white transition no-underline"
                         style="color: rgba(255, 255, 255, 0.7);">Условия использования</a>
                 </div>
             </div>

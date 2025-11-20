@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 19:28+0000\n"
+"POT-Creation-Date: 2025-11-20 21:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,91 +18,570 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: marketplace/templates/marketplace/home.html:5
-#, fuzzy
-#| msgid "ServiceHub - Маркетплейс специалистов"
-msgid "ServiceHub - Поиск специалистов"
-msgstr "ServiceHub - Mutaxassislarni qidirish"
-
-#: marketplace/templates/marketplace/home.html:17
-msgid "Найдите профи"
-msgstr "Mutaxassis toping"
-
-#: marketplace/templates/marketplace/home.html:18
-msgid "для любой задачи"
-msgstr "har qanday vazifa uchun"
-
-#: marketplace/templates/marketplace/home.html:33
-msgid "Что нужно сделать?"
-msgstr "Nima qilish kerak?"
-
-#: marketplace/templates/marketplace/home.html:37
-msgid "Найти"
-msgstr "Topish"
-
-#: templates/base.html:10
-msgid "ServiceHub - Маркетплейс специалистов"
-msgstr "ServiceHub - Mutaxassislar bozori"
-
-#: templates/base.html:131 templates/base.html:268
-msgid "Создать заказ"
-msgstr "Buyurtma yaratish"
-
-#: templates/base.html:194
-msgid "Язык"
-msgstr "Til"
-
-#: templates/base.html:266
-msgid "Клиентам"
-msgstr "Mijozlar uchun"
-
-#: templates/base.html:269
-msgid "Найти специалиста"
-msgstr "Mutaxassis topish"
-
-#: templates/base.html:270
-msgid "Безопасная сделка"
-msgstr "Xavfsiz shartnoma"
-
-#: templates/base.html:271
-msgid "Как это работает"
-msgstr "Qanday ishlaydi"
-
-#: templates/base.html:277
-msgid "Специалистам"
-msgstr "Mutaxassislar uchun"
-
-#: templates/base.html:279
-msgid "База заказов"
-msgstr "Buyurtmalar bazasi"
-
-#: templates/base.html:280
-msgid "Стать специалистом"
-msgstr "Mutaxassis bo'lish"
-
-#: templates/base.html:281
-msgid "Тарифы"
-msgstr "Tariflar"
-
-#: templates/base.html:282
+#: marketplace/templates/marketplace/static/help.html:4
 msgid "Помощь"
 msgstr "Yordam"
 
-#: templates/base.html:288
-msgid "Контакты"
+#: marketplace/templates/marketplace/static/help.html:10
+msgid "Помощь и поддержка"
+msgstr "Yordam va qo'llab-quvvatlash"
+
+#: marketplace/templates/marketplace/static/help.html:16
+msgid "Часто задаваемые вопросы"
+msgstr "Tez-tez beriladigan savollar"
+
+#: marketplace/templates/marketplace/static/help.html:22
+#, fuzzy
+#| msgid "Создать заказ"
+msgid "Как создать заказ?"
+msgstr "Buyurtma qanday yaratiladi?"
+
+#: marketplace/templates/marketplace/static/help.html:25
+msgid ""
+"Нажмите кнопку 'Создать заказ' в меню, заполните форму с описанием задачи, "
+"бюджетом и сроками. Вы можете использовать AI-помощник для автоматического "
+"заполнения полей."
+msgstr ""
+"Menudan 'Buyurtma yaratish' tugmasini bosing, vazifa tavsifi, byudjet va "
+"muddatlarni to'ldiring. Maydonlarni avtomatik to'ldirish uchun AI-yordamchidan "
+"foydalanishingiz mumkin."
+
+#: marketplace/templates/marketplace/static/help.html:31
+#, fuzzy
+#| msgid "Стать специалистом"
+msgid "Как стать специалистом?"
+msgstr "Qanday mutaxassis bo'lish mumkin?"
+
+#: marketplace/templates/marketplace/static/help.html:34
+msgid ""
+"Зарегистрируйтесь на платформе и заполните профиль специалиста. Укажите "
+"категории услуг, загрузите портфолио и начните откликаться на заказы."
+msgstr ""
+"Platformada ro'yxatdan o'ting va mutaxassis profilini to'ldiring. Xizmat "
+"kategoriyalarini ko'rsating, portfolioni yuklang va buyurtmalarga javob "
+"berishni boshlang."
+
+#: marketplace/templates/marketplace/static/help.html:40
+msgid "Как работает система оплаты?"
+msgstr "To'lov tizimi qanday ishlaydi?"
+
+#: marketplace/templates/marketplace/static/help.html:43
+msgid ""
+"После принятия оффера средства автоматически резервируются на счету клиента. "
+"После выполнения работы и подтверждения клиентом, средства переводятся "
+"специалисту."
+msgstr ""
+"Taklif qabul qilingandan keyin mablag'lar mijoz hisobiga avtomatik "
+"rezervatsiya qilinadi. Ish bajarilgandan va mijoz tomonidan tasdiqlangandan "
+"keyin, mablag'lar mutaxassisga o'tkaziladi."
+
+#: marketplace/templates/marketplace/static/help.html:49
+msgid "Что делать при споре?"
+msgstr "Nizoda nima qilish kerak?"
+
+#: marketplace/templates/marketplace/static/help.html:52
+msgid ""
+"Свяжитесь с нашей службой поддержки через email или телефон. Мы поможем "
+"разрешить спор справедливо для обеих сторон."
+msgstr ""
+"Email yoki telefon orqali qo'llab-quvvatlash xizmatimiz bilan bog'laning. "
+"Ikkala tomon uchun adolatli nizoni hal qilishga yordam beramiz."
+
+#: marketplace/templates/marketplace/static/help.html:60
+#, fuzzy
+#| msgid "Контакты"
+msgid "Контакты поддержки"
 msgstr "Kontaktlar"
 
-#: templates/base.html:314
-msgid "Все права защищены."
-msgstr "Barcha huquqlar himoyalangan."
+#: marketplace/templates/marketplace/static/help.html:66
+msgid "Email"
+msgstr "Email"
 
-#: templates/base.html:317
+#: marketplace/templates/marketplace/static/help.html:75
+msgid "Телефон"
+msgstr "Telefon"
+
+#: marketplace/templates/marketplace/static/help.html:84
+#, fuzzy
+#| msgid "Как это работает"
+msgid "Время работы"
+msgstr "Qanday ishlaydi"
+
+#: marketplace/templates/marketplace/static/help.html:85
+msgid "Пн-Пт: 9:00 - 18:00"
+msgstr "Dush-Juma: 9:00 - 18:00"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:4
+#: marketplace/templates/marketplace/static/how_it_works.html:10
+#: marketplace/templates/marketplace/static/safe_deal.html:21
+msgid "Как это работает"
+msgstr "Qanday ishlaydi"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:15
+msgid ""
+"ServiceHub - это удобная платформа для поиска специалистов и выполнения "
+"различных задач. Процесс прост и безопасен."
+msgstr ""
+"ServiceHub - mutaxassislarni topish va turli vazifalarni bajarish uchun "
+"qulay platforma. Jarayon oddiy va xavfsiz."
+
+#: marketplace/templates/marketplace/static/how_it_works.html:21
+#: marketplace/templates/marketplace/static/pricing.html:22
+#, fuzzy
+#| msgid "Клиентам"
+msgid "Для клиентов"
+msgstr "Mijozlar uchun"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:27
+#, fuzzy
+#| msgid "Создать заказ"
+msgid "Создайте заказ"
+msgstr "Buyurtma yarating"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:28
+msgid ""
+"Опишите задачу, укажите бюджет и сроки. Используйте AI-помощник для "
+"автоматического заполнения формы."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:34
+msgid "Получите отклики"
+msgstr "Javoblar oling"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:35
+msgid ""
+"Специалисты предложат свои услуги с ценами и описанием подхода к работе."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:41
+#, fuzzy
+#| msgid "Найти специалиста"
+msgid "Выберите специалиста"
+msgstr "Mutaxassisni tanlang"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:42
+msgid ""
+"Изучите профили, портфолио и отзывы. Выберите лучшего специалиста для вашей "
+"задачи."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:48
+#, fuzzy
+#| msgid "Безопасная сделка"
+msgid "Безопасная оплата"
+msgstr "Xavfsiz to'lov"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:49
+msgid ""
+"Средства резервируются на время выполнения работы и переводятся специалисту "
+"только после подтверждения выполнения."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:57
+#: marketplace/templates/marketplace/static/pricing.html:52
+#, fuzzy
+#| msgid "Стать специалистом"
+msgid "Для специалистов"
+msgstr "Mutaxassis bo'lish"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:63
+msgid "Зарегистрируйтесь"
+msgstr "Ro'yxatdan o'ting"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:64
+msgid ""
+"Создайте профиль специалиста, укажите категории услуг и загрузите портфолио."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:70
+#, fuzzy
+#| msgid "Мои заказы"
+msgid "Найдите заказы"
+msgstr "Buyurtmalarni toping"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:71
+msgid "Просматривайте доступные заказы в ваших категориях и городе."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:77
+#, fuzzy
+#| msgid "Создать заказ"
+msgid "Откликнитесь на заказ"
+msgstr "Buyurtmaga javob bering"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:78
+msgid "Предложите свою цену и опишите, как будете выполнять работу."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/how_it_works.html:84
+msgid "Выполните работу"
+msgstr "Ishni bajaring"
+
+#: marketplace/templates/marketplace/static/how_it_works.html:85
+msgid ""
+"После принятия оффера выполните работу качественно и в срок. Получите оплату "
+"после подтверждения клиентом."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/pricing.html:4
+#: marketplace/templates/marketplace/static/pricing.html:10
+msgid "Тарифы"
+msgstr "Tariflar"
+
+#: marketplace/templates/marketplace/static/pricing.html:13
+msgid "Прозрачные и справедливые тарифы для всех"
+msgstr "Hamma uchun shaffof va adolatli tariflar"
+
+#: marketplace/templates/marketplace/static/pricing.html:25
+#, fuzzy
+#| msgid "Создать заказ"
+msgid "Бесплатно создавать заказы"
+msgstr "Bepul buyurtma yaratish"
+
+#: marketplace/templates/marketplace/static/pricing.html:31
+msgid "Создание заказов - бесплатно"
+msgstr "Buyurtma yaratish - bepul"
+
+#: marketplace/templates/marketplace/static/pricing.html:35
+#, fuzzy
+#| msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
+msgid "Просмотр профилей специалистов - бесплатно"
+msgstr "Mutaxassislar profillarini ko'rish - bepul"
+
+#: marketplace/templates/marketplace/static/pricing.html:39
+#, fuzzy
+#| msgid "Безопасная сделка"
+msgid "Безопасная система оплаты Escrow"
+msgstr "Xavfsiz Escrow to'lov tizimi"
+
+#: marketplace/templates/marketplace/static/pricing.html:43
+#: marketplace/templates/marketplace/static/pricing.html:73
+#, python-format
+msgid "Комиссия платформы: 10%% от суммы сделки"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/pricing.html:55
+msgid "Регистрация и базовый профиль - бесплатно"
+msgstr "Ro'yxatdan o'tish va asosiy profil - bepul"
+
+#: marketplace/templates/marketplace/static/pricing.html:61
+msgid "Регистрация - бесплатно"
+msgstr "Ro'yxatdan o'tish - bepul"
+
+#: marketplace/templates/marketplace/static/pricing.html:65
+msgid "Отклики на заказы - бесплатно"
+msgstr "Buyurtmalarga javob berish - bepul"
+
+#: marketplace/templates/marketplace/static/pricing.html:69
+msgid "Портфолио и профиль - бесплатно"
+msgstr "Portfolio va profil - bepul"
+
+#: marketplace/templates/marketplace/static/pricing.html:81
+#: marketplace/templates/marketplace/static/safe_deal.html:46
+msgid "Комиссия платформы"
+msgstr "Platforma komissiyasi"
+
+#: marketplace/templates/marketplace/static/pricing.html:84
+#, python-format
+msgid ""
+"Комиссия в размере 10%% взимается только после успешного завершения сделки. "
+"Это покрывает расходы на безопасную обработку платежей, поддержку клиентов и "
+"развитие платформы."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:4
+#: marketplace/templates/marketplace/static/privacy_policy.html:10
 msgid "Политика конфиденциальности"
 msgstr "Maxfiylik siyosati"
 
-#: templates/base.html:319
+#: marketplace/templates/marketplace/static/privacy_policy.html:15
+#: marketplace/templates/marketplace/static/terms_of_service.html:15
+msgid "Дата вступления в силу:"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:20
+msgid "1. Общие положения"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:23
+msgid ""
+"Настоящая Политика конфиденциальности определяет порядок обработки и защиты "
+"персональных данных пользователей платформы ServiceHub."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:29
+msgid "2. Собираемая информация"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:32
+msgid "Мы собираем следующую информацию:"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:35
+msgid "Персональные данные: имя, email, телефон"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:36
+msgid "Профильная информация: специализация, опыт работы, портфолио"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:37
+msgid "Данные транзакций: история заказов и платежей"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:38
+msgid "Технические данные: IP-адрес, тип браузера, cookies"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:44
+msgid "3. Использование информации"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:47
+msgid "Мы используем собранную информацию для:"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:50
+msgid "Предоставления услуг платформы"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:51
+msgid "Обработки транзакций и платежей"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:52
+msgid "Связи с пользователями по вопросам сервиса"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:53
+msgid "Улучшения качества платформы"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:59
+msgid "4. Защита данных"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:62
+msgid ""
+"Мы применяем современные методы шифрования и защиты данных для обеспечения "
+"безопасности вашей информации."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:68
+#, fuzzy
+#| msgid "Условия использования"
+msgid "5. Права пользователей"
+msgstr "Foydalanish shartlari"
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:71
+msgid "Вы имеете право:"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:74
+msgid "Получать доступ к своим персональным данным"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:75
+msgid "Исправлять неточные данные"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:76
+msgid "Удалять свои данные"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:77
+msgid "Отозвать согласие на обработку данных"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:83
+#, fuzzy
+#| msgid "Контакты"
+msgid "6. Контакты"
+msgstr "Kontaktlar"
+
+#: marketplace/templates/marketplace/static/privacy_policy.html:86
+#, fuzzy
+#| msgid "Политика конфиденциальности"
+msgid "По вопросам конфиденциальности обращайтесь:"
+msgstr "Maxfiylik siyosati"
+
+#: marketplace/templates/marketplace/static/safe_deal.html:4
+#: marketplace/templates/marketplace/static/safe_deal.html:10
+msgid "Безопасная сделка"
+msgstr "Xavfsiz shartnoma"
+
+#: marketplace/templates/marketplace/static/safe_deal.html:15
+msgid ""
+"ServiceHub гарантирует безопасность всех сделок через систему Escrow "
+"(гарантийного депозита)."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:24
+msgid "Клиент создает заказ и указывает бюджет"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:25
+msgid "Специалист откликается и предлагает свою цену"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:26
+msgid ""
+"После принятия оффера средства автоматически резервируются на счету клиента"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:27
+#, fuzzy
+#| msgid "Специалистам"
+msgid "Специалист выполняет работу"
+msgstr "Mutaxassislar uchun"
+
+#: marketplace/templates/marketplace/static/safe_deal.html:28
+msgid "Клиент подтверждает выполнение и средства переводятся специалисту"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:34
+msgid "Гарантии безопасности"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:37
+msgid "Средства защищены до подтверждения выполнения работы"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:38
+msgid "Возможность возврата средств при невыполнении обязательств"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:39
+msgid "Прозрачная система разрешения споров"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/safe_deal.html:40
+#, fuzzy
+#| msgid "Все права защищены."
+msgid "Все транзакции защищены шифрованием"
+msgstr "Barcha huquqlar himoyalangan."
+
+#: marketplace/templates/marketplace/static/safe_deal.html:49
+#, python-format
+msgid ""
+"Комиссия платформы составляет 10%% от суммы сделки и взимается только после "
+"успешного завершения работы."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:4
+#: marketplace/templates/marketplace/static/terms_of_service.html:10
 msgid "Условия использования"
 msgstr "Foydalanish shartlari"
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:20
+msgid "1. Принятие условий"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:23
+msgid ""
+"Используя платформу ServiceHub, вы соглашаетесь с настоящими Условиями "
+"использования. Если вы не согласны с условиями, пожалуйста, не используйте "
+"платформу."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:29
+msgid "2. Описание сервиса"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:32
+msgid ""
+"ServiceHub - это платформа для связи клиентов и специалистов. Мы "
+"предоставляем инструменты для создания заказов, поиска специалистов и "
+"безопасной обработки платежей."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:38
+msgid "3. Обязанности пользователей"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:41
+msgid "Предоставлять достоверную информацию"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:42
+msgid "Соблюдать законодательство и этические нормы"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:43
+msgid "Не использовать платформу для незаконных целей"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:44
+msgid "Уважать права других пользователей"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:50
+msgid "4. Платежи и комиссии"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:53
+#, python-format
+msgid ""
+"Комиссия платформы составляет 10%% от суммы каждой успешно завершенной "
+"сделки. Комиссия взимается автоматически при переводе средств специалисту."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:59
+msgid "5. Ответственность"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:62
+msgid ""
+"ServiceHub выступает посредником между клиентами и специалистами. Мы не "
+"несем ответственности за качество выполненных работ, но предоставляем "
+"инструменты для разрешения споров."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:68
+msgid "6. Изменение условий"
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:71
+msgid ""
+"Мы оставляем за собой право изменять настоящие Условия использования. О "
+"существенных изменениях пользователи будут уведомлены заранее."
+msgstr ""
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:77
+#, fuzzy
+#| msgid "Контакты"
+msgid "7. Контакты"
+msgstr "Kontaktlar"
+
+#: marketplace/templates/marketplace/static/terms_of_service.html:80
+msgid "По вопросам использования платформы обращайтесь:"
+msgstr ""
+
+#, fuzzy
+#~| msgid "ServiceHub - Маркетплейс специалистов"
+#~ msgid "ServiceHub - Поиск специалистов"
+#~ msgstr "ServiceHub - Mutaxassislarni qidirish"
+
+#~ msgid "Найдите профи"
+#~ msgstr "Mutaxassis toping"
+
+#~ msgid "для любой задачи"
+#~ msgstr "har qanday vazifa uchun"
+
+#~ msgid "Что нужно сделать?"
+#~ msgstr "Nima qilish kerak?"
+
+#~ msgid "Найти"
+#~ msgstr "Topish"
+
+#~ msgid "ServiceHub - Маркетплейс специалистов"
+#~ msgstr "ServiceHub - Mutaxassislar bozori"
+
+#~ msgid "Язык"
+#~ msgstr "Til"
+
+#~ msgid "База заказов"
+#~ msgstr "Buyurtmalar bazasi"
 
 #~ msgid ""
 #~ "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, "
@@ -111,14 +590,8 @@ msgstr "Foydalanish shartlari"
 #~ "Minglab tekshirilgan mutaxassislar sizga yordam berishga tayyor. "
 #~ "Ta'mirlash, o'qitish, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
 
-#~ msgid "Мои заказы"
-#~ msgstr "Mening buyurtmalarim"
-
 #~ msgid "Профиль"
 #~ msgstr "Profil"
 
 #~ msgid "Выйти"
 #~ msgstr "Chiqish"
-
-#~ msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
-#~ msgstr "Mutaxassislarni topish bo'yicha №1 xizmat. Ishonchli, tez va qulay."

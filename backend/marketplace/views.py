@@ -20,6 +20,37 @@ from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioI
 User = get_user_model()
 
 
+# Статические страницы
+def safe_deal_view(request):
+    """Страница о безопасных сделках (Escrow)"""
+    return render(request, 'marketplace/static/safe_deal.html')
+
+
+def how_it_works_view(request):
+    """Страница 'Как это работает'"""
+    return render(request, 'marketplace/static/how_it_works.html')
+
+
+def pricing_view(request):
+    """Страница с тарифами"""
+    return render(request, 'marketplace/static/pricing.html')
+
+
+def help_view(request):
+    """Страница помощи"""
+    return render(request, 'marketplace/static/help.html')
+
+
+def privacy_policy_view(request):
+    """Политика конфиденциальности"""
+    return render(request, 'marketplace/static/privacy_policy.html')
+
+
+def terms_of_service_view(request):
+    """Условия использования"""
+    return render(request, 'marketplace/static/terms_of_service.html')
+
+
 def home(request):
     """
     Главная страница (лендинг).

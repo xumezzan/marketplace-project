@@ -7,7 +7,9 @@ from .views import (
     MarkDealPaidView, MarkDealCompletedView, create_review,
     my_tasks, my_offers, my_deals,
     PortfolioListView, PortfolioCreateView, PortfolioUpdateView, PortfolioDeleteView,
-    get_specialist_data
+    get_specialist_data,
+    safe_deal_view, how_it_works_view, pricing_view, help_view,
+    privacy_policy_view, terms_of_service_view
 )
 
 app_name = 'marketplace'
@@ -31,5 +33,12 @@ urlpatterns = [
     path('my/portfolio/<int:pk>/delete/', PortfolioDeleteView.as_view(), name='portfolio_delete'),
     # API
     path('api/specialist/<int:specialist_id>/', get_specialist_data, name='get_specialist_data'),
+    # Статические страницы
+    path('safe-deal/', safe_deal_view, name='safe_deal'),
+    path('how-it-works/', how_it_works_view, name='how_it_works'),
+    path('pricing/', pricing_view, name='pricing'),
+    path('help/', help_view, name='help'),
+    path('privacy-policy/', privacy_policy_view, name='privacy_policy'),
+    path('terms-of-service/', terms_of_service_view, name='terms_of_service'),
 ]
 
