@@ -1,7 +1,6 @@
 {% load static %}
-{% get_current_language as CURRENT_LANG %}
 <!DOCTYPE html>
-<html lang="{{ CURRENT_LANG|default:'ru' }}" id="html-root">
+<html lang="ru" id="html-root">
 
 <head>
     <meta charset="UTF-8">
@@ -97,8 +96,6 @@
                 <!-- Right Side -->
                 <div class="flex items-center gap-3">
                     <!-- Language Toggle -->
-                    {% get_current_language as CURRENT_LANGUAGE %}
-
                     <!-- Theme Toggle -->
                     <button id="theme-toggle" type="button"
                         class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-indigo-400 transition-colors mr-2">
@@ -112,14 +109,14 @@
                             <input type="hidden" name="language" value="ru">
                             <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                             <button type="submit"
-                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'ru' or not CURRENT_LANGUAGE %}bg-white shadow text-indigo-600{% else %}text-slate-500 hover:text-indigo-600{% endif %}">RU</button>
+                                class="px-2 py-1 text-xs font-bold rounded-md transition bg-white shadow text-indigo-600">RU</button>
                         </form>
                         <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="uz">
                             <input type="hidden" name="next" value="{{ request.path|default:'/' }}">
                             <button type="submit"
-                                class="px-2 py-1 text-xs font-bold rounded-md transition {% if CURRENT_LANGUAGE == 'uz' %}bg-white shadow text-indigo-600{% else %}text-slate-500 hover:text-indigo-600{% endif %}">UZ</button>
+                                class="px-2 py-1 text-xs font-bold rounded-md transition text-slate-500 hover:text-indigo-600">UZ</button>
                         </form>
                     </div>
 
