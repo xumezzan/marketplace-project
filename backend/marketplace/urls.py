@@ -6,7 +6,8 @@ from .views import (
     TaskListView, TaskCreateView, TaskDetailView, AcceptOfferView,
     MarkDealPaidView, MarkDealCompletedView, create_review,
     my_tasks, my_offers, my_deals,
-    PortfolioListView, PortfolioCreateView, PortfolioUpdateView, PortfolioDeleteView
+    PortfolioListView, PortfolioCreateView, PortfolioUpdateView, PortfolioDeleteView,
+    get_specialist_data
 )
 
 app_name = 'marketplace'
@@ -28,5 +29,7 @@ urlpatterns = [
     path('my/portfolio/add/', PortfolioCreateView.as_view(), name='portfolio_add'),
     path('my/portfolio/<int:pk>/edit/', PortfolioUpdateView.as_view(), name='portfolio_edit'),
     path('my/portfolio/<int:pk>/delete/', PortfolioDeleteView.as_view(), name='portfolio_delete'),
+    # API
+    path('api/specialist/<int:specialist_id>/', get_specialist_data, name='get_specialist_data'),
 ]
 

@@ -225,41 +225,59 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Mock Specialist 1 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
-            onclick="openSpecialistModal(1, 'Ашур Ахмедов', 'Дизайнер архитектур', 4.9, 142, 'Лучший дизайнер из Зирабада. Делаю элитные проекты, проектирую дворцы и современные коттеджи.', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80', 'от 5000 ₽/час', 2)">
+        {% for specialist in specialists %}
+        <div class="specialist-card-clickable bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
+            data-specialist-id="{{ specialist.id }}">
             <div
                 class="p-6 flex flex-col items-center text-center border-b border-slate-50 flex-grow dark:border-slate-700">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
-                        alt="Ашур Ахмедов"
-                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4 group-hover:scale-105 transition duration-300" />
-                    <div class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white">
+                    <img src="{% if specialist.avatar %}{{ specialist.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ specialist.username|urlencode }}&background=random{% endif %}"
+                        alt="{{ specialist.username }}"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-md mb-4 group-hover:scale-105 transition duration-300" />
+                    {% if specialist.specialist_profile.is_verified %}
+                    <div
+                        class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-700">
                     </div>
+                    {% endif %}
                 </div>
 
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Ашур Ахмедов</h3>
-                <p class="text-sm text-slate-500 mb-3 dark:text-slate-400">Дизайнер архитектур</p>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ specialist.username }}</h3>
+                <p class="text-sm text-slate-500 mb-3 dark:text-slate-400">
+                    {{ specialist.specialist_profile.categories.first.name|default:"Специалист" }}
+                </p>
 
+                {% if specialist.rating %}
                 <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-md mb-4 dark:bg-amber-900/30">
                     <i class="bi bi-star-fill text-amber-500 text-xs dark:text-amber-400"></i>
-                    <span class="font-bold text-slate-900 text-sm dark:text-white">4.9</span>
-                    <span class="text-slate-400 text-xs dark:text-slate-500">(142 отзыва)</span>
+                    <span class="font-bold text-slate-900 text-sm dark:text-white">{{ specialist.rating|floatformat:1
+                        }}</span>
+                    <span class="text-slate-400 text-xs dark:text-slate-500">({{ specialist.reviews_received.count }}
+                        отзывов)</span>
                 </div>
+                {% endif %}
 
-                <p class="text-sm text-slate-600 line-clamp-3 mb-4 dark:text-slate-300">Лучший дизайнер из Зирабада.
-                    Делаю элитные проекты, проектирую дворцы и современные коттеджи.</p>
+                <p class="text-sm text-slate-600 line-clamp-3 mb-4 dark:text-slate-300">
+                    {{ specialist.specialist_profile.description|truncatewords:15|default:"Опытный специалист" }}
+                </p>
 
                 <div
-                    class="mt-auto flex gap-2 text-xs text-slate-400 w-full justify-center border-t border-slate-50 pt-3 dark:border-slate-700">
-                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 142</span>
+                    class="mt-auto flex gap-2 text-xs text-slate-400 w-full justify-center border-t border-slate-50 pt-3 dark:border-slate-700 dark:text-slate-500">
+                    <span class="flex items-center gap-1">
+                        <i class="bi bi-chat-square-text"></i> {{ specialist.reviews_received.count }}
+                    </span>
                     <span>•</span>
-                    <span>2 работы</span>
+                    <span>{{ specialist.portfolio_items.count }} работ</span>
                 </div>
             </div>
 
             <div class="p-4 bg-slate-50 flex justify-between items-center dark:bg-slate-700/50">
-                <span class="font-semibold text-slate-900 dark:text-white">от 5000 ₽/час</span>
+                <span class="font-semibold text-slate-900 dark:text-white">
+                    {% if specialist.specialist_profile.hourly_rate %}
+                    от {{ specialist.specialist_profile.hourly_rate }} ₽/час
+                    {% else %}
+                    По договоренности
+                    {% endif %}
+                </span>
                 <div class="p-2 bg-white border border-slate-200 rounded-full text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors dark:bg-slate-700 dark:border-slate-600 dark:text-indigo-400 dark:group-hover:bg-indigo-500 dark:group-hover:text-white"
                     onclick="event.stopPropagation()">
                     <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
@@ -267,135 +285,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- Mock Specialist 2 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
-            onclick="openSpecialistModal(2, 'Нилюфар Каримова', 'Репетитор по английскому', 5.0, 89, 'Преподаватель ВУЗа. Готовлю к IELTS, CEFR. Индивидуальный подход к каждому ученику.', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80', 'от 2000 ₽/час', 1)">
-            <div
-                class="p-6 flex flex-col items-center text-center border-b border-slate-50 flex-grow dark:border-slate-700">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
-                        alt="Нилюфар Каримова"
-                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4 group-hover:scale-105 transition duration-300" />
-                    <div class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white">
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Нилюфар Каримова</h3>
-                <p class="text-sm text-slate-500 mb-3 dark:text-slate-400">Репетитор по английскому</p>
-
-                <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-md mb-4 dark:bg-amber-900/30">
-                    <i class="bi bi-star-fill text-amber-500 text-xs dark:text-amber-400"></i>
-                    <span class="font-bold text-slate-900 text-sm dark:text-white">5.0</span>
-                    <span class="text-slate-400 text-xs dark:text-slate-500">(89 отзывов)</span>
-                </div>
-
-                <p class="text-sm text-slate-600 line-clamp-3 mb-4 dark:text-slate-300">Преподаватель ВУЗа. Готовлю к
-                    IELTS, CEFR. Индивидуальный подход к каждому ученику.</p>
-
-                <div
-                    class="mt-auto flex gap-2 text-xs text-slate-400 w-full justify-center border-t border-slate-50 pt-3 dark:border-slate-700">
-                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 89</span>
-                    <span>•</span>
-                    <span>1 работа</span>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-50 flex justify-between items-center dark:bg-slate-700/50">
-                <span class="font-semibold text-slate-900 dark:text-white">от 2000 ₽/час</span>
-                <div class="p-2 bg-white border border-slate-200 rounded-full text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors dark:bg-slate-700 dark:border-slate-600 dark:text-indigo-400 dark:group-hover:bg-indigo-500 dark:group-hover:text-white"
-                    onclick="event.stopPropagation()">
-                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
-                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
-                </div>
-            </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <p class="text-slate-500 dark:text-slate-400">Специалисты появятся скоро</p>
         </div>
-
-        <!-- Mock Specialist 3 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
-            onclick="openSpecialistModal(3, 'Сардор Умаров', 'Электрик профи', 4.8, 215, 'Все виды электромонтажных работ. Замена проводки, установка розеток, люстр.', 'https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80', 'от 1800 ₽/час', 1)">
-            <div
-                class="p-6 flex flex-col items-center text-center border-b border-slate-50 flex-grow dark:border-slate-700">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
-                        alt="Сардор Умаров"
-                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4 group-hover:scale-105 transition duration-300" />
-                    <div class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white">
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Сардор Умаров</h3>
-                <p class="text-sm text-slate-500 mb-3 dark:text-slate-400">Электрик профи</p>
-
-                <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-md mb-4 dark:bg-amber-900/30">
-                    <i class="bi bi-star-fill text-amber-500 text-xs dark:text-amber-400"></i>
-                    <span class="font-bold text-slate-900 text-sm dark:text-white">4.8</span>
-                    <span class="text-slate-400 text-xs dark:text-slate-500">(215 отзывов)</span>
-                </div>
-
-                <p class="text-sm text-slate-600 line-clamp-3 mb-4 dark:text-slate-300">Все виды электромонтажных работ.
-                    Замена проводки, установка розеток, люстр.</p>
-
-                <div
-                    class="mt-auto flex gap-2 text-xs text-slate-400 w-full justify-center border-t border-slate-50 pt-3 dark:border-slate-700">
-                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 215</span>
-                    <span>•</span>
-                    <span>1 работа</span>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-50 flex justify-between items-center dark:bg-slate-700/50">
-                <span class="font-semibold text-slate-900 dark:text-white">от 1800 ₽/час</span>
-                <div class="p-2 bg-white border border-slate-200 rounded-full text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors dark:bg-slate-700 dark:border-slate-600 dark:text-indigo-400 dark:group-hover:bg-indigo-500 dark:group-hover:text-white"
-                    onclick="event.stopPropagation()">
-                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
-                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mock Specialist 4 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
-            onclick="openSpecialistModal(4, 'Зарина Юсупова', 'Косметолог, Визажист', 4.9, 56, 'Дипломированный специалист. Использую только профессиональную косметику.', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80', 'от 3000 ₽/час', 2)">
-            <div
-                class="p-6 flex flex-col items-center text-center border-b border-slate-50 flex-grow dark:border-slate-700">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
-                        alt="Зарина Юсупова"
-                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4 group-hover:scale-105 transition duration-300" />
-                    <div class="absolute bottom-4 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white">
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Зарина Юсупова</h3>
-                <p class="text-sm text-slate-500 mb-3 dark:text-slate-400">Косметолог, Визажист</p>
-
-                <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-md mb-4 dark:bg-amber-900/30">
-                    <i class="bi bi-star-fill text-amber-500 text-xs dark:text-amber-400"></i>
-                    <span class="font-bold text-slate-900 text-sm dark:text-white">4.9</span>
-                    <span class="text-slate-400 text-xs dark:text-slate-500">(56 отзывов)</span>
-                </div>
-
-                <p class="text-sm text-slate-600 line-clamp-3 mb-4 dark:text-slate-300">Дипломированный специалист.
-                    Использую только профессиональную косметику.</p>
-
-                <div
-                    class="mt-auto flex gap-2 text-xs text-slate-400 w-full justify-center border-t border-slate-50 pt-3 dark:border-slate-700">
-                    <span class="flex items-center gap-1"><i class="bi bi-chat-square-text"></i> 56</span>
-                    <span>•</span>
-                    <span>2 работы</span>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-50 flex justify-between items-center dark:bg-slate-700/50">
-                <span class="font-semibold text-slate-900 dark:text-white">от 3000 ₽/час</span>
-                <div class="p-2 bg-white border border-slate-200 rounded-full text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors dark:bg-slate-700 dark:border-slate-600 dark:text-indigo-400 dark:group-hover:bg-indigo-500 dark:group-hover:text-white"
-                    onclick="event.stopPropagation()">
-                    <span class="text-sm font-medium px-2 group-hover:hidden">Профиль</span>
-                    <span class="text-sm font-medium px-2 hidden group-hover:inline">Открыть</span>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
     <div class="mt-6 sm:hidden text-center">
         <a href="#" class="text-indigo-600 font-medium hover:text-indigo-700 no-underline">Все специалисты &rarr;</a>

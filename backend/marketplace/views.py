@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404, render
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
@@ -27,11 +28,22 @@ def home(request):
     """
     categories = Category.objects.all()[:12]
     tasks_count = Task.objects.filter(status=Task.Status.PUBLISHED).count()
-    specialists_count = 1200  # Заглушка
+    
+    # Получаем реальных специалистов с рейтингом
+    specialists = User.objects.filter(
+        is_specialist=True, 
+        specialist_profile__isnull=False
+    ).select_related('specialist_profile').prefetch_related(
+        'specialist_profile__categories',
+        'portfolio_items'
+    ).order_by('-rating')[:4]
+    
+    specialists_count = User.objects.filter(is_specialist=True).count()
     cities_count = 10  # Заглушка
     
     context = {
         'categories': categories,
+        'specialists': specialists,
         'tasks_count': tasks_count,
         'specialists_count': specialists_count,
         'cities_count': cities_count,
@@ -646,3 +658,60 @@ class PortfolioDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Работа удалена из портфолио.')
         return super().delete(request, *args, **kwargs)
+
+
+def get_specialist_data(request, specialist_id):
+    """
+    API endpoint для получения данных специалиста в JSON формате.
+    Используется для модального окна профиля специалиста.
+    """
+    try:
+        specialist = get_object_or_404(User, id=specialist_id, is_specialist=True)
+        
+        # Получаем профиль специалиста
+        try:
+            profile = specialist.specialist_profile
+        except:
+            return JsonResponse({'error': 'Профиль специалиста не найден'}, status=404)
+        
+        # Получаем портфолио
+        portfolio_items = PortfolioItem.objects.filter(specialist=specialist).order_by('order')
+        portfolio_data = [{
+            'id': item.id,
+            'title': item.title,
+            'description': item.description,
+            'image_url': item.image.url if item.image else None,
+        } for item in portfolio_items]
+        
+        # Получаем отзывы
+        reviews = Review.objects.filter(specialist=specialist).select_related('task', 'client').order_by('-created_at')[:10]
+        reviews_data = [{
+            'id': review.id,
+            'client_name': review.client.username,
+            'rating': review.rating,
+            'comment': review.comment,
+            'created_at': review.created_at.strftime('%d.%m.%Y'),
+            'task_title': review.task.title if review.task else None,
+        } for review in reviews]
+        
+        # Формируем ответ
+        data = {
+            'id': specialist.id,
+            'username': specialist.username,
+            'avatar_url': specialist.avatar.url if specialist.avatar else f'https://ui-avatars.com/api/?name={specialist.username}&background=random',
+            'rating': float(specialist.rating) if specialist.rating else 0,
+            'reviews_count': reviews.count(),
+            'profession': profile.categories.first().name if profile.categories.exists() else 'Специалист',
+            'description': profile.description or 'Описание отсутствует',
+            'years_of_experience': profile.years_of_experience,
+            'hourly_rate': str(profile.hourly_rate) if profile.hourly_rate else None,
+            'price_range': f'{profile.typical_price_range_min}-{profile.typical_price_range_max} ₽' if profile.typical_price_range_min else 'По договоренности',
+            'is_verified': profile.is_verified,
+            'portfolio': portfolio_data,
+            'reviews': reviews_data,
+        }
+        
+        return JsonResponse(data)
+    except Exception as e:
+        logger.error(f"Error fetching specialist data: {e}")
+        return JsonResponse({'error': 'Ошибка при получении данных'}, status=500)
