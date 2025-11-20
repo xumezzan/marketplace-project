@@ -12,113 +12,93 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: uz\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
 #: marketplace/templates/marketplace/home.html:5
-#, fuzzy
-#| msgid "ServiceHub - Маркетплейс специалистов"
 msgid "ServiceHub - Поиск специалистов"
-msgstr "ServiceHub - Mutaxassislarni qidirish"
+msgstr ""
 
 #: marketplace/templates/marketplace/home.html:17
 msgid "Найдите профи"
-msgstr "Mutaxassis toping"
+msgstr ""
 
 #: marketplace/templates/marketplace/home.html:18
 msgid "для любой задачи"
-msgstr "har qanday vazifa uchun"
+msgstr ""
 
 #: marketplace/templates/marketplace/home.html:33
 msgid "Что нужно сделать?"
-msgstr "Nima qilish kerak?"
+msgstr ""
 
 #: marketplace/templates/marketplace/home.html:37
 msgid "Найти"
-msgstr "Topish"
+msgstr ""
 
 #: templates/base.html:10
 msgid "ServiceHub - Маркетплейс специалистов"
-msgstr "ServiceHub - Mutaxassislar bozori"
+msgstr ""
 
 #: templates/base.html:131 templates/base.html:268
 msgid "Создать заказ"
-msgstr "Buyurtma yaratish"
+msgstr ""
 
 #: templates/base.html:194
 msgid "Язык"
-msgstr "Til"
+msgstr ""
 
 #: templates/base.html:266
 msgid "Клиентам"
-msgstr "Mijozlar uchun"
+msgstr ""
 
 #: templates/base.html:269
 msgid "Найти специалиста"
-msgstr "Mutaxassis topish"
+msgstr ""
 
 #: templates/base.html:270
 msgid "Безопасная сделка"
-msgstr "Xavfsiz shartnoma"
+msgstr ""
 
 #: templates/base.html:271
 msgid "Как это работает"
-msgstr "Qanday ishlaydi"
+msgstr ""
 
 #: templates/base.html:277
 msgid "Специалистам"
-msgstr "Mutaxassislar uchun"
+msgstr ""
 
 #: templates/base.html:279
 msgid "База заказов"
-msgstr "Buyurtmalar bazasi"
+msgstr ""
 
 #: templates/base.html:280
 msgid "Стать специалистом"
-msgstr "Mutaxassis bo'lish"
+msgstr ""
 
 #: templates/base.html:281
 msgid "Тарифы"
-msgstr "Tariflar"
+msgstr ""
 
 #: templates/base.html:282
 msgid "Помощь"
-msgstr "Yordam"
+msgstr ""
 
 #: templates/base.html:288
 msgid "Контакты"
-msgstr "Kontaktlar"
+msgstr ""
 
 #: templates/base.html:314
 msgid "Все права защищены."
-msgstr "Barcha huquqlar himoyalangan."
+msgstr ""
 
 #: templates/base.html:317
 msgid "Политика конфиденциальности"
-msgstr "Maxfiylik siyosati"
+msgstr ""
 
 #: templates/base.html:319
 msgid "Условия использования"
-msgstr "Foydalanish shartlari"
-
-#~ msgid ""
-#~ "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, "
-#~ "красота, IT и многое другое. Быстро, безопасно и качественно."
-#~ msgstr ""
-#~ "Minglab tekshirilgan mutaxassislar sizga yordam berishga tayyor. "
-#~ "Ta'mirlash, o'qitish, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
-
-#~ msgid "Мои заказы"
-#~ msgstr "Mening buyurtmalarim"
-
-#~ msgid "Профиль"
-#~ msgstr "Profil"
-
-#~ msgid "Выйти"
-#~ msgstr "Chiqish"
-
-#~ msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
-#~ msgstr "Mutaxassislarni topish bo'yicha №1 xizmat. Ishonchli, tez va qulay."
+msgstr ""

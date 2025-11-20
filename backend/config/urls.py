@@ -28,6 +28,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('', include('marketplace.urls')),
     path('api/', include('marketplace.api_urls')),
+    path('api/payments/', include('payments.api_urls')),
 ]
 
 # Поддержка MEDIA файлов в режиме разработки

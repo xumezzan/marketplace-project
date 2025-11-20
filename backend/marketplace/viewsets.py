@@ -435,48 +435,70 @@ class DealViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def mark_paid(self, request, pk=None):
-        """Отметить сделку как оплаченную."""
+        """
+        Оплатить сделку (зарезервировать средства).
+        Только для клиента.
+        """
         deal = self.get_object()
         
-        # Проверяем права
-        if request.user != deal.client and request.user != deal.specialist:
+        # Проверяем права - платит только клиент
+        if request.user != deal.client:
             return Response(
-                {'error': 'Только участники сделки могут изменять её статус.'},
+                {'error': 'Только клиент может оплатить сделку.'},
                 status=status.HTTP_403_FORBIDDEN
             )
         
         # Проверяем текущий статус
-        if deal.status != Deal.Status.PENDING_PAYMENT:
+        if deal.status != Deal.Status.PENDING:
             return Response(
-                {'error': f'Сделку со статусом "{deal.get_status_display()}" нельзя отметить как оплаченную.'},
+                {'error': f'Сделку со статусом "{deal.get_status_display()}" нельзя оплатить.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        deal.mark_as_paid()
+        from payments.services import PaymentService
+        
+        success = PaymentService.process_payment(deal)
+        
+        if not success:
+            return Response(
+                {'error': 'Недостаточно средств на кошельке или ошибка обработки.'},
+                status=status.HTTP_402_PAYMENT_REQUIRED
+            )
         
         serializer = self.get_serializer(deal)
         return Response(serializer.data)
     
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def mark_completed(self, request, pk=None):
-        """Отметить сделку как завершенную."""
+        """
+        Завершить сделку и перевести средства исполнителю.
+        Только для клиента (подтверждение выполнения).
+        """
         deal = self.get_object()
         
-        # Проверяем права
-        if request.user != deal.client and request.user != deal.specialist:
+        # Проверяем права - подтверждает только клиент
+        if request.user != deal.client:
             return Response(
-                {'error': 'Только участники сделки могут изменять её статус.'},
+                {'error': 'Только клиент может подтвердить выполнение и завершить сделку.'},
                 status=status.HTTP_403_FORBIDDEN
             )
         
         # Проверяем текущий статус
-        if deal.status not in [Deal.Status.PAID, Deal.Status.PENDING_PAYMENT]:
+        if deal.status != Deal.Status.IN_PROGRESS:
             return Response(
-                {'error': f'Сделку со статусом "{deal.get_status_display()}" нельзя отметить как завершенную.'},
+                {'error': f'Сделку со статусом "{deal.get_status_display()}" нельзя завершить (она должна быть оплачена и в процессе).'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        deal.mark_as_completed()
+        from payments.services import PaymentService
+        
+        success = PaymentService.release_payment(deal)
+        
+        if not success:
+            return Response(
+                {'error': 'Ошибка при переводе средств.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
         
         serializer = self.get_serializer(deal)
         return Response(serializer.data)
