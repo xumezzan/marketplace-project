@@ -193,12 +193,16 @@ STATICFILES_DIRS = [
 ]
 
 # WhiteNoise для обслуживания статических файлов в продакшене
-# В продакшене (DEBUG=False) используем CompressedStaticFilesStorage (без хеширования, чтобы избежать проблем с manifest)
+# В продакшене (DEBUG=False) используем CompressedStaticFilesStorage
 # В разработке используем стандартный storage
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    # WhiteNoise настройки для продакшена
     WHITENOISE_USE_FINDERS = False  # В продакшене не использовать finders
     WHITENOISE_AUTOREFRESH = False  # В продакшене не автообновлять
+    # Максимальное время кеширования статических файлов (1 год)
+    WHITENOISE_MAX_AGE = 31536000
+    # WhiteNoise автоматически использует STATIC_ROOT, не нужно указывать WHITENOISE_ROOT
 else:
     # В разработке используем стандартный storage и finders
     STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"

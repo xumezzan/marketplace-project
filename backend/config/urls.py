@@ -34,3 +34,5 @@ urlpatterns = [
 # Поддержка MEDIA файлов в режиме разработки
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # В режиме разработки также обслуживаем статические файлы через Django
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
