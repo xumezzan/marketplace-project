@@ -2,7 +2,7 @@
 Views для marketplace приложения.
 """
 import logging
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
 logger = logging.getLogger(__name__)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,8 +13,8 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from .models import Task, Offer, Deal, Category, Review
-from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm
+from .models import Task, Offer, Deal, Category, Review, PortfolioItem
+from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm
 
 User = get_user_model()
 
@@ -220,10 +220,29 @@ class TaskDetailView(DetailView):
                 ).exists()
                 reviews_count = Review.objects.filter(specialist=offer.specialist).count()
             
+            # Получаем профиль специалиста
+            specialist_profile = getattr(offer.specialist, 'specialist_profile', None)
+            portfolio_count = offer.specialist.portfolio_items.count()
+            
+            profession = "Специалист"
+            description = ""
+            price_range = ""
+            
+            if specialist_profile:
+                first_category = specialist_profile.categories.first()
+                if first_category:
+                    profession = first_category.name
+                description = specialist_profile.description or ""
+                price_range = specialist_profile.price_range_display
+
             offers_with_ratings.append({
                 'offer': offer,
                 'has_review': has_review,
                 'reviews_count': reviews_count,
+                'portfolio_count': portfolio_count,
+                'profession': profession,
+                'description': description,
+                'price_range': price_range,
             })
         
         context['offers'] = offers
@@ -555,3 +574,75 @@ def analyze_task_ai(request):
             result['price_estimated'] = True
     
     return Response(result, status=status.HTTP_200_OK)
+
+
+class PortfolioListView(LoginRequiredMixin, ListView):
+    """
+    Список работ в портфолио специалиста.
+    """
+    model = PortfolioItem
+    template_name = 'marketplace/portfolio_list.html'
+    context_object_name = 'portfolio_items'
+    
+    def get_queryset(self):
+        return PortfolioItem.objects.filter(specialist=self.request.user).order_by('order', '-created_at')
+        
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_specialist:
+            messages.error(request, 'Портфолио доступно только специалистам.')
+            return redirect('marketplace:tasks_list')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class PortfolioCreateView(LoginRequiredMixin, CreateView):
+    """
+    Добавление работы в портфолио.
+    """
+    model = PortfolioItem
+    form_class = PortfolioItemForm
+    template_name = 'marketplace/portfolio_form.html'
+    success_url = reverse_lazy('marketplace:portfolio_list')
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_specialist:
+            messages.error(request, 'Только специалисты могут добавлять работы.')
+            return redirect('marketplace:tasks_list')
+        return super().dispatch(request, *args, **kwargs)
+        
+    def form_valid(self, form):
+        form.instance.specialist = self.request.user
+        messages.success(self.request, 'Работа добавлена в портфолио!')
+        return super().form_valid(form)
+
+
+class PortfolioUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Редактирование работы в портфолио.
+    """
+    model = PortfolioItem
+    form_class = PortfolioItemForm
+    template_name = 'marketplace/portfolio_form.html'
+    success_url = reverse_lazy('marketplace:portfolio_list')
+    
+    def get_queryset(self):
+        return PortfolioItem.objects.filter(specialist=self.request.user)
+        
+    def form_valid(self, form):
+        messages.success(self.request, 'Работа обновлена!')
+        return super().form_valid(form)
+
+
+class PortfolioDeleteView(LoginRequiredMixin, DeleteView):
+    """
+    Удаление работы из портфолио.
+    """
+    model = PortfolioItem
+    template_name = 'marketplace/portfolio_confirm_delete.html'
+    success_url = reverse_lazy('marketplace:portfolio_list')
+    
+    def get_queryset(self):
+        return PortfolioItem.objects.filter(specialist=self.request.user)
+        
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Работа удалена из портфолио.')
+        return super().delete(request, *args, **kwargs)

@@ -330,8 +330,20 @@
                                 <!-- Offer Header -->
                                 <div class="flex justify-between items-start mb-3">
                                     <div>
-                                        <div class="font-bold text-slate-900 dark:text-white">{{
-                                            offer.specialist.username }}</div>
+                                        <div class="font-bold text-slate-900 dark:text-white cursor-pointer hover:text-indigo-600 transition"
+                                            onclick="openSpecialistModal(
+                                                 {{ offer.specialist.id }},
+                                                 '{{ offer.specialist.username|escapejs }}',
+                                                 '{{ item.profession|escapejs }}',
+                                                 {{ offer.specialist.rating|default:0|stringformat:'f' }},
+                                                 {{ reviews_count }},
+                                                 '{{ item.description|escapejs|linebreaksbr }}',
+                                                 '{% if offer.specialist.avatar %}{{ offer.specialist.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ offer.specialist.username }}&background=random{% endif %}',
+                                                 '{{ item.price_range|escapejs }}',
+                                                 {{ item.portfolio_count }}
+                                             )">
+                                            {{ offer.specialist.username }}
+                                        </div>
                                         {% if offer.specialist.rating and offer.specialist.rating > 0 %}
                                         <div class="flex items-center gap-1 text-xs text-amber-500 font-medium">
                                             <i class="bi bi-star-fill"></i> {{ offer.specialist.rating|floatformat:1 }}

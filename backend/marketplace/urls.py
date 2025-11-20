@@ -5,7 +5,8 @@ from django.urls import path
 from .views import (
     TaskListView, TaskCreateView, TaskDetailView, AcceptOfferView,
     MarkDealPaidView, MarkDealCompletedView, create_review,
-    my_tasks, my_offers, my_deals
+    my_tasks, my_offers, my_deals,
+    PortfolioListView, PortfolioCreateView, PortfolioUpdateView, PortfolioDeleteView
 )
 
 app_name = 'marketplace'
@@ -22,5 +23,10 @@ urlpatterns = [
     path('my/tasks/', my_tasks, name='my_tasks'),
     path('my/offers/', my_offers, name='my_offers'),
     path('my/deals/', my_deals, name='my_deals'),
+    # Портфолио
+    path('my/portfolio/', PortfolioListView.as_view(), name='portfolio_list'),
+    path('my/portfolio/add/', PortfolioCreateView.as_view(), name='portfolio_add'),
+    path('my/portfolio/<int:pk>/edit/', PortfolioUpdateView.as_view(), name='portfolio_edit'),
+    path('my/portfolio/<int:pk>/delete/', PortfolioDeleteView.as_view(), name='portfolio_delete'),
 ]
 
