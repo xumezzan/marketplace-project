@@ -330,18 +330,16 @@
                                 <!-- Offer Header -->
                                 <div class="flex justify-between items-start mb-3">
                                     <div>
-                                        <div class="font-bold text-slate-900 dark:text-white cursor-pointer hover:text-indigo-600 transition"
-                                            onclick="openSpecialistModal(
-                                                 {{ offer.specialist.id }},
-                                                 '{{ offer.specialist.username|escapejs }}',
-                                                 '{{ item.profession|escapejs }}',
-                                                 {{ offer.specialist.rating|default:0|stringformat:'f' }},
-                                                 {{ reviews_count }},
-                                                 '{{ item.description|escapejs|linebreaksbr }}',
-                                                 '{% if offer.specialist.avatar %}{{ offer.specialist.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ offer.specialist.username }}&background=random{% endif %}',
-                                                 '{{ item.price_range|escapejs }}',
-                                                 {{ item.portfolio_count }}
-                                             )">
+                                        <div class="font-bold text-slate-900 dark:text-white cursor-pointer hover:text-indigo-600 transition specialist-modal-trigger"
+                                            data-specialist-id="{{ offer.specialist.id }}"
+                                            data-specialist-name="{{ offer.specialist.username|escapejs }}"
+                                            data-specialist-profession="{{ item.profession|escapejs }}"
+                                            data-specialist-rating="{{ offer.specialist.rating|default:0|floatformat:1 }}"
+                                            data-specialist-reviews="{{ item.reviews_count|default:0 }}"
+                                            data-specialist-description="{{ item.description|escapejs }}"
+                                            data-specialist-avatar="{% if offer.specialist.avatar %}{{ offer.specialist.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ offer.specialist.username|urlencode }}&background=random{% endif %}"
+                                            data-specialist-price="{{ item.price_range|escapejs }}"
+                                            data-specialist-portfolio="{{ item.portfolio_count|default:0 }}">
                                             {{ offer.specialist.username }}
                                         </div>
                                         {% if offer.specialist.rating and offer.specialist.rating > 0 %}

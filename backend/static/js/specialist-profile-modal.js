@@ -201,5 +201,27 @@
             window.closeSpecialistModal();
         }
     });
+
+    // Event delegation для открытия модалки специалиста
+    document.addEventListener('click', function(e) {
+        const trigger = e.target.closest('.specialist-modal-trigger');
+        if (trigger) {
+            e.preventDefault();
+            
+            // Получаем данные из data-атрибутов
+            const id = parseInt(trigger.dataset.specialistId);
+            const name = trigger.dataset.specialistName;
+            const profession = trigger.dataset.specialistProfession;
+            const rating = parseFloat(trigger.dataset.specialistRating) || 0;
+            const reviewsCount = parseInt(trigger.dataset.specialistReviews) || 0;
+            const description = trigger.dataset.specialistDescription;
+            const avatarUrl = trigger.dataset.specialistAvatar;
+            const price = trigger.dataset.specialistPrice;
+            const portfolioCount = parseInt(trigger.dataset.specialistPortfolio) || 0;
+            
+            // Открываем модальное окно
+            window.openSpecialistModal(id, name, profession, rating, reviewsCount, description, avatarUrl, price, portfolioCount);
+        }
+    });
 })();
 
