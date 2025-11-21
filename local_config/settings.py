@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 import dj_database_url
 from dotenv import load_dotenv
 
@@ -20,6 +21,7 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, os.path.join(BASE_DIR, 'backend'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -47,12 +49,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     # Local apps
-    'users',
-    'categories',
-    'tasks',
-    'offers',
-    'specialists',
-    'deals',
+    'accounts',
+    'marketplace',
+    'payments',
+    'chat',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -65,12 +66,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'marketplace.urls'
+ROOT_URLCONF = 'local_config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'backend', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,7 +83,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'marketplace.wsgi.application'
+WSGI_APPLICATION = 'local_config.wsgi.application'
 
 
 # Database
@@ -152,7 +153,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Django REST Framework settings
 REST_FRAMEWORK = {

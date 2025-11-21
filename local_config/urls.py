@@ -19,16 +19,29 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.i18n import set_language
+
+from django.shortcuts import render
 import sys
 import os
 
 # Add the backend directory to the Python path
 backend_path = os.path.join(settings.BASE_DIR, 'backend')
 if backend_path not in sys.path:
-    sys.path.insert(0, backend_path)
+    sys.path.insert(0, settings.BASE_DIR)
+
+from marketplace import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/setlang/', set_language, name='set_language'),
+    path('', views.home, name='home'),
+    path('test/', lambda request: render(request, 'test.html', {'count': 42})),
+    path('accounts/', include('accounts.urls')),
+    path('chat/', include('chat.urls')),
+    path('notifications/', include('notifications.urls')),
+    path('', include('marketplace.urls')),
+    path('api/', include('marketplace.api_urls')),
+    path('api/payments/', include('payments.api_urls')),
 ]
 
 # Поддержка MEDIA файлов в режиме разработки

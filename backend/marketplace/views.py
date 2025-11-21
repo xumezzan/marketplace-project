@@ -57,6 +57,7 @@ def home(request):
     
     Отображает информацию о платформе, популярные категории и статистику.
     """
+    print("DEBUG: Home view called!")
     categories = Category.objects.all()[:12]
     tasks_count = Task.objects.filter(status=Task.Status.PUBLISHED).count()
     
