@@ -103,7 +103,7 @@ class AIService:
     @staticmethod
     def _parse_with_gemini(text: str, user=None) -> Dict[str, Any]:
         """Парсинг с использованием Gemini API."""
-        from backend.marketplace.models import Category, Subcategory
+        from marketplace.models import Category, Subcategory
         
         # Получаем список категорий для контекста
         categories = list(Category.objects.values('id', 'name'))
@@ -174,7 +174,7 @@ class AIService:
     def _parse_fallback(text: str) -> Dict[str, Any]:
         """Простая логика парсинга без AI."""
         import re
-        from backend.marketplace.models import Category
+        from marketplace.models import Category
         
         result = {
             'category_id': None,
@@ -242,7 +242,7 @@ class AIService:
                 - estimated_max: максимальная оценка
                 - confidence: уверенность (0.0 - 1.0)
         """
-        from backend.marketplace.models import Deal, Task
+        from marketplace.models import Deal, Task
         from django.db.models import Avg
         
         category_id = task_data.get('category_id')
@@ -338,7 +338,7 @@ class AIService:
     def _log_request(request_type: str, input_data: Dict, user=None, output_data: Dict = None):
         """Логирование AI запроса в базу данных."""
         try:
-            from backend.marketplace.models import AIRequest
+            from marketplace.models import AIRequest
             AIRequest.objects.create(
                 user=user,
                 request_type=request_type,

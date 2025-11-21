@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
 from django.db.models import Q
 from .models import Conversation, Message
-from backend.marketplace.models import Deal
+from marketplace.models import Deal
 
 class ConversationDetailView(LoginRequiredMixin, DetailView):
     """

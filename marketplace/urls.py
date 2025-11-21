@@ -27,21 +27,8 @@ backend_path = os.path.join(settings.BASE_DIR, 'backend')
 if backend_path not in sys.path:
     sys.path.insert(0, backend_path)
 
-# Import views from the backend directory
-from backend.marketplace import views
-from backend import test_view
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('i18n/setlang/', set_language, name='set_language'),
-    path('test/', test_view.test_view, name='test'),  # Test URL
-    path('', views.home, name='home'),
-    path('notifications/', include(('backend.notifications.urls', 'notifications'), namespace='notifications')),
-    path('chat/', include(('backend.chat.urls', 'chat'), namespace='chat')),
-    path('accounts/', include(('backend.accounts.urls', 'accounts'), namespace='accounts')),
-    path('', include(('backend.marketplace.urls', 'marketplace'), namespace='marketplace')),
-    path('api/', include('backend.marketplace.api_urls')),
-    path('api/payments/', include('backend.payments.api_urls')),
 ]
 
 # Поддержка MEDIA файлов в режиме разработки

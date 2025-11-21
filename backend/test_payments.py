@@ -6,7 +6,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from django.contrib.auth import get_user_model
-from backend.marketplace.models import Task, Offer, Deal, Escrow, Category
+from marketplace.models import Task, Offer, Deal, Escrow, Category
 from payments.models import Wallet
 from payments.services import PaymentService
 

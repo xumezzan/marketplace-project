@@ -95,7 +95,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         
         # Добавляем форму профиля в зависимости от роли
         if user.is_specialist:
-            from backend.marketplace.models import SpecialistProfile
+            from marketplace.models import SpecialistProfile
             from .forms import SpecialistProfileUpdateForm
             # Создаем профиль, если его нет
             profile, _ = SpecialistProfile.objects.get_or_create(user=user)
@@ -103,7 +103,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
                 context['specialist_form'] = SpecialistProfileUpdateForm(instance=profile)
                 
         if user.is_client:
-            from backend.marketplace.models import ClientProfile
+            from marketplace.models import ClientProfile
             from .forms import ClientProfileUpdateForm
             # Создаем профиль, если его нет
             profile, _ = ClientProfile.objects.get_or_create(user=user)
@@ -122,14 +122,14 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         client_form = None
         
         if self.object.is_specialist:
-            from backend.marketplace.models import SpecialistProfile
+            from marketplace.models import SpecialistProfile
             from .forms import SpecialistProfileUpdateForm
             profile, _ = SpecialistProfile.objects.get_or_create(user=self.object)
             specialist_form = SpecialistProfileUpdateForm(request.POST, instance=profile)
             valid = valid and specialist_form.is_valid()
             
         if self.object.is_client:
-            from backend.marketplace.models import ClientProfile
+            from marketplace.models import ClientProfile
             from .forms import ClientProfileUpdateForm
             profile, _ = ClientProfile.objects.get_or_create(user=self.object)
             client_form = ClientProfileUpdateForm(request.POST, instance=profile)

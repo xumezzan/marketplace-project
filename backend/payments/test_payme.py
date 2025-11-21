@@ -3,7 +3,7 @@ import base64
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from backend.marketplace.models import Deal, Task, Category, SpecialistProfile, ClientProfile, Offer
+from marketplace.models import Deal, Task, Category, SpecialistProfile, ClientProfile, Offer
 from payments.models import PaymeTransaction
 
 User = get_user_model()
