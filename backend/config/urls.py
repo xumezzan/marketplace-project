@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/setlang/', set_language, name='set_language'),
     path('', views.home, name='home'),
+    path('notifications/', include('notifications.urls')),
+    path('chat/', include('chat.urls')),
     path('accounts/', include('accounts.urls')),
     path('', include('marketplace.urls')),
     path('api/', include('marketplace.api_urls')),

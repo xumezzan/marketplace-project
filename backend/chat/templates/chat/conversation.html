@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Диалог{% endblock %}
+
+{% block content %}
+<div class="row h-100">
+    <div class="col-md-8 mx-auto d-flex flex-column" style="height: calc(100vh - 200px);">
+        <div class="card flex-grow-1 d-flex flex-column shadow-sm">
+            <div class="card-header bg-white py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        {% if conversation.deal %}
+                        Чат по сделке: {{ conversation.deal.task.title }}
+                        {% else %}
+                        Диалог
+                        {% endif %}
+                    </h5>
+                    <a href="{% url 'marketplace:my_deals' %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> К сделкам
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body overflow-auto flex-grow-1 bg-light" id="messages-container">
+                {% for message in conversation.messages.all %}
+                <div class="d-flex mb-3 {% if message.sender == user %}justify-content-end{% endif %}">
+                    <div class="card border-0 shadow-sm {% if message.sender == user %}bg-primary text-white{% else %}bg-white{% endif %}"
+                        style="max-width: 75%;">
+                        <div class="card-body py-2 px-3">
+                            <p class="mb-1">{{ message.text|linebreaksbr }}</p>
+                            <div class="d-flex align-items-center justify-content-end gap-2">
+                                <small
+                                    class="{% if message.sender == user %}text-white-50{% else %}text-muted{% endif %}"
+                                    style="font-size: 0.7rem;">
+                                    {{ message.created_at|time:"H:i" }}
+                                </small>
+                                {% if message.sender == user %}
+                                {% if message.is_read %}
+                                <i class="bi bi-check-all text-white" style="font-size: 0.8rem;"></i>
+                                {% else %}
+                                <i class="bi bi-check text-white-50" style="font-size: 0.8rem;"></i>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5 text-muted">
+                    <p>Начните общение первым!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="card-footer bg-white p-3">
+                <form method="post" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <textarea name="text" class="form-control" rows="1" placeholder="Напишите сообщение..." required
+                        style="resize: none;"></textarea>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Прокрутка вниз при загрузке
+    const container = document.getElementById('messages-container');
+    container.scrollTop = container.scrollHeight;
+</script>
+{% endblock %}

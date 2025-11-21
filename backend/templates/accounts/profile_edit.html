@@ -9,82 +9,171 @@
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <h2 class="card-title mb-4">Редактирование профиля</h2>
-                
+
                 <form method="post" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
-                    
+
                     <!-- Avatar -->
                     <div class="mb-4">
                         <label class="form-label">Текущий аватар</label>
                         <div class="mb-3">
                             {% if user.avatar %}
-                                <img src="{{ user.avatar.url }}" alt="Аватар" class="img-thumbnail rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                            <img src="{{ user.avatar.url }}" alt="Аватар" class="img-thumbnail rounded-circle"
+                                style="width: 100px; height: 100px; object-fit: cover;">
                             {% else %}
-                                <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
-                                    <i class="bi bi-person-circle text-white" style="font-size: 60px;"></i>
-                                </div>
+                            <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center"
+                                style="width: 100px; height: 100px;">
+                                <i class="bi bi-person-circle text-white" style="font-size: 60px;"></i>
+                            </div>
                             {% endif %}
                         </div>
                         <label for="{{ form.avatar.id_for_label }}" class="form-label">{{ form.avatar.label }}</label>
                         {{ form.avatar }}
                         {% if form.avatar.errors %}
-                            <div class="text-danger small">{{ form.avatar.errors }}</div>
+                        <div class="text-danger small">{{ form.avatar.errors }}</div>
                         {% endif %}
                         <div class="form-text">Оставьте пустым, чтобы не изменять текущий аватар</div>
                     </div>
-                    
+
                     <!-- First Name -->
                     <div class="mb-3">
-                        <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label
+                            }}</label>
                         {{ form.first_name }}
                         {% if form.first_name.errors %}
-                            <div class="text-danger small">{{ form.first_name.errors }}</div>
+                        <div class="text-danger small">{{ form.first_name.errors }}</div>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Last Name -->
                     <div class="mb-3">
-                        <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label
+                            }}</label>
                         {{ form.last_name }}
                         {% if form.last_name.errors %}
-                            <div class="text-danger small">{{ form.last_name.errors }}</div>
+                        <div class="text-danger small">{{ form.last_name.errors }}</div>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Email -->
                     <div class="mb-3">
                         <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
                         {{ form.email }}
                         {% if form.email.errors %}
-                            <div class="text-danger small">{{ form.email.errors }}</div>
+                        <div class="text-danger small">{{ form.email.errors }}</div>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Phone -->
                     <div class="mb-3">
                         <label for="{{ form.phone.id_for_label }}" class="form-label">{{ form.phone.label }}</label>
                         {{ form.phone }}
                         {% if form.phone.errors %}
-                            <div class="text-danger small">{{ form.phone.errors }}</div>
+                        <div class="text-danger small">{{ form.phone.errors }}</div>
                         {% endif %}
                     </div>
-                    
+
                     <!-- City -->
                     <div class="mb-3">
                         <label for="{{ form.city.id_for_label }}" class="form-label">{{ form.city.label }}</label>
                         {{ form.city }}
                         {% if form.city.errors %}
-                            <div class="text-danger small">{{ form.city.errors }}</div>
+                        <div class="text-danger small">{{ form.city.errors }}</div>
                         {% endif %}
                     </div>
-                    
+
+                    {% if specialist_form %}
+                    <hr class="my-4">
+                    <h4 class="mb-3">Профиль специалиста</h4>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="{{ specialist_form.description.id_for_label }}" class="form-label">{{
+                            specialist_form.description.label }}</label>
+                        {{ specialist_form.description }}
+                        {% if specialist_form.description.errors %}
+                        <div class="text-danger small">{{ specialist_form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <!-- Years of Experience -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ specialist_form.years_of_experience.id_for_label }}" class="form-label">{{
+                                specialist_form.years_of_experience.label }}</label>
+                            {{ specialist_form.years_of_experience }}
+                            {% if specialist_form.years_of_experience.errors %}
+                            <div class="text-danger small">{{ specialist_form.years_of_experience.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Hourly Rate -->
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ specialist_form.hourly_rate.id_for_label }}" class="form-label">{{
+                                specialist_form.hourly_rate.label }}</label>
+                            {{ specialist_form.hourly_rate }}
+                            {% if specialist_form.hourly_rate.errors %}
+                            <div class="text-danger small">{{ specialist_form.hourly_rate.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="mb-3">
+                        <label class="form-label">{{ specialist_form.categories.label }}</label>
+                        <div class="card p-3" style="max-height: 200px; overflow-y: auto;">
+                            {{ specialist_form.categories }}
+                        </div>
+                        {% if specialist_form.categories.errors %}
+                        <div class="text-danger small">{{ specialist_form.categories.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Portfolio Links -->
+                    <div class="mb-3">
+                        <label for="{{ specialist_form.portfolio_links.id_for_label }}" class="form-label">{{
+                            specialist_form.portfolio_links.label }}</label>
+                        {{ specialist_form.portfolio_links }}
+                        {% if specialist_form.portfolio_links.errors %}
+                        <div class="text-danger small">{{ specialist_form.portfolio_links.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Введите ссылки в формате JSON списка, например: ["https://site.com",
+                            "https://behance.net"]</div>
+                    </div>
+                    {% endif %}
+
+                    {% if client_form %}
+                    <hr class="my-4">
+                    <h4 class="mb-3">Профиль клиента</h4>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label for="{{ client_form.address.id_for_label }}" class="form-label">{{
+                            client_form.address.label }}</label>
+                        {{ client_form.address }}
+                        {% if client_form.address.errors %}
+                        <div class="text-danger small">{{ client_form.address.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Preferences -->
+                    <div class="mb-3">
+                        <label for="{{ client_form.preferences.id_for_label }}" class="form-label">{{
+                            client_form.preferences.label }}</label>
+                        {{ client_form.preferences }}
+                        {% if client_form.preferences.errors %}
+                        <div class="text-danger small">{{ client_form.preferences.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
                     <!-- Non-field errors -->
                     {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {{ form.non_field_errors }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
                     {% endif %}
-                    
+
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
                         <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">Отмена</a>
@@ -95,4 +184,3 @@
     </div>
 </div>
 {% endblock %}
-

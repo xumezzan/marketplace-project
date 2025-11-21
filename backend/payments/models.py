@@ -122,3 +122,38 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.get_type_display()}: {self.amount} ({self.created_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+class PaymeTransaction(models.Model):
+    """
+    Транзакция Payme.
+    """
+    payme_id = models.CharField('ID транзакции в Payme', max_length=255)
+    time = models.BigIntegerField('время создания транзакции в Payme')
+    amount = models.BigIntegerField('сумма (в тийинах)')
+    account = models.JSONField('параметры аккаунта', null=True, blank=True)
+    create_time = models.BigIntegerField('время добавления транзакции в БД', default=0)
+    perform_time = models.BigIntegerField('время проведения транзакции', default=0)
+    cancel_time = models.BigIntegerField('время отмены транзакции', default=0)
+    state = models.IntegerField('состояние транзакции')
+    reason = models.IntegerField('причина отмены', null=True, blank=True)
+    
+    # Связь со сделкой (если оплата идет за сделку)
+    deal = models.ForeignKey(
+        'marketplace.Deal',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='payme_transactions',
+        verbose_name='сделка'
+    )
+
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+
+    class Meta:
+        verbose_name = 'транзакция Payme'
+        verbose_name_plural = 'транзакции Payme'
+
+    def __str__(self):
+        return f"Payme {self.payme_id} - {self.amount}"

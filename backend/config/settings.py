@@ -82,6 +82,8 @@ INSTALLED_APPS = [
     'accounts',
     'marketplace',
     'payments',
+    'notifications',
+    'chat',
 
     # сторонние
     'rest_framework',

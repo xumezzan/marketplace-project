@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from .models import User
+from marketplace.models import SpecialistProfile, ClientProfile
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -164,3 +165,72 @@ class UserProfileUpdateForm(forms.ModelForm):
             'city': 'Город',
         }
 
+
+class SpecialistProfileUpdateForm(forms.ModelForm):
+    """
+    Форма для обновления профиля специалиста.
+    """
+    categories = forms.ModelMultipleChoiceField(
+        queryset=None,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='Категории услуг'
+    )
+
+    class Meta:
+        model = SpecialistProfile
+        fields = ('description', 'years_of_experience', 'hourly_rate', 'categories', 'portfolio_links')
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Расскажите о своем опыте и навыках...'
+            }),
+            'years_of_experience': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'hourly_rate': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': '0.00'
+            }),
+            'portfolio_links': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': '["https://behance.net/...", "https://github.com/..."]'
+            }),
+        }
+        labels = {
+            'description': 'О себе',
+            'years_of_experience': 'Опыт работы (лет)',
+            'hourly_rate': 'Почасовая ставка (в валюте)',
+            'portfolio_links': 'Ссылки на портфолио (JSON список)',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from marketplace.models import Category
+        self.fields['categories'].queryset = Category.objects.all()
+
+
+class ClientProfileUpdateForm(forms.ModelForm):
+    """
+    Форма для обновления профиля клиента.
+    """
+    class Meta:
+        model = ClientProfile
+        fields = ('address', 'preferences')
+        widgets = {
+            'address': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ваш адрес'
+            }),
+            'preferences': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': '{"preferred_time": "morning"}'
+            }),
+        }
+        labels = {
+            'address': 'Адрес',
+            'preferences': 'Предпочтения (JSON)',
+        }

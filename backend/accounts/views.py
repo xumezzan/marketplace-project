@@ -77,6 +77,8 @@ def profile_view(request):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """
     View для редактирования профиля пользователя.
+    Поддерживает редактирование как основной информации (User),
+    так и специфичной для роли (SpecialistProfile/ClientProfile).
     """
     model = User
     form_class = UserProfileUpdateForm
@@ -87,7 +89,74 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """Возвращает текущего пользователя."""
         return self.request.user
     
-    def form_valid(self, form):
-        """Обработка успешной валидации формы."""
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        
+        # Добавляем форму профиля в зависимости от роли
+        if user.is_specialist:
+            from marketplace.models import SpecialistProfile
+            from .forms import SpecialistProfileUpdateForm
+            # Создаем профиль, если его нет
+            profile, _ = SpecialistProfile.objects.get_or_create(user=user)
+            if 'specialist_form' not in context:
+                context['specialist_form'] = SpecialistProfileUpdateForm(instance=profile)
+                
+        if user.is_client:
+            from marketplace.models import ClientProfile
+            from .forms import ClientProfileUpdateForm
+            # Создаем профиль, если его нет
+            profile, _ = ClientProfile.objects.get_or_create(user=user)
+            if 'client_form' not in context:
+                context['client_form'] = ClientProfileUpdateForm(instance=profile)
+                
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user_form = self.get_form()
+        
+        valid = user_form.is_valid()
+        
+        specialist_form = None
+        client_form = None
+        
+        if self.object.is_specialist:
+            from marketplace.models import SpecialistProfile
+            from .forms import SpecialistProfileUpdateForm
+            profile, _ = SpecialistProfile.objects.get_or_create(user=self.object)
+            specialist_form = SpecialistProfileUpdateForm(request.POST, instance=profile)
+            valid = valid and specialist_form.is_valid()
+            
+        if self.object.is_client:
+            from marketplace.models import ClientProfile
+            from .forms import ClientProfileUpdateForm
+            profile, _ = ClientProfile.objects.get_or_create(user=self.object)
+            client_form = ClientProfileUpdateForm(request.POST, instance=profile)
+            valid = valid and client_form.is_valid()
+            
+        if valid:
+            return self.form_valid(user_form, specialist_form, client_form)
+        else:
+            return self.form_invalid(user_form, specialist_form, client_form)
+            
+    def form_valid(self, user_form, specialist_form=None, client_form=None):
+        """Сохраняем все валидные формы."""
+        user_form.save()
+        
+        if specialist_form:
+            specialist_form.save()
+            
+        if client_form:
+            client_form.save()
+            
         messages.success(self.request, 'Профиль успешно обновлен!')
-        return super().form_valid(form)
+        return redirect(self.success_url)
+        
+    def form_invalid(self, user_form, specialist_form=None, client_form=None):
+        """Рендерим страницу с ошибками."""
+        return self.render_to_response(self.get_context_data(
+            form=user_form,
+            specialist_form=specialist_form,
+            client_form=client_form
+        ))
