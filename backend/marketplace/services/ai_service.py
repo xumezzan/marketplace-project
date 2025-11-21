@@ -204,8 +204,8 @@ class AIService:
                     if category:
                         result['category_id'] = category.id
                         break
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(f"Error looking up category '{category_name}': {e}")
         
         # Поиск цен (числа + валюта)
         price_pattern = r'(\d+[\s,]?\d*)\s*(сум|руб|₽|$|долл)'

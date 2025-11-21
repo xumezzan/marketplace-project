@@ -246,6 +246,17 @@ REST_FRAMEWORK = {
 # Настройки платежей
 PLATFORM_FEE_PERCENTAGE = 10  # Комиссия платформы в процентах
 
+# Настройки Payme
+PAYME_LOGIN = os.environ.get('PAYME_LOGIN', 'Paycom')
+PAYME_KEY = os.environ.get('PAYME_KEY', '')  # CRITICAL: Must be set in production
+if not DEBUG and not PAYME_KEY:
+    import warnings
+    warnings.warn(
+        "PAYME_KEY environment variable is not set! "
+        "Payme webhook authentication will fail. SET THIS IN PRODUCTION!",
+        RuntimeWarning
+    )
+
 # Настройки AI (Google Gemini)
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 

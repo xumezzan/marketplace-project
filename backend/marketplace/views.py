@@ -136,7 +136,6 @@ class TaskListView(ListView):
         if category_filter:
             from .models import Category
             try:
-                # Сначала пробуем найти по slug
                 category = Category.objects.filter(slug=category_filter).first()
                 if not category:
                     # Если не найдено по slug, ищем по названию (icontains)
@@ -144,8 +143,9 @@ class TaskListView(ListView):
                 
                 if category:
                     queryset = queryset.filter(category=category)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Error filtering by category '{category_filter}': {e}", exc_info=True)
+                # Продолжаем без фильтра категории
         
         # Фильтр по бюджету
         if price_min:
@@ -155,8 +155,9 @@ class TaskListView(ListView):
                 queryset = queryset.filter(
                     Q(budget_max__gte=price_min_float) | Q(budget_min__gte=price_min_float)
                 )
-            except (ValueError, TypeError):
-                pass
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Invalid price_min value '{price_min}': {e}")
+                # Игнорируем невалидное значение минимальной цены
         
         if price_max:
             try:
@@ -165,8 +166,9 @@ class TaskListView(ListView):
                 queryset = queryset.filter(
                     Q(budget_min__lte=price_max_float) | Q(budget_max__lte=price_max_float)
                 )
-            except (ValueError, TypeError):
-                pass
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Invalid price_max value '{price_max}': {e}")
+                # Игнорируем невалидное значение максимальной цены
         
         return queryset
     
