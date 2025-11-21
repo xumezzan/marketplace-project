@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from django.contrib.auth import get_user_model
-from marketplace.models import SpecialistProfile, TimeSlot
+from backend.marketplace.models import SpecialistProfile, TimeSlot
 from marketplace.services.schedule_service import ScheduleService
 
 User = get_user_model()

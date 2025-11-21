@@ -1,7 +1,7 @@
 import time
 from django.conf import settings
 from .models import PaymeTransaction
-from marketplace.models import Deal
+from backend.marketplace.models import Deal
 
 class PaymeErrors:
     TRANS_NOT_FOUND = -31003

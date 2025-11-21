@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from .models import User
-from marketplace.models import SpecialistProfile, ClientProfile
+from backend.marketplace.models import SpecialistProfile, ClientProfile
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -208,7 +208,7 @@ class SpecialistProfileUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from marketplace.models import Category
+        from backend.marketplace.models import Category
         self.fields['categories'].queryset = Category.objects.all()
 
 

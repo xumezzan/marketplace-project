@@ -1,72 +1,34 @@
-/**
- * Scroll to Top Button
- * Плавная прокрутка к верху страницы
- */
-
-(function() {
-    'use strict';
-    
-    // Создаем кнопку
-    const scrollButton = document.createElement('button');
-    scrollButton.innerHTML = '<i class="bi bi-arrow-up"></i>';
-    scrollButton.className = 'scroll-to-top';
-    scrollButton.setAttribute('aria-label', 'Наверх');
-    scrollButton.style.cssText = `
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        width: 3rem;
-        height: 3rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    `;
-    
-    // Добавляем hover эффект
-    scrollButton.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-4px)';
-        this.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.6)';
-    });
-    
-    scrollButton.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-        this.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
-    });
-    
-    // Добавляем кнопку в body
-    document.body.appendChild(scrollButton);
-    
-    // Показываем/скрываем кнопку при прокрутке
-    function toggleScrollButton() {
-        if (window.pageYOffset > 300) {
-            scrollButton.style.display = 'flex';
-        } else {
-            scrollButton.style.display = 'none';
-        }
+document.addEventListener('DOMContentLoaded', function () {
+    // Create button if it doesn't exist
+    if (!document.getElementById('scroll-to-top')) {
+        const buttonHtml = `
+            <button id="scroll-to-top" class="fixed bottom-8 right-8 bg-indigo-600 text-white p-3 rounded-full shadow-lg transform translate-y-20 transition-all duration-300 hover:bg-indigo-700 focus:outline-none z-40 opacity-0" aria-label="Scroll to top">
+                <i class="bi bi-arrow-up text-xl"></i>
+            </button>
+        `;
+        document.body.insertAdjacentHTML('beforeend', buttonHtml);
     }
-    
-    // Плавная прокрутка к верху
-    scrollButton.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-    
-    // Слушаем событие прокрутки
-    window.addEventListener('scroll', toggleScrollButton);
-    
-    // Проверяем при загрузке страницы
-    toggleScrollButton();
-    
-})();
 
+    const scrollToTopBtn = document.getElementById('scroll-to-top');
+
+    if (scrollToTopBtn) {
+        // Show button when scrolling down
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove('translate-y-20', 'opacity-0');
+                scrollToTopBtn.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                scrollToTopBtn.classList.add('translate-y-20', 'opacity-0');
+                scrollToTopBtn.classList.remove('translate-y-0', 'opacity-100');
+            }
+        });
+
+        // Scroll to top when clicked
+        scrollToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+});

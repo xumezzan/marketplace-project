@@ -5,7 +5,7 @@ import datetime
 from typing import List, Optional
 from django.utils import timezone
 from django.db import transaction
-from marketplace.models import TimeSlot, SpecialistProfile
+from backend.marketplace.models import TimeSlot, SpecialistProfile
 
 class ScheduleService:
     """

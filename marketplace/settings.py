@@ -46,13 +46,12 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework.authtoken',
-    # Local apps
-    'users',
-    'categories',
-    'tasks',
-    'offers',
-    'specialists',
-    'deals',
+    # Backend apps (using the backend implementation)
+    'backend.marketplace',
+    'backend.accounts',
+    'backend.chat',
+    'backend.notifications',
+    'backend.payments',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +69,9 @@ ROOT_URLCONF = 'marketplace.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'backend' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,6 +142,9 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'backend' / 'static',
+]
 
 # Media files (user uploads)
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -152,7 +156,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Django REST Framework settings
 REST_FRAMEWORK = {

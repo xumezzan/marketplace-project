@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.conf import settings
 from decimal import Decimal
-from marketplace.models import Deal, Escrow
+from backend.marketplace.models import Deal, Escrow
 from payments.models import Wallet, Transaction
 
 class PaymentService:
