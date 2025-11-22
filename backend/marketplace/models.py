@@ -1170,4 +1170,43 @@ class Message(models.Model):
         ]
     
     def __str__(self):
-        return f"Message from {self.sender.username} at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+        return f"Message from {self.sender} in {self.conversation}"
+
+
+class Notification(models.Model):
+    """
+    Model for user notifications.
+    """
+    class Type(models.TextChoices):
+        BOOKING = 'booking', 'Бронирование'
+        MESSAGE = 'message', 'Сообщение'
+        SYSTEM = 'system', 'Система'
+        REVIEW = 'review', 'Отзыв'
+        
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    type = models.CharField(max_length=20, choices=Type.choices, default=Type.SYSTEM)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    link = models.CharField(max_length=255, blank=True, null=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"{self.type}: {self.title} ({self.user})"
+
+
+class NotificationPreference(models.Model):
+    """
+    User notification preferences.
+    """
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notification_preferences')
+    email_booking = models.BooleanField(default=True)
+    email_message = models.BooleanField(default=True)
+    email_review = models.BooleanField(default=True)
+    email_system = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return f"Preferences for {self.user}"

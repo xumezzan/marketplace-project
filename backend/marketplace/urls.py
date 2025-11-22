@@ -7,10 +7,11 @@ from .views import (
     MarkDealPaidView, MarkDealCompletedView, create_review,
     my_tasks, my_offers, my_deals,
     PortfolioListView, PortfolioCreateView, PortfolioUpdateView, PortfolioDeleteView,
-    get_specialist_data, SpecialistDetailView,
+    get_specialist_data, SpecialistDetailView, SpecialistListView,
     BookingListView, UpdateBookingStatusView,
     ConversationListView, ConversationDetailView, start_conversation,
     AnalyticsDashboardView, analytics_data,
+    NotificationListView, mark_notification_read, mark_all_notifications_read,
     safe_deal_view, how_it_works_view, pricing_view, help_view,
     privacy_policy_view, terms_of_service_view
 )
@@ -22,6 +23,7 @@ app_name = 'marketplace'
 
 urlpatterns = [
     # Specialists
+    path('specialists/', SpecialistListView.as_view(), name='specialist_list'),
     path('specialists/<int:pk>/', SpecialistDetailView.as_view(), name='specialist_detail'),
     # Tasks
     path('tasks/', TaskListView.as_view(), name='tasks_list'),
@@ -58,6 +60,10 @@ urlpatterns = [
     path('api/analytics/data/', analytics_data, name='analytics_data'),
     # Аналитика
     path('analytics/', AnalyticsDashboardView.as_view(), name='analytics_dashboard'),
+    # Уведомления
+    path('notifications/', NotificationListView.as_view(), name='notification_list'),
+    path('notifications/<int:pk>/read/', mark_notification_read, name='mark_notification_read'),
+    path('notifications/read-all/', mark_all_notifications_read, name='mark_all_notifications_read'),
     # Статические страницы
     path('safe-deal/', safe_deal_view, name='safe_deal'),
     path('how-it-works/', how_it_works_view, name='how_it_works'),

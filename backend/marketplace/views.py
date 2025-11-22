@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message
+from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message, Notification
 from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm
 
 User = get_user_model()
@@ -983,6 +983,37 @@ def start_conversation(request, specialist_id):
     return redirect('marketplace:conversation_detail', pk=conversation.id)
 
 
+class SpecialistListView(ListView):
+    model = User
+    template_name = 'marketplace/specialist_list.html'
+    context_object_name = 'specialists'
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = User.objects.filter(is_specialist=True).select_related('specialist_profile')
+        
+        # Filter by search query
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(username__icontains=query) |
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query) |
+                Q(specialist_profile__description__icontains=query)
+            )
+            
+        # Apply filters
+        from .filters import SpecialistFilter
+        self.filterset = SpecialistFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = self.filterset
+        context['categories'] = Category.objects.all()
+        return context
+
+
 class AnalyticsDashboardView(LoginRequiredMixin, TemplateView):
     """
     Analytics dashboard for specialists to view their performance metrics.
@@ -1040,3 +1071,40 @@ def analytics_data(request):
         return Response({'error': 'Invalid type'}, status=400)
     
     return Response(data)
+
+
+class NotificationListView(LoginRequiredMixin, ListView):
+    model = Notification
+    template_name = 'marketplace/notifications.html'
+    context_object_name = 'notifications'
+    paginate_by = 20
+    
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['unread_count'] = Notification.objects.filter(user=self.request.user, is_read=False).count()
+        return context
+
+
+@login_required
+def mark_notification_read(request, pk):
+    notification = get_object_or_404(Notification, pk=pk, user=request.user)
+    notification.is_read = True
+    notification.save()
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
+        
+    return redirect('marketplace:notification_list')
+
+
+@login_required
+def mark_all_notifications_read(request):
+    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
+        
+    return redirect('marketplace:notification_list')

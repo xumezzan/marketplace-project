@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Специалисты" %} - Marketplace{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Найти специалиста" %}</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-1">{% trans "Выберите лучшего исполнителя для вашей
+                    задачи" %}</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Filters Sidebar -->
+            <div class="w-full lg:w-1/4">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg text-slate-900 dark:text-white">{% trans "Фильтры" %}</h3>
+                        <a href="{% url 'marketplace:specialist_list' %}"
+                            class="text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">{% trans
+                            "Сбросить" %}</a>
+                    </div>
+
+                    <form method="get" class="space-y-6">
+                        <!-- Search -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{% trans
+                                "Поиск" %}</label>
+                            <div class="relative">
+                                <input type="text" name="q" value="{{ request.GET.q }}"
+                                    placeholder="{% trans 'Имя или услуга...' %}"
+                                    class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
+                                <i class="bi bi-search absolute left-3 top-2.5 text-slate-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Categories -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{% trans
+                                "Категория" %}</label>
+                            <div class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+                                {% for category in categories %}
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="category" value="{{ category.slug }}" {% if
+                                        category.slug in request.GET.category %}checked{% endif %}
+                                        class="rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
+                                    <span class="text-sm text-slate-600 dark:text-slate-400">{{ category.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{% trans
+                                "Цена за час" %}</label>
+                            <div class="flex gap-2">
+                                <input type="number" name="min_price" value="{{ request.GET.min_price }}"
+                                    placeholder="От"
+                                    class="w-1/2 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
+                                <input type="number" name="max_price" value="{{ request.GET.max_price }}"
+                                    placeholder="До"
+                                    class="w-1/2 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
+                            </div>
+                        </div>
+
+                        <!-- Rating -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{% trans
+                                "Рейтинг" %}</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="rating" value="4.5" {% if request.GET.rating=='4.5'
+                                        %}checked{% endif %}
+                                        class="text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
+                                    <span class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                                        <span class="text-yellow-400 mr-1">★★★★★</span> 4.5+
+                                    </span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="rating" value="4.0" {% if request.GET.rating=='4.0'
+                                        %}checked{% endif %}
+                                        class="text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
+                                    <span class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                                        <span class="text-yellow-400 mr-1">★★★★☆</span> 4.0+
+                                    </span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="rating" value="3.0" {% if request.GET.rating=='3.0'
+                                        %}checked{% endif %}
+                                        class="text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
+                                    <span class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                                        <span class="text-yellow-400 mr-1">★★★☆☆</span> 3.0+
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition">
+                            {% trans "Применить" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Specialists Grid -->
+            <div class="w-full lg:w-3/4">
+                {% if specialists %}
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {% for specialist in specialists %}
+                    {% include 'marketplace/components/specialist_card.html' with specialist=specialist %}
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <div class="mt-8 flex justify-center">
+                    <nav class="flex items-center gap-2">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                            class="p-2 rounded-lg border border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        {% endif %}
+
+                        <span class="px-4 py-2 text-slate-600 dark:text-slate-400">
+                            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                        </span>
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                            class="p-2 rounded-lg border border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+                {% else %}
+                <div
+                    class="text-center py-16 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+                    <div
+                        class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="bi bi-search text-2xl text-slate-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-1">{% trans "Специалисты не
+                        найдены" %}</h3>
+                    <p class="text-slate-500 dark:text-slate-400 mb-6">{% trans "Попробуйте изменить параметры поиска"
+                        %}</p>
+                    <a href="{% url 'marketplace:specialist_list' %}"
+                        class="text-indigo-600 font-medium hover:text-indigo-700 dark:text-indigo-400">
+                        {% trans "Сбросить фильтры" %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

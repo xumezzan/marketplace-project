@@ -147,6 +147,17 @@
                     </a>
                     {% endif %}
 
+                    <!-- Notifications -->
+                    <a href="{% url 'marketplace:notification_list' %}"
+                        class="relative p-2 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 transition">
+                        <span class="sr-only">{% trans "Уведомления" %}</span>
+                        <i class="bi bi-bell text-xl"></i>
+                        {% if unread_notifications_count > 0 %}
+                        <span
+                            class="absolute top-1 right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-800"></span>
+                        {% endif %}
+                    </a>
+
                     <!-- User Menu -->
                     {% if user.is_authenticated %}
                     <div class="relative" x-data="{ open: false }">
