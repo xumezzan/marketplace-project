@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Сравнение специалистов" %} - Marketplace{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Сравнение" %}</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-1">{% trans "Сравните характеристики специалистов" %}
+                </p>
+            </div>
+            {% if specialists_data %}
+            <a href="{% url 'marketplace:specialist_list' %}"
+                class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 font-medium">
+                {% trans "Добавить специалиста" %}
+            </a>
+            {% endif %}
+        </div>
+
+        {% if specialists_data %}
+        <div
+            class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr>
+                        <th class="p-6 border-b border-slate-200 dark:border-slate-700 min-w-[200px]"></th>
+                        {% for specialist in specialists_data %}
+                        <th class="p-6 border-b border-slate-200 dark:border-slate-700 min-w-[250px] relative group">
+                            <button class="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition"
+                                onclick="toggleCompare({{ specialist.id }})">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                            <div class="flex flex-col items-center text-center">
+                                <img src="{% if specialist.avatar %}{{ specialist.avatar }}{% else %}https://ui-avatars.com/api/?name={{ specialist.name|urlencode }}&background=random&size=100{% endif %}"
+                                    alt="{{ specialist.name }}"
+                                    class="w-20 h-20 rounded-full object-cover mb-3 ring-4 ring-slate-50 dark:ring-slate-700">
+                                <h3 class="font-bold text-lg text-slate-900 dark:text-white">
+                                    <a href="{% url 'marketplace:specialist_detail' specialist.id %}"
+                                        class="hover:text-indigo-600 dark:hover:text-indigo-400">
+                                        {{ specialist.name }}
+                                    </a>
+                                </h3>
+                                {% if specialist.is_verified %}
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 mt-1">
+                                    <i class="bi bi-patch-check-fill mr-1"></i> {% trans "Проверен" %}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                    <!-- Rating -->
+                    <tr>
+                        <td class="p-6 font-medium text-slate-500 dark:text-slate-400">{% trans "Рейтинг" %}</td>
+                        {% for specialist in specialists_data %}
+                        <td class="p-6">
+                            <div class="flex items-center justify-center">
+                                <i class="bi bi-star-fill text-yellow-400 mr-1"></i>
+                                <span class="font-bold text-slate-900 dark:text-white">{{
+                                    specialist.rating|floatformat:1 }}</span>
+                                <span class="text-slate-400 text-sm ml-1">({{ specialist.reviews_count }})</span>
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Price -->
+                    <tr>
+                        <td class="p-6 font-medium text-slate-500 dark:text-slate-400">{% trans "Стоимость" %}</td>
+                        {% for specialist in specialists_data %}
+                        <td class="p-6 text-center">
+                            <span class="font-bold text-slate-900 dark:text-white">{{ specialist.hourly_rate }} ₽</span>
+                            <span class="text-slate-500 text-sm">/ {% trans "час" %}</span>
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Experience -->
+                    <tr>
+                        <td class="p-6 font-medium text-slate-500 dark:text-slate-400">{% trans "Опыт работы" %}</td>
+                        {% for specialist in specialists_data %}
+                        <td class="p-6 text-center text-slate-900 dark:text-white">
+                            {{ specialist.experience }} {% trans "лет" %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Completed Tasks -->
+                    <tr>
+                        <td class="p-6 font-medium text-slate-500 dark:text-slate-400">{% trans "Выполнено заданий" %}
+                        </td>
+                        {% for specialist in specialists_data %}
+                        <td class="p-6 text-center text-slate-900 dark:text-white">
+                            {{ specialist.completed_tasks }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Categories -->
+                    <tr>
+                        <td class="p-6 font-medium text-slate-500 dark:text-slate-400">{% trans "Категории" %}</td>
+                        {% for specialist in specialists_data %}
+                        <td class="p-6 text-center">
+                            <div class="flex flex-wrap justify-center gap-1">
+                                {% for category in specialist.categories %}
+                                <span
+                                    class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs text-slate-600 dark:text-slate-300">
+                                    {{ category }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Action -->
+                    <tr>
+                        <td class="p-6 border-none"></td>
+                        {% for specialist in specialists_data %}
+                        <td class="p-6 border-none text-center">
+                            <a href="{% url 'marketplace:specialist_detail' specialist.id %}"
+                                class="inline-block w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition">
+                                {% trans "Подробнее" %}
+                            </a>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div
+            class="text-center py-16 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+            <div
+                class="w-16 h-16 bg-indigo-50 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-arrow-left-right text-2xl text-indigo-400"></i>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-1">{% trans "Список сравнения пуст" %}</h3>
+            <p class="text-slate-500 dark:text-slate-400 mb-6">{% trans "Добавьте специалистов для сравнения их
+                характеристик" %}</p>
+            <a href="{% url 'marketplace:specialist_list' %}"
+                class="text-indigo-600 font-medium hover:text-indigo-700 dark:text-indigo-400">
+                {% trans "Найти специалиста" %} &rarr;
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

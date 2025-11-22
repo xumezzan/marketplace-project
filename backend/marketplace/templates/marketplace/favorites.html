@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Избранное" %} - Marketplace{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Избранное" %}</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-1">{% trans "Сохраненные специалисты" %}</p>
+            </div>
+        </div>
+
+        {% if favorites %}
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {% for favorite in favorites %}
+            {% include 'marketplace/components/specialist_card.html' with specialist=favorite.specialist %}
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="mt-8 flex justify-center">
+            <nav class="flex items-center gap-2">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                    class="p-2 rounded-lg border border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+                {% endif %}
+
+                <span class="px-4 py-2 text-slate-600 dark:text-slate-400">
+                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                    class="p-2 rounded-lg border border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+        {% else %}
+        <div
+            class="text-center py-16 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+            <div
+                class="w-16 h-16 bg-red-50 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-heart text-2xl text-red-400"></i>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-1">{% trans "Список избранного пуст" %}
+            </h3>
+            <p class="text-slate-500 dark:text-slate-400 mb-6">{% trans "Добавляйте специалистов в избранное, чтобы не
+                потерять их" %}</p>
+            <a href="{% url 'marketplace:specialist_list' %}"
+                class="text-indigo-600 font-medium hover:text-indigo-700 dark:text-indigo-400">
+                {% trans "Найти специалиста" %} &rarr;
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

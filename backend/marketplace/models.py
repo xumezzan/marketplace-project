@@ -1210,3 +1210,19 @@ class NotificationPreference(models.Model):
     
     def __str__(self):
         return f"Preferences for {self.user}"
+
+
+class Favorite(models.Model):
+    """
+    Model for storing user's favorite specialists.
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorites')
+    specialist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorited_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'specialist')
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"{self.user} favorites {self.specialist}"

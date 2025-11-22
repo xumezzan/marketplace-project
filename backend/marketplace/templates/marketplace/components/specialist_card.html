@@ -5,7 +5,23 @@
 
 <div class="specialist-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
     data-specialist-id="{{ specialist.id }}"
-    onclick="window.location.href='{% url 'marketplace:specialist_detail' specialist.id %}'">
+    onclick="if(!event.target.closest('.no-card-click')) window.location.href='{% url 'marketplace:specialist_detail' specialist.id %}'">
+
+    <!-- Favorite Button -->
+    <button
+        class="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 shadow-sm transition-all duration-200 no-card-click favorite-btn group"
+        data-specialist-id="{{ specialist.id }}" onclick="toggleFavorite(event, {{ specialist.id }})">
+        <i
+            class="bi bi-heart{% if specialist.is_favorited %}-fill text-red-500{% else %} text-slate-400 group-hover:text-red-500{% endif %} text-lg transition-colors"></i>
+    </button>
+
+    <!-- Compare Button -->
+    <button
+        class="absolute top-14 right-3 z-10 p-2 rounded-full bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 shadow-sm transition-all duration-200 no-card-click compare-btn group"
+        data-specialist-id="{{ specialist.id }}" onclick="event.stopPropagation(); toggleCompare({{ specialist.id }})"
+        title="{% trans 'Сравнить' %}">
+        <i class="bi bi-arrow-left-right text-slate-400 group-hover:text-indigo-600 text-lg transition-colors"></i>
+    </button>
 
     {# Header with Avatar #}
     <div class="p-6 flex flex-col items-center text-center border-b border-slate-50 flex-grow dark:border-slate-700">

@@ -5,6 +5,21 @@ from django import forms
 from .models import Task, Category, Offer, Review, PortfolioItem
 
 
+class TaskWizardStep1Form(forms.Form):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), label=_("Категория"))
+    title = forms.CharField(max_length=200, label=_("Что нужно сделать?"))
+
+class TaskWizardStep2Form(forms.Form):
+    description = forms.CharField(widget=forms.Textarea, label=_("Подробное описание"))
+
+class TaskWizardStep3Form(forms.Form):
+    budget = forms.DecimalField(max_digits=10, decimal_places=2, required=False, label=_("Бюджет"))
+    deadline = forms.DateTimeField(
+        required=False, 
+        label=_("Срок выполнения"),
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'})
+    )
+
 class TaskCreateForm(forms.ModelForm):
     """
     Форма для создания задачи клиентом.

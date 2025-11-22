@@ -169,6 +169,9 @@
                         <div x-show="open" x-transition
                             class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50 dark:bg-slate-800 dark:border-slate-700"
                             style="display: none;">
+                            <a href="{% url 'marketplace:favorites' %}"
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
+                                trans "Избранное" %}</a>
                             <a href="{% url 'marketplace:conversation_list' %}"
                                 class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
                                 trans "Сообщения" %}</a>
@@ -226,9 +229,10 @@
                         class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
                         trans "Стать специалистом" %}</a>
                     {% if user.is_authenticated and user.is_client %}
-                    <a href="{% url 'marketplace:task_create' %}" @click="mobileMenuOpen = false"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{%
-                        trans "Создать заказ" %}</a>
+                    <a href="{% url 'marketplace:task_wizard' %}"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-semibold transition shadow-lg shadow-indigo-500/30">
+                        {% trans "Создать задание" %}
+                    </a>
                     {% endif %}
                     <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
                         <span class="text-sm text-slate-500">{% trans "Язык" %}:</span>
@@ -418,6 +422,8 @@
         }
     </script>
     {% block extra_js %}{% endblock %}
+    <script src="{% static 'js/favorites.js' %}"></script>
+    <script src="{% static 'js/comparison.js' %}"></script>
 </body>
 
 </html>

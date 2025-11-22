@@ -2,11 +2,14 @@
 Views для marketplace приложения.
 """
 import logging
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import (
+    TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
+)
 
 logger = logging.getLogger(__name__)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404, render
 from django.http import JsonResponse
@@ -14,8 +17,11 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message, Notification
-from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm
+from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message, Notification, Favorite
+from .forms import (
+    TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm,
+    TaskWizardStep1Form, TaskWizardStep2Form, TaskWizardStep3Form
+)
 
 User = get_user_model()
 
@@ -1100,11 +1106,140 @@ def mark_notification_read(request, pk):
     return redirect('marketplace:notification_list')
 
 
-@login_required
-def mark_all_notifications_read(request):
-    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
-    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'success': True})
         
     return redirect('marketplace:notification_list')
+
+
+class FavoriteListView(LoginRequiredMixin, ListView):
+    model = Favorite
+    template_name = 'marketplace/favorites.html'
+    context_object_name = 'favorites'
+    paginate_by = 12
+    
+    def get_queryset(self):
+        return Favorite.objects.filter(user=self.request.user).select_related('specialist', 'specialist__specialist_profile')
+
+
+@login_required
+@require_POST
+def toggle_favorite(request, specialist_id):
+    specialist = get_object_or_404(User, pk=specialist_id, is_specialist=True)
+    
+    favorite, created = Favorite.objects.get_or_create(user=request.user, specialist=specialist)
+    
+    if not created:
+        favorite.delete()
+        is_favorite = False
+    else:
+        is_favorite = True
+        
+    return JsonResponse({
+        'success': True,
+        'is_favorite': is_favorite
+    })
+
+
+class ComparisonView(TemplateView):
+    template_name = 'marketplace/comparison.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Get specialist IDs from session
+        comparison_ids = self.request.session.get('comparison_ids', [])
+        
+        if comparison_ids:
+            from .comparison import get_comparison_data
+            context['specialists_data'] = get_comparison_data(comparison_ids)
+        else:
+            context['specialists_data'] = []
+            
+        return context
+
+
+@require_POST
+def toggle_compare(request, specialist_id):
+    comparison_ids = request.session.get('comparison_ids', [])
+    
+    if specialist_id in comparison_ids:
+        comparison_ids.remove(specialist_id)
+        is_in_comparison = False
+    else:
+        if len(comparison_ids) >= 3:
+            return JsonResponse({
+                'success': False,
+                'error': 'Maximum 3 specialists allowed'
+            })
+        comparison_ids.append(specialist_id)
+        is_in_comparison = True
+        
+    request.session['comparison_ids'] = comparison_ids
+    
+    return JsonResponse({
+        'success': True,
+        'is_in_comparison': is_in_comparison,
+        'count': len(comparison_ids)
+    })
+
+
+class TaskWizardView(LoginRequiredMixin, TemplateView):
+    template_name = 'marketplace/task_wizard.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+        
+    def post(self, request, *args, **kwargs):
+        # Handle final submission
+        try:
+            data = request.POST
+            category = get_object_or_404(Category, id=data.get('category'))
+            
+            task = Task.objects.create(
+                client=request.user,
+                category=category,
+                title=data.get('title'),
+                description=data.get('description'),
+                budget=data.get('budget') or None,
+                deadline=data.get('deadline') or None,
+                status='open'
+            )
+            
+            messages.success(request, _('Задание успешно создано!'))
+            return JsonResponse({'success': True, 'redirect_url': f'/tasks/{task.id}/'})
+            
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+
+@login_required
+@require_POST
+def api_generate_task_description(request):
+    """
+    Generate task description using AI (mocked for now).
+    """
+    title = request.POST.get('title')
+    category_id = request.POST.get('category_id')
+    
+    if not title:
+        return JsonResponse({'success': False, 'error': 'Title is required'})
+        
+    # In a real implementation, call Gemini API here
+    # For now, return a mocked response based on title
+    
+    mock_descriptions = [
+        f"Мне нужно выполнить задачу: {title}. \n\nТребования:\n- Качественное выполнение\n- Соблюдение сроков\n- Аккуратность\n\nЖду ваших предложений с ценами и примерами работ.",
+        f"Ищу специалиста для: {title}. \n\nВажно:\n1. Опыт работы от 3 лет\n2. Наличие инструментов\n3. Гарантия на работу\n\nПриступать можно в ближайшее время.",
+        f"Необходимо {title}. \n\nПодробности:\n- Объем работы средний\n- Материалы мои\n- Бюджет обсуждаем\n\nПишите, если свободны на этой неделе."
+    ]
+    
+    import random
+    description = random.choice(mock_descriptions)
+    
+    return JsonResponse({
+        'success': True, 
+        'description': description
+    })

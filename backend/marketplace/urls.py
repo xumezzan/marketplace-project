@@ -12,6 +12,9 @@ from .views import (
     ConversationListView, ConversationDetailView, start_conversation,
     AnalyticsDashboardView, analytics_data,
     NotificationListView, mark_notification_read, mark_all_notifications_read,
+    FavoriteListView, toggle_favorite,
+    ComparisonView, toggle_compare,
+    TaskWizardView, api_generate_task_description,
     safe_deal_view, how_it_works_view, pricing_view, help_view,
     privacy_policy_view, terms_of_service_view
 )
@@ -27,7 +30,10 @@ urlpatterns = [
     path('specialists/<int:pk>/', SpecialistDetailView.as_view(), name='specialist_detail'),
     # Tasks
     path('tasks/', TaskListView.as_view(), name='tasks_list'),
+    path('tasks/', TaskListView.as_view(), name='tasks_list'),
     path('tasks/create/', TaskCreateView.as_view(), name='task_create'),
+    path('tasks/wizard/', TaskWizardView.as_view(), name='task_wizard'),
+    path('api/tasks/generate-description/', api_generate_task_description, name='generate_task_description'),
     path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
     path('tasks/<int:task_id>/review/<int:specialist_id>/', create_review, name='create_review'),
     path('offers/<int:offer_id>/accept/', AcceptOfferView.as_view(), name='accept_offer'),
@@ -37,6 +43,11 @@ urlpatterns = [
     path('my/tasks/', my_tasks, name='my_tasks'),
     path('my/offers/', my_offers, name='my_offers'),
     path('my/deals/', my_deals, name='my_deals'),
+    path('my/favorites/', FavoriteListView.as_view(), name='favorites'),
+    path('api/favorites/toggle/<int:specialist_id>/', toggle_favorite, name='toggle_favorite'),
+    # Сравнение
+    path('compare/', ComparisonView.as_view(), name='comparison'),
+    path('api/compare/toggle/<int:specialist_id>/', toggle_compare, name='toggle_compare'),
     # Портфолио
     path('my/portfolio/', PortfolioListView.as_view(), name='portfolio_list'),
     path('my/portfolio/add/', PortfolioCreateView.as_view(), name='portfolio_add'),
