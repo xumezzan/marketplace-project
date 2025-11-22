@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="ru" id="html-root">
 
@@ -82,16 +82,16 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
                     <a href="{% url 'marketplace:tasks_list' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">Найти
-                        специалиста</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">Мои
-                        заказы</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">Стать
-                        специалистом</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Стать специалистом" %}</a>
                 </div>
 
                 <!-- Right Side -->
@@ -125,7 +125,7 @@
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}"
                         class="hidden sm:block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 no-underline">
-                        Создать заказ
+                        {% trans "Создать заказ" %}
                     </a>
                     {% endif %}
 
@@ -141,9 +141,11 @@
                             class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50 dark:bg-slate-800 dark:border-slate-700"
                             style="display: none;">
                             <a href="{% url 'accounts:profile' %}"
-                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">Профиль</a>
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
+                                trans "Профиль" %}</a>
                             <a href="{% url 'accounts:logout' %}"
-                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline dark:text-red-400 dark:hover:bg-slate-700">Выйти</a>
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline dark:text-red-400 dark:hover:bg-slate-700">{%
+                                trans "Выйти" %}</a>
                         </div>
                     </div>
                     {% else %}
@@ -170,23 +172,23 @@
                 class="md:hidden border-t border-slate-200 py-4" style="display: none;">
                 <div class="flex flex-col space-y-3 px-4">
                     <a href="{% url 'marketplace:tasks_list' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">Найти
-                        специалиста</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">Мои
-                        заказы</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">Стать
-                        специалистом</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Стать специалистом" %}</a>
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}" @click="mobileMenuOpen = false"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">Создать
-                        заказ</a>
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{%
+                        trans "Создать заказ" %}</a>
                     {% endif %}
                     <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
-                        <span class="text-sm text-slate-500">Язык:</span>
+                        <span class="text-sm text-slate-500">{% trans "Язык" %}:</span>
                         <div class="flex items-center bg-slate-100 rounded-lg p-1">
                             <form method="post" action="{% url 'set_language' %}" class="flex items-center">
                                 {% csrf_token %}
@@ -238,8 +240,8 @@
                     <h4 class="footer-brand flex items-center gap-2">
                         <i class="bi bi-briefcase-fill"></i> ServiceHub
                     </h4>
-                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">Сервис поиска
-                        специалистов №1. Надежно, быстро, удобно.</p>
+                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">{% trans "Сервис поиска
+                        специалистов №1. Надежно, быстро, удобно." %}</p>
                     <div class="flex gap-3">
                         <a href="#" class="text-white hover:text-indigo-400 transition"
                             style="color: rgba(255, 255, 255, 0.7);">
@@ -258,29 +260,29 @@
 
                 <!-- Клиентам -->
                 <div>
-                    <h4 class="footer-heading">Клиентам</h4>
+                    <h4 class="footer-heading">{% trans "Клиентам" %}</h4>
                     <ul class="footer-links">
-                        <li><a href="{% url 'marketplace:task_create' %}">Создать заказ</a></li>
-                        <li><a href="{% url 'marketplace:tasks_list' %}">Найти специалиста</a></li>
-                        <li><a href="{% url 'marketplace:safe_deal' %}">Безопасная сделка</a></li>
-                        <li><a href="{% url 'marketplace:how_it_works' %}">Как это работает</a></li>
+                        <li><a href="{% url 'marketplace:task_create' %}">{% trans "Создать заказ" %}</a></li>
+                        <li><a href="{% url 'marketplace:tasks_list' %}">{% trans "Найти специалиста" %}</a></li>
+                        <li><a href="{% url 'marketplace:safe_deal' %}">{% trans "Безопасная сделка" %}</a></li>
+                        <li><a href="{% url 'marketplace:how_it_works' %}">{% trans "Как это работает" %}</a></li>
                     </ul>
                 </div>
 
                 <!-- Специалистам -->
                 <div>
-                    <h4 class="footer-heading">Специалистам</h4>
+                    <h4 class="footer-heading">{% trans "Специалистам" %}</h4>
                     <ul class="footer-links">
-                        <li><a href="{% url 'marketplace:tasks_list' %}">База заказов</a></li>
-                        <li><a href="{% url 'accounts:register' %}">Стать специалистом</a></li>
-                        <li><a href="{% url 'marketplace:pricing' %}">Тарифы</a></li>
-                        <li><a href="{% url 'marketplace:help' %}">Помощь</a></li>
+                        <li><a href="{% url 'marketplace:tasks_list' %}">{% trans "База заказов" %}</a></li>
+                        <li><a href="{% url 'accounts:register' %}">{% trans "Стать специалистом" %}</a></li>
+                        <li><a href="{% url 'marketplace:pricing' %}">{% trans "Тарифы" %}</a></li>
+                        <li><a href="{% url 'marketplace:help' %}">{% trans "Помощь" %}</a></li>
                     </ul>
                 </div>
 
                 <!-- Контакты -->
                 <div>
-                    <h4 class="footer-heading">Контакты</h4>
+                    <h4 class="footer-heading">{% trans "Контакты" %}</h4>
                     <ul class="footer-links">
                         <li>
                             <a href="mailto:support@servicehub.com" class="flex items-center gap-2">
@@ -306,12 +308,12 @@
             <!-- Copyright -->
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm"
                 style="color: rgba(255, 255, 255, 0.5);">
-                <p>&copy; {% now "Y" %} ServiceHub. Все права защищены.</p>
+                <p>&copy; {% now "Y" %} ServiceHub. {% trans "Все права защищены." %}</p>
                 <div class="flex gap-6">
                     <a href="{% url 'marketplace:privacy_policy' %}" class="hover:text-white transition no-underline"
-                        style="color: rgba(255, 255, 255, 0.7);">Политика конфиденциальности</a>
+                        style="color: rgba(255, 255, 255, 0.7);">{% trans "Политика конфиденциальности" %}</a>
                     <a href="{% url 'marketplace:terms_of_service' %}" class="hover:text-white transition no-underline"
-                        style="color: rgba(255, 255, 255, 0.7);">Условия использования</a>
+                        style="color: rgba(255, 255, 255, 0.7);">{% trans "Условия использования" %}</a>
                 </div>
             </div>
         </div>
