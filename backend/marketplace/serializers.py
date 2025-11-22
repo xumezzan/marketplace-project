@@ -159,6 +159,28 @@ class UserSerializer(serializers.ModelSerializer):
         return 0
 
 
+class SpecialistSerializer(serializers.ModelSerializer):
+    """Сериализатор для специалиста (User + SpecialistProfile) для поиска."""
+    profession = serializers.SerializerMethodField()
+    avatar_url = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'profession', 'avatar_url', 'rating']
+        
+    def get_profession(self, obj):
+        try:
+            category = obj.specialist_profile.categories.first()
+            return category.name if category else "Специалист"
+        except:
+            return "Специалист"
+
+    def get_avatar_url(self, obj):
+        if obj.avatar:
+            return obj.avatar.url
+        return f"https://ui-avatars.com/api/?name={obj.username}&background=random"
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор для модели Review."""
     

@@ -801,18 +801,25 @@ class PortfolioItem(models.Model):
     description = models.TextField(
         'описание',
         blank=True,
-        null=True,
         help_text="Описание работы"
     )
     image = models.ImageField(
         'изображение',
-        upload_to='portfolio/%Y/%m/%d/',
+        upload_to='portfolio/%Y/%m/',
         help_text="Изображение работы"
     )
-    order = models.PositiveIntegerField(
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='portfolio_items',
+        verbose_name='категория'
+    )
+    order = models.IntegerField(
         'порядок',
         default=0,
-        help_text="Порядок отображения (меньше = выше)"
+        help_text="Порядок отображения (меньше - выше)"
     )
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
@@ -820,14 +827,105 @@ class PortfolioItem(models.Model):
     class Meta:
         db_table = 'portfolio_items'
         verbose_name = 'элемент портфолио'
-        verbose_name_plural = 'элементы портфолио'
+        verbose_name_plural = 'портфолио'
         ordering = ['order', '-created_at']
+    
+    def __str__(self):
+        return f"{self.title} ({self.specialist.username})"
+
+
+class Availability(models.Model):
+    """
+    Расписание доступности специалиста (повторяющееся).
+    Например: Понедельник 09:00 - 18:00.
+    """
+    specialist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='availability_slots',
+        verbose_name='специалист'
+    )
+    day_of_week = models.IntegerField(
+        'день недели',
+        choices=[
+            (0, 'Понедельник'), (1, 'Вторник'), (2, 'Среда'),
+            (3, 'Четверг'), (4, 'Пятница'), (5, 'Суббота'), (6, 'Воскресенье')
+        ],
+        help_text="День недели (0 - Понедельник, 6 - Воскресенье)"
+    )
+    start_time = models.TimeField('время начала')
+    end_time = models.TimeField('время окончания')
+    is_recurring = models.BooleanField('повторяющееся', default=True)
+    
+    class Meta:
+        db_table = 'availability_slots'
+        verbose_name = 'слот доступности'
+        verbose_name_plural = 'слоты доступности'
+        ordering = ['day_of_week', 'start_time']
+        unique_together = ['specialist', 'day_of_week', 'start_time']
+    
+    def __str__(self):
+        days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+        return f"{self.specialist.username}: {days[self.day_of_week]} {self.start_time}-{self.end_time}"
+
+
+class Booking(models.Model):
+    """
+    Бронирование услуги на конкретную дату и время.
+    """
+    
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Ожидает подтверждения'
+        CONFIRMED = 'confirmed', 'Подтверждено'
+        CANCELLED = 'cancelled', 'Отменено'
+        COMPLETED = 'completed', 'Завершено'
+    
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.CASCADE,
+        related_name='bookings',
+        verbose_name='задача'
+    )
+    specialist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='bookings_as_specialist',
+        verbose_name='специалист'
+    )
+    client = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='bookings_as_client',
+        verbose_name='клиент'
+    )
+    
+    scheduled_date = models.DateField('дата')
+    scheduled_time = models.TimeField('время')
+    duration_minutes = models.IntegerField('длительность (мин)', default=60)
+    
+    status = models.CharField(
+        'статус',
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING
+    )
+    
+    notes = models.TextField('примечания', blank=True)
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    
+    class Meta:
+        db_table = 'bookings'
+        verbose_name = 'бронирование'
+        verbose_name_plural = 'бронирования'
+        ordering = ['-scheduled_date', '-scheduled_time']
         indexes = [
-            models.Index(fields=['specialist', 'order']),
+            models.Index(fields=['specialist', 'scheduled_date']),
+            models.Index(fields=['client', 'status']),
         ]
     
-    def __str__(self) -> str:
-        return f"{self.title} - {self.specialist.username}"
+    def __str__(self):
+        return f"Бронирование: {self.task.title} - {self.scheduled_date} {self.scheduled_time}"
 
 
 class Escrow(models.Model):

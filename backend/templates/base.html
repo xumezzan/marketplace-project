@@ -82,6 +82,21 @@
                     <span class="text-xl font-bold text-indigo-900 tracking-tight dark:text-white">ServiceHub</span>
                 </a>
 
+                <!-- Search Bar -->
+                <div class="hidden md:block relative flex-1 max-w-xl mx-8">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-search text-slate-400"></i>
+                        </div>
+                        <input type="text" id="searchInput"
+                            class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50 text-slate-900 placeholder-slate-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:placeholder-slate-400 transition-colors"
+                            placeholder="{% trans 'Найти специалиста, категорию или задачу...' %}">
+                        <div id="searchResults"
+                            class="hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 max-h-96 overflow-y-auto z-50">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
                     <a href="{% url 'marketplace:tasks_list' %}"
@@ -341,6 +356,9 @@
 
     <!-- Scroll to Top -->
     <script src="{% static 'js/scroll-to-top.js' %}?v=1"></script>
+
+    <!-- Search Autocomplete -->
+    <script src="{% static 'js/search-autocomplete.js' %}?v=1"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

@@ -11,6 +11,8 @@ from .views import (
     safe_deal_view, how_it_works_view, pricing_view, help_view,
     privacy_policy_view, terms_of_service_view
 )
+from .api.search import search_suggestions
+from .api.booking import get_availability, create_booking
 
 app_name = 'marketplace'
 
@@ -36,6 +38,9 @@ urlpatterns = [
     path('my/portfolio/<int:pk>/delete/', PortfolioDeleteView.as_view(), name='portfolio_delete'),
     # API
     path('api/specialist/<int:specialist_id>/', get_specialist_data, name='get_specialist_data'),
+    path('api/search/suggestions/', search_suggestions, name='search_suggestions'),
+    path('api/specialist/<int:specialist_id>/availability/', get_availability, name='get_availability'),
+    path('api/bookings/create/', create_booking, name='create_booking'),
     # Статические страницы
     path('safe-deal/', safe_deal_view, name='safe_deal'),
     path('how-it-works/', how_it_works_view, name='how_it_works'),
