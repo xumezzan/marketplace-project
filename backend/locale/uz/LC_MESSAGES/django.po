@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 09:20+0000\n"
+"POT-Creation-Date: 2025-11-22 09:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,110 +60,110 @@ msgstr "Haqiqiy sharhlar"
 msgid "специалистов"
 msgstr "mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:80
+#: marketplace/templates/marketplace/home.html:79
 #, fuzzy
 #| msgid "специалистов"
 msgid "Специалистов"
 msgstr "mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:100
+#: marketplace/templates/marketplace/home.html:98
 msgid "Активных задач"
 msgstr "Faol vazifalar"
 
-#: marketplace/templates/marketplace/home.html:119
+#: marketplace/templates/marketplace/home.html:117
 msgid "Средний рейтинг"
 msgstr "O'rtacha reyting"
 
-#: marketplace/templates/marketplace/home.html:134
+#: marketplace/templates/marketplace/home.html:132
 msgid "Безопасные сделки"
 msgstr "Xavfsiz bitimlar"
 
-#: marketplace/templates/marketplace/home.html:135
+#: marketplace/templates/marketplace/home.html:133
 msgid "Escrow система защиты платежей"
 msgstr "To'lovlarni himoya qilish Escrow tizimi"
 
-#: marketplace/templates/marketplace/home.html:147
+#: marketplace/templates/marketplace/home.html:145
 msgid "Популярные категории"
 msgstr "Ommabop toifalar"
 
-#: marketplace/templates/marketplace/home.html:157
+#: marketplace/templates/marketplace/home.html:155
 msgid "Ремонт"
 msgstr "Ta'mirlash"
 
-#: marketplace/templates/marketplace/home.html:167
+#: marketplace/templates/marketplace/home.html:165
 msgid "Обучение"
 msgstr "Ta'lim"
 
-#: marketplace/templates/marketplace/home.html:177
+#: marketplace/templates/marketplace/home.html:175
 msgid "Красота"
 msgstr "Go'zallik"
 
-#: marketplace/templates/marketplace/home.html:187
+#: marketplace/templates/marketplace/home.html:185
 msgid "Перевозки"
 msgstr "Tashish"
 
-#: marketplace/templates/marketplace/home.html:197
+#: marketplace/templates/marketplace/home.html:195
 msgid "IT услуги"
 msgstr "IT xizmatlari"
 
-#: marketplace/templates/marketplace/home.html:207
+#: marketplace/templates/marketplace/home.html:205
 msgid "Все категории"
 msgstr "Barcha toifalar"
 
-#: marketplace/templates/marketplace/home.html:217
+#: marketplace/templates/marketplace/home.html:215
 msgid "Рекомендуемые специалисты"
 msgstr "Tavsiya etilgan mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:218
+#: marketplace/templates/marketplace/home.html:216
 msgid "Профессионалы с высоким рейтингом и отзывами"
 msgstr "Yuqori reyting va sharhlarga ega professionallar"
 
-#: marketplace/templates/marketplace/home.html:220
-#: marketplace/templates/marketplace/home.html:291
+#: marketplace/templates/marketplace/home.html:218
+#: marketplace/templates/marketplace/home.html:289
 msgid "Все специалисты"
 msgstr "Barcha mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:243
+#: marketplace/templates/marketplace/home.html:241
 msgid "Специалист"
 msgstr "Mutaxassis"
 
-#: marketplace/templates/marketplace/home.html:251
+#: marketplace/templates/marketplace/home.html:249
 msgid "отзывов"
 msgstr "sharhlar"
 
-#: marketplace/templates/marketplace/home.html:256
+#: marketplace/templates/marketplace/home.html:254
 msgid "Опытный специалист"
 msgstr "Tajribali mutaxassis"
 
-#: marketplace/templates/marketplace/home.html:265
+#: marketplace/templates/marketplace/home.html:263
 msgid "работ"
 msgstr "ishlar"
 
-#: marketplace/templates/marketplace/home.html:272
+#: marketplace/templates/marketplace/home.html:270
 msgid "от"
 msgstr "dan"
 
-#: marketplace/templates/marketplace/home.html:272
+#: marketplace/templates/marketplace/home.html:270
 msgid "₽/час"
 msgstr "so'm/soat"
 
-#: marketplace/templates/marketplace/home.html:274
+#: marketplace/templates/marketplace/home.html:272
 msgid "По договоренности"
 msgstr "Kelishuv bo'yicha"
 
-#: marketplace/templates/marketplace/home.html:279 templates/base.html:141
+#: marketplace/templates/marketplace/home.html:277 templates/base.html:141
 msgid "Профиль"
 msgstr "Profil"
 
-#: marketplace/templates/marketplace/home.html:280
+#: marketplace/templates/marketplace/home.html:278
 msgid "Открыть"
 msgstr "Ochish"
 
-#: marketplace/templates/marketplace/home.html:286
+#: marketplace/templates/marketplace/home.html:284
 msgid "Специалисты появятся скоро"
 msgstr "Mutaxassislar tez orada paydo bo'ladi"
 
-#: marketplace/templates/marketplace/home.html:300
+#: marketplace/templates/marketplace/home.html:298
 #: marketplace/templates/marketplace/static/how_it_works.html:4
 #: marketplace/templates/marketplace/static/how_it_works.html:10
 #: marketplace/templates/marketplace/static/safe_deal.html:21
@@ -171,36 +171,36 @@ msgstr "Mutaxassislar tez orada paydo bo'ladi"
 msgid "Как это работает"
 msgstr "Bu qanday ishlaydi"
 
-#: marketplace/templates/marketplace/home.html:301
+#: marketplace/templates/marketplace/home.html:299
 msgid "Всего 3 простых шага, чтобы решить вашу задачу"
 msgstr "Vazifangizni hal qilish uchun atigi 3 oddiy qadam"
 
-#: marketplace/templates/marketplace/home.html:310
+#: marketplace/templates/marketplace/home.html:308
 msgid "Создайте задачу"
 msgstr "Vazifa yarating"
 
-#: marketplace/templates/marketplace/home.html:311
+#: marketplace/templates/marketplace/home.html:309
 msgid "Опишите, что нужно сделать. Это бесплатно и займет пару минут."
 msgstr ""
 "Nima qilish kerakligini tasvirlab bering. Bu bepul va bir necha daqiqa vaqt "
 "oladi."
 
-#: marketplace/templates/marketplace/home.html:317
+#: marketplace/templates/marketplace/home.html:315
 #: marketplace/templates/marketplace/static/how_it_works.html:34
 msgid "Получите отклики"
 msgstr "Takliflarni qabul qiling"
 
-#: marketplace/templates/marketplace/home.html:318
+#: marketplace/templates/marketplace/home.html:316
 msgid "Специалисты предложат свои услуги и цены. Выберите лучшего."
 msgstr ""
 "Mutaxassislar o'z xizmatlari va narxlarini taklif qilishadi. Eng yaxshisini "
 "tanlang."
 
-#: marketplace/templates/marketplace/home.html:324
+#: marketplace/templates/marketplace/home.html:322
 msgid "Договоритесь о работе"
 msgstr "Ish haqida kelishib oling"
 
-#: marketplace/templates/marketplace/home.html:326
+#: marketplace/templates/marketplace/home.html:324
 msgid "Обсудите детали в чате и выберите исполнителя."
 msgstr "Chatda tafsilotlarni muhokama qiling va ijrochini tanlang."
 
