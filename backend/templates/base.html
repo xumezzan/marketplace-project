@@ -26,6 +26,9 @@
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"
         integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
@@ -82,13 +85,16 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
                     <a href="{% url 'marketplace:tasks_list' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{% trans "Найти специалиста" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{% trans "Мои заказы" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{% trans "Стать специалистом" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Стать специалистом" %}</a>
                 </div>
 
                 <!-- Right Side -->
@@ -138,9 +144,11 @@
                             class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50 dark:bg-slate-800 dark:border-slate-700"
                             style="display: none;">
                             <a href="{% url 'accounts:profile' %}"
-                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{% trans "Профиль" %}</a>
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
+                                trans "Профиль" %}</a>
                             <a href="{% url 'accounts:logout' %}"
-                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline dark:text-red-400 dark:hover:bg-slate-700">{% trans "Выйти" %}</a>
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-50 no-underline dark:text-red-400 dark:hover:bg-slate-700">{%
+                                trans "Выйти" %}</a>
                         </div>
                     </div>
                     {% else %}
@@ -167,16 +175,20 @@
                 class="md:hidden border-t border-slate-200 py-4" style="display: none;">
                 <div class="flex flex-col space-y-3 px-4">
                     <a href="{% url 'marketplace:tasks_list' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{% trans "Найти специалиста" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Найти специалиста" %}</a>
                     {% if user.is_authenticated %}
                     <a href="{% url 'marketplace:my_tasks' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{% trans "Мои заказы" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Мои заказы" %}</a>
                     {% endif %}
                     <a href="{% url 'accounts:register' %}" @click="mobileMenuOpen = false"
-                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{% trans "Стать специалистом" %}</a>
+                        class="text-slate-600 hover:text-indigo-600 font-medium transition py-2 no-underline dark:text-slate-300 dark:hover:text-indigo-400">{%
+                        trans "Стать специалистом" %}</a>
                     {% if user.is_authenticated and user.is_client %}
                     <a href="{% url 'marketplace:task_create' %}" @click="mobileMenuOpen = false"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{% trans "Создать заказ" %}</a>
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium text-sm transition text-center no-underline">{%
+                        trans "Создать заказ" %}</a>
                     {% endif %}
                     <div class="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
                         <span class="text-sm text-slate-500">{% trans "Язык" %}:</span>
@@ -231,7 +243,8 @@
                     <h4 class="footer-brand flex items-center gap-2">
                         <i class="bi bi-briefcase-fill"></i> ServiceHub
                     </h4>
-                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">{% trans "Сервис поиска специалистов №1. Надежно, быстро, удобно." %}</p>
+                    <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">{% trans "Сервис поиска
+                        специалистов №1. Надежно, быстро, удобно." %}</p>
                     <div class="flex gap-3">
                         <a href="#" class="text-white hover:text-indigo-400 transition"
                             style="color: rgba(255, 255, 255, 0.7);">
@@ -328,6 +341,9 @@
 
     <!-- Scroll to Top -->
     <script src="{% static 'js/scroll-to-top.js' %}?v=1"></script>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
         var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');

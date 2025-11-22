@@ -1,0 +1,33 @@
+{% load static i18n %}
+
+{# Reusable category card component #}
+{# Usage: {% include 'marketplace/components/category_card.html' with category=category icon=icon color=color %} #}
+
+<a href="{% url 'marketplace:tasks_list' %}?category={{ category.slug }}"
+    class="category-card group flex flex-col items-center gap-3 p-6 rounded-2xl hover:bg-white dark:hover:bg-slate-700 transition-all duration-300 cursor-pointer no-underline border border-transparent hover:border-{{ color|default:'indigo' }}-200 dark:hover:border-{{ color|default:'indigo' }}-800 hover:shadow-lg">
+
+    {# Icon Container #}
+    <div
+        class="w-16 h-16 rounded-2xl flex items-center justify-center bg-{{ color|default:'indigo' }}-100 text-{{ color|default:'indigo' }}-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-{{ color|default:'indigo' }}-900/30 dark:text-{{ color|default:'indigo' }}-400">
+        <i class="bi bi-{{ icon|default:'grid' }} text-3xl"></i>
+    </div>
+
+    {# Category Name #}
+    <div class="text-center">
+        <span
+            class="text-sm font-semibold text-slate-700 group-hover:text-{{ color|default:'indigo' }}-600 dark:text-slate-300 dark:group-hover:text-{{ color|default:'indigo' }}-400 transition-colors block mb-1">
+            {{ category.name }}
+        </span>
+
+        {# Specialist Count #}
+        <span class="text-xs text-slate-400 dark:text-slate-500">
+            {{ category.specialists_count|default:0 }} {% trans "специалистов" %}
+        </span>
+    </div>
+
+    {# Hover Arrow Indicator #}
+    <div class="opacity-0 group-hover:opacity-100 transition-opacity">
+        <i
+            class="bi bi-arrow-right text-{{ color|default:'indigo' }}-600 dark:text-{{ color|default:'indigo' }}-400"></i>
+    </div>
+</a>

@@ -7,7 +7,7 @@ from .views import (
     MarkDealPaidView, MarkDealCompletedView, create_review,
     my_tasks, my_offers, my_deals,
     PortfolioListView, PortfolioCreateView, PortfolioUpdateView, PortfolioDeleteView,
-    get_specialist_data,
+    get_specialist_data, SpecialistDetailView,
     safe_deal_view, how_it_works_view, pricing_view, help_view,
     privacy_policy_view, terms_of_service_view
 )
@@ -15,6 +15,9 @@ from .views import (
 app_name = 'marketplace'
 
 urlpatterns = [
+    # Specialists
+    path('specialists/<int:pk>/', SpecialistDetailView.as_view(), name='specialist_detail'),
+    # Tasks
     path('tasks/', TaskListView.as_view(), name='tasks_list'),
     path('tasks/create/', TaskCreateView.as_view(), name='task_create'),
     path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),

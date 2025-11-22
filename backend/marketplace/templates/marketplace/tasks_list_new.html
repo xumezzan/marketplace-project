@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Активные заявки" %} - ServiceHub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {# Page Header #}
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-slate-900 dark:text-white">{% trans "Активные заявки" %}</h1>
+                <p class="mt-2 text-lg text-slate-600 dark:text-slate-400">
+                    {% trans "Находите интересные задачи и предлагайте свои услуги" %}
+                </p>
+            </div>
+            {% if user.is_authenticated and user.is_client %}
+            <a href="{% url 'marketplace:task_create' %}"
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg no-underline">
+                <i class="bi bi-plus-circle"></i> {% trans "Создать заявку" %}
+            </a>
+            {% endif %}
+        </div>
+
+        {# Main Content Area #}
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            {# Sidebar Filters (Desktop) #}
+            <aside class="hidden lg:block lg:w-80 flex-shrink-0">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sticky top-24">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">{% trans "Фильтры" %}</h3>
+                        <a href="{% url 'marketplace:tasks_list' %}"
+                            class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                            {% trans "Сбросить" %}
+                        </a>
+                    </div>
+
+                    <form method="get" class="space-y-6" id="filterForm">
+                        {# Search #}
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="bi bi-search"></i> {% trans "Поиск" %}
+                            </label>
+                            <input type="text" name="q" value="{{ current_query }}"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors"
+                                placeholder="{% trans 'Название или описание...' %}">
+                        </div>
+
+                        {# Category #}
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="bi bi-grid"></i> {% trans "Категория" %}
+                            </label>
+                            <select name="category"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors">
+                                <option value="">{% trans "Любая" %}</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.slug }}" {% if current_category==cat.slug %}selected{% endif %}>
+                                    {{ cat.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {# Location #}
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="bi bi-geo-alt"></i> {% trans "Город" %}
+                            </label>
+                            <input type="text" name="city" value="{{ current_city }}"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors"
+                                placeholder="{% trans 'Ташкент' %}">
+                        </div>
+
+                        {# Budget Range #}
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="bi bi-currency-dollar"></i> {% trans "Бюджет" %}
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="number" name="price_min" value="{{ current_price_min|default_if_none:'' }}"
+                                    class="w-1/2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors text-sm"
+                                    placeholder="{% trans 'От' %}">
+                                <input type="number" name="price_max" value="{{ current_price_max|default_if_none:'' }}"
+                                    class="w-1/2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors text-sm"
+                                    placeholder="{% trans 'До' %}">
+                            </div>
+                        </div>
+
+                        {# Status #}
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="bi bi-flag"></i> {% trans "Статус" %}
+                            </label>
+                            <select name="status"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors">
+                                <option value="">{% trans "Любой" %}</option>
+                                <option value="published" {% if current_status=='published' %}selected{% endif %}>{%
+                                    trans "Опубликована" %}</option>
+                                <option value="in_progress" {% if current_status=='in_progress' %}selected{% endif %}>{%
+                                    trans "В работе" %}</option>
+                                <option value="completed" {% if current_status=='completed' %}selected{% endif %}>{%
+                                    trans "Завершена" %}</option>
+                            </select>
+                        </div>
+
+                        {# Apply Button #}
+                        <button type="submit"
+                            class="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold transition-all shadow-lg">
+                            {% trans "Применить фильтры" %}
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            {# Main Content #}
+            <div class="flex-grow">
+
+                {# Mobile Filters Button #}
+                <div class="lg:hidden mb-6">
+                    <button onclick="toggleMobileFilters()"
+                        class="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                        <i class="bi bi-funnel"></i> {% trans "Фильтры" %}
+                    </button>
+                </div>
+
+                {# Results Header #}
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <p class="text-slate-600 dark:text-slate-400">
+                            {% if tasks %}
+                            {% trans "Найдено" %} <span class="font-bold text-slate-900 dark:text-white">{{
+                                paginator.count }}</span> {% trans "задач" %}
+                            {% else %}
+                            {% trans "Задач не найдено" %}
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    {# View Toggle and Sort #}
+                    <div class="flex items-center gap-3">
+                        {# Sort Dropdown #}
+                        <select name="sort" id="sortSelect" onchange="applySort(this.value)"
+                            class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="newest" {% if current_sort=='newest' %}selected{% endif %}>{% trans "Новые"
+                                %}</option>
+                            <option value="price_low" {% if current_sort=='price_low' %}selected{% endif %}>{% trans
+                                "Цена: низкая" %}</option>
+                            <option value="price_high" {% if current_sort=='price_high' %}selected{% endif %}>{% trans
+                                "Цена: высокая" %}</option>
+                        </select>
+
+                        {# View Toggle #}
+                        <div
+                            class="flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-1">
+                            <button onclick="setViewMode('grid')" id="gridViewBtn"
+                                class="p-2 rounded-lg transition view-toggle-btn active">
+                                <i class="bi bi-grid-3x3-gap"></i>
+                            </button>
+                            <button onclick="setViewMode('list')" id="listViewBtn"
+                                class="p-2 rounded-lg transition view-toggle-btn">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {# Active Filters Tags #}
+                {% if current_query or current_city or current_category or current_status or current_price_min or
+                current_price_max %}
+                <div class="flex flex-wrap gap-2 mb-6">
+                    {% if current_query %}
+                    <span
+                        class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-lg text-sm">
+                        <i class="bi bi-search"></i> {{ current_query }}
+                        <a href="?{% if current_city %}city={{ current_city }}&{% endif %}{% if current_category %}category={{ current_category }}&{% endif %}{% if current_status %}status={{ current_status }}&{% endif %}{% if current_price_min %}price_min={{ current_price_min }}&{% endif %}{% if current_price_max %}price_max={{ current_price_max }}{% endif %}"
+                            class="text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-100">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </span>
+                    {% endif %}
+                    {% if current_category %}
+                    <span
+                        class="inline-flex items-center gap-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-lg text-sm">
+                        {{ current_category }}
+                        <a href="?{% if current_query %}q={{ current_query }}&{% endif %}{% if current_city %}city={{ current_city }}&{% endif %}{% if current_status %}status={{ current_status }}&{% endif %}{% if current_price_min %}price_min={{ current_price_min }}&{% endif %}{% if current_price_max %}price_max={{ current_price_max }}{% endif %}"
+                            class="text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-purple-100">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {# Tasks Grid/List #}
+                {% if tasks %}
+                <div id="tasksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for task in tasks %}
+                    {% include 'marketplace/components/task_card.html' with task=task view_mode='grid' %}
+                    {% endfor %}
+                </div>
+
+                {# Pagination #}
+                {% if is_paginated %}
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex items-center gap-2">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}{% if current_city %}&city={{ current_city }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_price_min %}&price_min={{ current_price_min }}{% endif %}{% if current_price_max %}&price_max={{ current_price_max }}{% endif %}"
+                            class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition no-underline">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        {% endif %}
+
+                        <span
+                            class="px-6 py-3 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 font-semibold">
+                            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                        </span>
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}{% if current_city %}&city={{ current_city }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_price_min %}&price_min={{ current_price_min }}{% endif %}{% if current_price_max %}&price_max={{ current_price_max }}{% endif %}"
+                            class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition no-underline">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+
+                {% else %}
+                {# Empty State #}
+                <div
+                    class="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div
+                        class="w-24 h-24 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="bi bi-search text-5xl text-slate-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                        {% if current_query or current_city or current_category or current_status or current_price_min
+                        or current_price_max %}
+                        {% trans "По вашему запросу ничего не найдено" %}
+                        {% else %}
+                        {% trans "Задач пока нет" %}
+                        {% endif %}
+                    </h3>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-8">
+                        {% if current_query or current_city or current_category or current_status or current_price_min
+                        or current_price_max %}
+                        {% trans "Попробуйте изменить фильтры или параметры поиска." %}
+                        {% else %}
+                        {% trans "В данный момент нет опубликованных задач. Зайдите позже или создайте свою задачу!" %}
+                        {% endif %}
+                    </p>
+                    {% if current_query or current_city or current_category or current_status or current_price_min or
+                    current_price_max %}
+                    <a href="{% url 'marketplace:tasks_list' %}"
+                        class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition no-underline">
+                        <i class="bi bi-arrow-counterclockwise"></i> {% trans "Сбросить фильтры" %}
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Mobile Filters Modal #}
+<div id="mobileFiltersModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden lg:hidden">
+    <div
+        class="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-800 rounded-t-3xl p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">{% trans "Фильтры" %}</h3>
+            <button onclick="toggleMobileFilters()"
+                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition">
+                <i class="bi bi-x-lg text-xl"></i>
+            </button>
+        </div>
+
+        <form method="get" class="space-y-4">
+            {# Same filters as sidebar #}
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{% trans "Поиск"
+                    %}</label>
+                <input type="text" name="q" value="{{ current_query }}"
+                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white"
+                    placeholder="{% trans 'Название или описание...' %}">
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" onclick="toggleMobileFilters()"
+                    class="flex-1 px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                    {% trans "Отмена" %}
+                </button>
+                <button type="submit"
+                    class="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold transition-all shadow-lg">
+                    {% trans "Применить" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // View mode toggle
+    let currentViewMode = 'grid';
+
+    function setViewMode(mode) {
+        currentViewMode = mode;
+        const container = document.getElementById('tasksContainer');
+        const gridBtn = document.getElementById('gridViewBtn');
+        const listBtn = document.getElementById('listViewBtn');
+
+        if (mode === 'grid') {
+            container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+            gridBtn.classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900/30', 'text-indigo-600', 'dark:text-indigo-400');
+            listBtn.classList.remove('active', 'bg-indigo-100', 'dark:bg-indigo-900/30', 'text-indigo-600', 'dark:text-indigo-400');
+        } else {
+            container.className = 'space-y-4';
+            listBtn.classList.add('active', 'bg-indigo-100', 'dark:bg-indigo-900/30', 'text-indigo-600', 'dark:text-indigo-400');
+            gridBtn.classList.remove('active', 'bg-indigo-100', 'dark:bg-indigo-900/30', 'text-indigo-600', 'dark:text-indigo-400');
+        }
+
+        // Update all task cards
+        const cards = container.querySelectorAll('.task-card');
+        cards.forEach(card => {
+            card.outerHTML = card.outerHTML; // Force re-render
+        });
+
+        localStorage.setItem('taskViewMode', mode);
+    }
+
+    // Load saved view mode
+    document.addEventListener('DOMContentLoaded', function () {
+        const savedMode = localStorage.getItem('taskViewMode') || 'grid';
+        setViewMode(savedMode);
+    });
+
+    // Sort functionality
+    function applySort(sortValue) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', sortValue);
+        window.location.href = url.toString();
+    }
+
+    // Mobile filters toggle
+    function toggleMobileFilters() {
+        const modal = document.getElementById('mobileFiltersModal');
+        modal.classList.toggle('hidden');
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('mobileFiltersModal')?.addEventListener('click', function (e) {
+        if (e.target === this) {
+            toggleMobileFilters();
+        }
+    });
+</script>
+
+<style>
+    .view-toggle-btn {
+        color: #64748b;
+    }
+
+    .view-toggle-btn.active {
+        background-color: rgb(238 242 255);
+        color: rgb(79 70 229);
+    }
+
+    .dark .view-toggle-btn.active {
+        background-color: rgba(79, 70, 229, 0.3);
+        color: rgb(165 180 252);
+    }
+</style>
+{% endblock %}

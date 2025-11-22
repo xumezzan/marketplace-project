@@ -1,0 +1,493 @@
+{% extends 'base.html' %}
+{% load static i18n dict_filters %}
+
+{% block title %}{{ specialist.get_full_name|default:specialist.username }} - {% trans "Специалист" %}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {# Header Section #}
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden mb-8">
+            <div class="relative h-48 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+                {# Background pattern #}
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute inset-0"
+                        style="background-image: url('data:image/svg+xml,%3Csvg width=\&quot;60\&quot; height=\&quot;60\&quot; viewBox=\&quot;0 0 60 60\&quot; xmlns=\&quot;http://www.w3.org/2000/svg\&quot;%3E%3Cg fill=\&quot;none\&quot; fill-rule=\&quot;evenodd\&quot;%3E%3Cg fill=\&quot;%23ffffff\&quot; fill-opacity=\&quot;1\&quot;%3E%3Cpath d=\&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 pb-8">
+                <div class="flex flex-col md:flex-row gap-6 -mt-20">
+                    {# Avatar #}
+                    <div class="flex-shrink-0">
+                        <div class="relative">
+                            {% if specialist.avatar %}
+                            <img src="{{ specialist.avatar.url }}" alt="{{ specialist.username }}"
+                                class="w-32 h-32 rounded-2xl border-4 border-white dark:border-slate-800 shadow-xl object-cover">
+                            {% else %}
+                            <div
+                                class="w-32 h-32 rounded-2xl border-4 border-white dark:border-slate-800 shadow-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <span class="text-4xl font-bold text-white">{{ specialist.username|first|upper }}</span>
+                            </div>
+                            {% endif %}
+
+                            {# Verification Badge #}
+                            {% if profile.is_verified %}
+                            <div class="absolute -bottom-2 -right-2 bg-blue-500 rounded-full p-2 shadow-lg">
+                                <i class="bi bi-patch-check-fill text-white text-xl"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {# Info #}
+                    <div class="flex-grow mt-20 md:mt-0">
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                            <div>
+                                <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+                                    {{ specialist.get_full_name|default:specialist.username }}
+                                </h1>
+
+                                {# Categories #}
+                                {% if categories %}
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    {% for category in categories %}
+                                    <span
+                                        class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 px-3 py-1 rounded-lg text-sm font-medium">
+                                        {{ category.name }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                {# Rating and Stats #}
+                                <div class="flex flex-wrap items-center gap-4 text-sm">
+                                    <div class="flex items-center gap-1">
+                                        <div class="flex text-yellow-400">
+                                            {% for i in "12345" %}
+                                            {% if specialist.rating >= i|add:"0" %}
+                                            <i class="bi bi-star-fill"></i>
+                                            {% elif specialist.rating >= i|add:"-0.5" %}
+                                            <i class="bi bi-star-half"></i>
+                                            {% else %}
+                                            <i class="bi bi-star"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <span class="font-bold text-slate-900 dark:text-white ml-1">{{
+                                            specialist.rating|floatformat:1 }}</span>
+                                        <span class="text-slate-500 dark:text-slate-400">({{ reviews.count }} {% trans
+                                            "отзывов" %})</span>
+                                    </div>
+
+                                    {% if portfolio_items.count > 0 %}
+                                    <div class="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                                        <i class="bi bi-images"></i>
+                                        <span>{{ portfolio_items.count }} {% trans "работ" %}</span>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if profile.years_of_experience %}
+                                    <div class="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                                        <i class="bi bi-briefcase"></i>
+                                        <span>{{ profile.years_of_experience }} {% trans "лет опыта" %}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {# Action Buttons #}
+                            <div class="flex flex-col gap-2">
+                                <a href="#contact"
+                                    class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg no-underline">
+                                    <i class="bi bi-chat-dots"></i> {% trans "Написать" %}
+                                </a>
+                                <button
+                                    class="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition">
+                                    <i class="bi bi-heart"></i> {% trans "В избранное" %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Main Content #}
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            {# Main Column #}
+            <div class="flex-grow">
+
+                {# Tabs #}
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    {# Tab Headers #}
+                    <div class="flex border-b border-slate-200 dark:border-slate-700 overflow-x-auto">
+                        <button onclick="switchTab('about')" id="tab-about"
+                            class="tab-button active flex-1 px-6 py-4 font-semibold transition-colors whitespace-nowrap">
+                            <i class="bi bi-person"></i> {% trans "О себе" %}
+                        </button>
+                        <button onclick="switchTab('portfolio')" id="tab-portfolio"
+                            class="tab-button flex-1 px-6 py-4 font-semibold transition-colors whitespace-nowrap">
+                            <i class="bi bi-images"></i> {% trans "Портфолио" %} ({{ portfolio_items.count }})
+                        </button>
+                        <button onclick="switchTab('reviews')" id="tab-reviews"
+                            class="tab-button flex-1 px-6 py-4 font-semibold transition-colors whitespace-nowrap">
+                            <i class="bi bi-star"></i> {% trans "Отзывы" %} ({{ reviews.count }})
+                        </button>
+                    </div>
+
+                    {# Tab Content #}
+                    <div class="p-8">
+
+                        {# About Tab #}
+                        <div id="content-about" class="tab-content">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">{% trans "Описание" %}
+                            </h3>
+                            {% if profile.description %}
+                            <p class="text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">{{
+                                profile.description }}</p>
+                            {% else %}
+                            <p class="text-slate-400 dark:text-slate-500 italic">{% trans "Специалист пока не добавил
+                                описание" %}</p>
+                            {% endif %}
+
+                            {% if profile %}
+                            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {% if profile.hourly_rate %}
+                                <div class="flex items-start gap-3">
+                                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl">
+                                        <i
+                                            class="bi bi-currency-dollar text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Почасовая
+                                            ставка" %}</p>
+                                        <p class="text-lg font-bold text-slate-900 dark:text-white">{{
+                                            profile.hourly_rate }} ₽/{% trans "час" %}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if profile.typical_price_range_min %}
+                                <div class="flex items-start gap-3">
+                                    <div class="p-3 bg-purple-50 dark:bg-purple-900/30 rounded-xl">
+                                        <i class="bi bi-cash-stack text-purple-600 dark:text-purple-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Типичный
+                                            диапазон цен" %}</p>
+                                        <p class="text-lg font-bold text-slate-900 dark:text-white">
+                                            {{ profile.typical_price_range_min }}-{{ profile.typical_price_range_max }}
+                                            ₽
+                                        </p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {# Portfolio Tab #}
+                        <div id="content-portfolio" class="tab-content hidden">
+                            {% if portfolio_items %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {% for item in portfolio_items %}
+                                <div class="group relative bg-slate-50 dark:bg-slate-700 rounded-xl overflow-hidden hover:shadow-xl transition-all cursor-pointer"
+                                    onclick="openPortfolioModal({{ forloop.counter0 }})">
+                                    {% if item.image %}
+                                    <div class="aspect-square overflow-hidden">
+                                        <img src="{{ item.image.url }}" alt="{{ item.title }}"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="aspect-square bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                                        <i class="bi bi-image text-white text-5xl"></i>
+                                    </div>
+                                    {% endif %}
+
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end">
+                                        <div class="p-4 text-white">
+                                            <h4 class="font-bold mb-1">{{ item.title }}</h4>
+                                            {% if item.description %}
+                                            <p class="text-sm text-white/80 line-clamp-2">{{ item.description }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="text-center py-12">
+                                <i class="bi bi-images text-slate-300 dark:text-slate-600 text-6xl mb-4"></i>
+                                <p class="text-slate-500 dark:text-slate-400">{% trans "Портфолио пока пусто" %}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {# Reviews Tab #}
+                        <div id="content-reviews" class="tab-content hidden">
+                            {% if reviews %}
+                            <div class="space-y-6">
+                                {% for review in reviews %}
+                                <div class="border-b border-slate-200 dark:border-slate-700 pb-6 last:border-0">
+                                    <div class="flex items-start gap-4">
+                                        <div class="flex-shrink-0">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                                                {{ review.client.username|first|upper }}
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <div>
+                                                    <p class="font-semibold text-slate-900 dark:text-white">{{
+                                                        review.client.username }}</p>
+                                                    <p class="text-sm text-slate-500 dark:text-slate-400">{{
+                                                        review.created_at|date:"d.m.Y" }}</p>
+                                                </div>
+                                                <div class="flex text-yellow-400">
+                                                    {% for i in "12345" %}
+                                                    {% if review.rating >= i|add:"0" %}
+                                                    <i class="bi bi-star-fill"></i>
+                                                    {% else %}
+                                                    <i class="bi bi-star"></i>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            {% if review.text %}
+                                            <p class="text-slate-600 dark:text-slate-300">{{ review.text }}</p>
+                                            {% endif %}
+                                            {% if review.task %}
+                                            <p class="text-sm text-slate-400 dark:text-slate-500 mt-2">
+                                                {% trans "Задача:" %} <a
+                                                    href="{% url 'marketplace:task_detail' review.task.id %}"
+                                                    class="text-indigo-600 dark:text-indigo-400 hover:underline">{{
+                                                    review.task.title }}</a>
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="text-center py-12">
+                                <i class="bi bi-star text-slate-300 dark:text-slate-600 text-6xl mb-4"></i>
+                                <p class="text-slate-500 dark:text-slate-400">{% trans "Отзывов пока нет" %}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Sidebar #}
+            <aside class="lg:w-96 flex-shrink-0">
+
+                {# Pricing Card #}
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6 sticky top-24">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Стоимость услуг" %}</h3>
+
+                    {% if profile.hourly_rate %}
+                    <div
+                        class="text-center py-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl mb-4">
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-1">{% trans "От" %}</p>
+                        <p
+                            class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+                            {{ profile.hourly_rate }} ₽
+                        </p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "за час" %}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                            <i class="bi bi-check-circle-fill text-green-500"></i>
+                            <span>{% trans "Безопасная сделка" %}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                            <i class="bi bi-check-circle-fill text-green-500"></i>
+                            <span>{% trans "Гарантия возврата" %}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                            <i class="bi bi-check-circle-fill text-green-500"></i>
+                            <span>{% trans "Поддержка 24/7" %}</span>
+                        </div>
+                    </div>
+
+                    <a href="#contact"
+                        class="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg no-underline">
+                        {% trans "Связаться" %}
+                    </a>
+                </div>
+
+                {# Stats Card #}
+                {% if rating_stats %}
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Рейтинг" %}</h3>
+
+                    <div class="space-y-2">
+                        {% for rating in "54321" %}
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-slate-600 dark:text-slate-400 w-8">{{ rating }} <i
+                                    class="bi bi-star-fill text-yellow-400 text-xs"></i></span>
+                            <div class="flex-grow bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                                {% with count=rating_stats|get_item:rating|default:0 total=reviews.count %}
+                                <div class="bg-yellow-400 h-full"
+                                    style="width: {% if total > 0 %}{{ count|mul:100|div:total }}{% else %}0{% endif %}%">
+                                </div>
+                                {% endwith %}
+                            </div>
+                            <span class="text-sm text-slate-600 dark:text-slate-400 w-8 text-right">{{
+                                rating_stats|get_item:rating|default:0 }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+
+        {# Contact Form Section #}
+        <div id="contact"
+            class="mt-8 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">{% trans "Связаться со специалистом" %}
+            </h2>
+
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'marketplace:task_create' %}" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{% trans
+                        "Описание задачи" %}</label>
+                    <textarea name="description" rows="4" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white"
+                        placeholder="{% trans 'Опишите, что вам нужно...' %}"></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg">
+                    {% trans "Отправить запрос" %}
+                </button>
+            </form>
+            {% else %}
+            <div class="text-center py-8">
+                <p class="text-slate-600 dark:text-slate-300 mb-4">{% trans "Войдите, чтобы связаться со специалистом"
+                    %}</p>
+                <a href="{% url 'accounts:login' %}?next={{ request.path }}"
+                    class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition no-underline">
+                    {% trans "Войти" %}
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# Portfolio Modal #}
+<div id="portfolioModal"
+    class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <button onclick="closePortfolioModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 text-4xl">
+        <i class="bi bi-x"></i>
+    </button>
+    <div class="max-w-4xl w-full">
+        <img id="portfolioModalImage" src="" alt="" class="w-full h-auto rounded-2xl shadow-2xl">
+        <div class="text-white mt-4 text-center">
+            <h3 id="portfolioModalTitle" class="text-2xl font-bold mb-2"></h3>
+            <p id="portfolioModalDescription" class="text-gray-300"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Tab switching
+    function switchTab(tabName) {
+        // Hide all content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+
+        // Remove active from all buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('active', 'text-indigo-600', 'dark:text-indigo-400', 'border-b-2', 'border-indigo-600', 'dark:border-indigo-400');
+            button.classList.add('text-slate-600', 'dark:text-slate-400');
+        });
+
+        // Show selected content
+        document.getElementById('content-' + tabName).classList.remove('hidden');
+
+        // Add active to selected button
+        const activeButton = document.getElementById('tab-' + tabName);
+        activeButton.classList.add('active', 'text-indigo-600', 'dark:text-indigo-400', 'border-b-2', 'border-indigo-600', 'dark:border-indigo-400');
+        activeButton.classList.remove('text-slate-600', 'dark:text-slate-400');
+    }
+
+    // Portfolio modal
+    const portfolioItems = [
+        {% for item in portfolio_items %}
+    {
+        title: "{{ item.title|escapejs }}",
+            description: "{{ item.description|escapejs }}",
+                image_url: "{% if item.image %}{{ item.image.url }}{% endif %}"
+    } {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    ];
+
+    function openPortfolioModal(index) {
+        const modal = document.getElementById('portfolioModal');
+        const item = portfolioItems[index];
+
+        if (item) {
+            document.getElementById('portfolioModalImage').src = item.image_url || '';
+            document.getElementById('portfolioModalTitle').textContent = item.title || '';
+            document.getElementById('portfolioModalDescription').textContent = item.description || '';
+            modal.classList.remove('hidden');
+        }
+    }
+
+    function closePortfolioModal() {
+        document.getElementById('portfolioModal').classList.add('hidden');
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closePortfolioModal();
+        }
+    });
+
+    // Close modal on backdrop click
+    document.getElementById('portfolioModal')?.addEventListener('click', function (e) {
+        if (e.target === this) {
+            closePortfolioModal();
+        }
+    });
+</script>
+
+<style>
+    .tab-button {
+        color: #64748b;
+    }
+
+    .tab-button.active {
+        color: rgb(79 70 229);
+        border-bottom: 2px solid rgb(79 70 229);
+    }
+
+    .dark .tab-button.active {
+        color: rgb(165 180 252);
+        border-bottom-color: rgb(165 180 252);
+    }
+</style>
+{% endblock %}

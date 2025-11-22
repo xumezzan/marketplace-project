@@ -1,0 +1,99 @@
+{% load static i18n %}
+
+{# Reusable specialist card component #}
+{# Usage: {% include 'marketplace/components/specialist_card.html' with specialist=specialist %} #}
+
+<div class="specialist-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group cursor-pointer dark:bg-slate-800 dark:border-slate-700"
+    data-specialist-id="{{ specialist.id }}"
+    onclick="window.location.href='{% url 'marketplace:specialist_detail' specialist.id %}'">
+
+    {# Header with Avatar #}
+    <div class="p-6 flex flex-col items-center text-center border-b border-slate-50 flex-grow dark:border-slate-700">
+        <div class="relative mb-4">
+            <img src="{% if specialist.avatar %}{{ specialist.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ specialist.username|urlencode }}&background=random&size=200{% endif %}"
+                alt="{{ specialist.username }}"
+                class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg group-hover:scale-110 transition-transform duration-300" />
+
+            {# Verification Badge #}
+            {% if specialist.specialist_profile.is_verified %}
+            <div
+                class="absolute bottom-0 right-0 bg-green-500 w-6 h-6 rounded-full border-2 border-white dark:border-slate-700 flex items-center justify-center">
+                <i class="bi bi-check-lg text-white text-xs font-bold"></i>
+            </div>
+            {% endif %}
+
+            {# Online Status #}
+            <div
+                class="absolute top-0 right-0 w-4 h-4 bg-green-400 rounded-full border-2 border-white dark:border-slate-700 animate-pulse">
+            </div>
+        </div>
+
+        {# Name and Category #}
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1">{{ specialist.username }}</h3>
+        <p class="text-sm text-slate-500 mb-3 dark:text-slate-400">
+            {{ specialist.specialist_profile.categories.first.name|default:_("Специалист") }}
+        </p>
+
+        {# Rating #}
+        {% if specialist.rating %}
+        <div class="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-lg mb-4 dark:bg-amber-900/30">
+            <i class="bi bi-star-fill text-amber-500 text-sm dark:text-amber-400"></i>
+            <span class="font-bold text-slate-900 text-sm dark:text-white">{{ specialist.rating|floatformat:1 }}</span>
+            <span class="text-slate-400 text-xs dark:text-slate-500">({{ specialist.reviews_received.count }})</span>
+        </div>
+        {% endif %}
+
+        {# Description #}
+        <p class="text-sm text-slate-600 line-clamp-3 mb-4 dark:text-slate-300">
+            {{ specialist.specialist_profile.description|truncatewords:15|default:_("Опытный специалист готов помочь с
+            вашей задачей") }}
+        </p>
+
+        {# Portfolio Preview (if available) #}
+        {% if specialist.portfolio_items.count > 0 %}
+        <div class="flex gap-2 mb-4 justify-center">
+            {% for item in specialist.portfolio_items.all|slice:":3" %}
+            <div
+                class="w-16 h-16 rounded-lg overflow-hidden border-2 border-slate-100 dark:border-slate-600 group-hover:border-indigo-300 transition-colors">
+                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# Stats #}
+        <div
+            class="mt-auto flex gap-3 text-xs text-slate-400 w-full justify-center border-t border-slate-50 pt-3 dark:border-slate-700 dark:text-slate-500">
+            <span class="flex items-center gap-1">
+                <i class="bi bi-chat-square-text"></i> {{ specialist.reviews_received.count }}
+            </span>
+            <span>•</span>
+            <span class="flex items-center gap-1">
+                <i class="bi bi-briefcase"></i> {{ specialist.portfolio_items.count }} {% trans "работ" %}
+            </span>
+            <span>•</span>
+            <span class="flex items-center gap-1">
+                <i class="bi bi-check-circle"></i> {{ specialist.completed_deals.count }}
+            </span>
+        </div>
+    </div>
+
+    {# Footer with Price #}
+    <div
+        class="p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-700/50 dark:to-slate-800/50 flex justify-between items-center group-hover:from-indigo-50 group-hover:to-purple-50 dark:group-hover:from-indigo-900/20 dark:group-hover:to-purple-900/20 transition-colors">
+        <div class="flex flex-col">
+            <span class="text-xs text-slate-500 dark:text-slate-400">{% trans "Стоимость" %}</span>
+            <span class="font-bold text-slate-900 dark:text-white">
+                {% if specialist.specialist_profile.hourly_rate %}
+                {% trans "от" %} {{ specialist.specialist_profile.hourly_rate }} ₽/{% trans "час" %}
+                {% else %}
+                {% trans "По договоренности" %}
+                {% endif %}
+            </span>
+        </div>
+        <div
+            class="p-2.5 bg-white border border-slate-200 rounded-full text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all dark:bg-slate-700 dark:border-slate-600 dark:text-indigo-400 dark:group-hover:bg-indigo-500 dark:group-hover:text-white">
+            <i class="bi bi-arrow-right text-lg font-bold"></i>
+        </div>
+    </div>
+</div>

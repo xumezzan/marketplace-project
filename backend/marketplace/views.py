@@ -61,14 +61,15 @@ def home(request):
     categories = Category.objects.all()[:12]
     tasks_count = Task.objects.filter(status=Task.Status.PUBLISHED).count()
     
-    # Получаем реальных специалистов с рейтингом
+    # Получаем реальных специалистов с рейтингом (больше для карусели)
     specialists = User.objects.filter(
         is_specialist=True, 
         specialist_profile__isnull=False
     ).select_related('specialist_profile').prefetch_related(
         'specialist_profile__categories',
-        'portfolio_items'
-    ).order_by('-rating')[:4]
+        'portfolio_items',
+        'reviews_received'
+    ).order_by('-rating')[:8]  # Увеличили до 8 для карусели
     
     specialists_count = User.objects.filter(is_specialist=True).count()
     cities_count = 10  # Заглушка
@@ -81,7 +82,7 @@ def home(request):
         'cities_count': cities_count,
     }
     
-    return render(request, 'marketplace/home.html', context)
+    return render(request, 'marketplace/home_new.html', context)
 
 
 class TaskListView(ListView):
@@ -90,17 +91,17 @@ class TaskListView(ListView):
     
     Показывает только задачи со статусом PUBLISHED (по умолчанию),
     с поддержкой фильтрации по городу, категории, поиску, бюджету и статусу.
-    Для специалистов по умолчанию показывает задачи их категорий и города.
+    Поддержка сортировки по дате, цене.
     """
     model = Task
-    template_name = 'marketplace/tasks_list.html'
+    template_name = 'marketplace/tasks_list_new.html'
     context_object_name = 'tasks'
     paginate_by = 12  # Количество задач на странице
     
     def get_queryset(self):
-        """Возвращает отфильтрованные задачи."""
-        # Начальный queryset - по умолчанию только опубликованные
-        queryset = Task.objects.select_related('client', 'category').order_by('-created_at')
+        """Возвращает отфильтрованные и отсортированные задачи."""
+        # Начальный queryset
+        queryset = Task.objects.select_related('client', 'category').prefetch_related('offers')
         
         # Получаем все GET-параметры
         city_filter = self.request.GET.get('city', '').strip()
@@ -109,6 +110,7 @@ class TaskListView(ListView):
         price_min = self.request.GET.get('price_min', '').strip()
         price_max = self.request.GET.get('price_max', '').strip()
         status_filter = self.request.GET.get('status', '').strip()
+        sort = self.request.GET.get('sort', 'newest').strip()
         
         # Проверяем, есть ли явные фильтры в GET-параметрах
         has_explicit_filters = bool(
@@ -171,6 +173,14 @@ class TaskListView(ListView):
                 logger.warning(f"Invalid price_max value '{price_max}': {e}")
                 # Игнорируем невалидное значение максимальной цены
         
+        # Сортировка
+        if sort == 'price_low':
+            queryset = queryset.order_by('budget_min', 'budget_max')
+        elif sort == 'price_high':
+            queryset = queryset.order_by('-budget_max', '-budget_min')
+        else:  # newest (default)
+            queryset = queryset.order_by('-created_at')
+        
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -188,6 +198,7 @@ class TaskListView(ListView):
         context['current_price_min'] = self.request.GET.get('price_min', '').strip()
         context['current_price_max'] = self.request.GET.get('price_max', '').strip()
         context['current_status'] = self.request.GET.get('status', '').strip()
+        context['current_sort'] = self.request.GET.get('sort', 'newest').strip()
         
         # Для обратной совместимости
         context['current_filters'] = {
@@ -196,6 +207,7 @@ class TaskListView(ListView):
         }
         
         return context
+
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
@@ -749,3 +761,53 @@ def get_specialist_data(request, specialist_id):
     except Exception as e:
         logger.error(f"Error fetching specialist data: {e}")
         return JsonResponse({'error': 'Ошибка при получении данных'}, status=500)
+
+class SpecialistDetailView(DetailView):
+    """
+    Представление для отображения профиля специалиста.
+    
+    Показывает информацию о специалисте, портфолио, отзывы и форму контакта.
+    """
+    model = User
+    template_name = 'marketplace/specialist_detail.html'
+    context_object_name = 'specialist'
+    
+    def get_queryset(self):
+        """Возвращает только специалистов."""
+        return User.objects.filter(is_specialist=True).select_related('specialist_profile').prefetch_related(
+            'specialist_profile__categories',
+            'portfolio_items',
+            'reviews_received__client',
+            'reviews_received__task'
+        )
+    
+    def get_context_data(self, **kwargs):
+        """Добавляет дополнительную информацию в контекст."""
+        context = super().get_context_data(**kwargs)
+        specialist = self.get_object()
+        
+        # Получаем профиль
+        try:
+            profile = specialist.specialist_profile
+            context['profile'] = profile
+        except:
+            context['profile'] = None
+        
+        # Получаем портфолио
+        portfolio_items = specialist.portfolio_items.all().order_by('order', '-created_at')
+        context['portfolio_items'] = portfolio_items
+        
+        # Получаем отзывы
+        reviews = specialist.reviews_received.all().select_related('client', 'task').order_by('-created_at')
+        context['reviews'] = reviews
+        
+        # Статистика отзывов
+        from django.db.models import Count
+        rating_stats = reviews.values('rating').annotate(count=Count('rating')).order_by('-rating')
+        context['rating_stats'] = {item['rating']: item['count'] for item in rating_stats}
+        
+        # Категории
+        if context['profile']:
+            context['categories'] = context['profile'].categories.all()
+        
+        return context

@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}ServiceHub - {% trans "Поиск специалистов" %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Enhanced Design -->
+<div
+    class="relative bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 overflow-hidden transition-colors duration-300">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-20 right-20 w-96 h-96 bg-indigo-200 dark:bg-indigo-900/30 rounded-full blur-3xl opacity-30 animate-pulse">
+        </div>
+        <div class="absolute bottom-20 left-20 w-96 h-96 bg-purple-200 dark:bg-purple-900/30 rounded-full blur-3xl opacity-20 animate-pulse"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-200 dark:bg-pink-900/30 rounded-full blur-3xl opacity-10 animate-pulse"
+            style="animation-delay: 2s;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
+        <div class="text-center max-w-4xl mx-auto">
+            <!-- Main Heading -->
+            <h1
+                class="text-5xl md:text-6xl lg:text-7xl tracking-tight font-extrabold text-slate-900 dark:text-white mb-6 animate__animated animate__fadeInUp">
+                {% trans "Найдите профи" %}
+                <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    {% trans "для любой задачи" %}
+                </span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="mt-6 text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto animate__animated animate__fadeInUp"
+                style="animation-delay: 0.1s">
+                {% trans "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и многое
+                другое. Быстро, безопасно и качественно." %}
+            </p>
+
+            <!-- Search Bar -->
+            <div class="mt-10 max-w-2xl mx-auto animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <form action="{% url 'marketplace:tasks_list' %}" method="get" class="relative">
+                    <div class="relative rounded-2xl shadow-2xl">
+                        <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                            <i class="bi bi-search text-slate-400 text-xl"></i>
+                        </div>
+                        <input type="text" name="search"
+                            class="block w-full pl-16 pr-32 py-6 text-lg border-0 rounded-2xl bg-white dark:bg-slate-800 dark:text-white focus:ring-4 focus:ring-indigo-500/50 transition-all"
+                            placeholder="{% trans 'Что нужно сделать?' %}" />
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                            <button type="submit"
+                                class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                                {% trans "Найти" %}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-slate-600 dark:text-slate-400 animate__animated animate__fadeInUp"
+                style="animation-delay: 0.3s">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <i class="bi bi-shield-check text-green-600 dark:text-green-400 text-lg"></i>
+                    </div>
+                    <span class="font-medium">{% trans "Проверенные профили" %}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+                        <i class="bi bi-star-fill text-yellow-600 dark:text-yellow-400 text-lg"></i>
+                    </div>
+                    <span class="font-medium">{% trans "Честные отзывы" %}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <i class="bi bi-people-fill text-blue-600 dark:text-blue-400 text-lg"></i>
+                    </div>
+                    <span class="font-medium">{{ specialists_count|default:"100" }}+ {% trans "специалистов" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wave Divider -->
+    <div class="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+            <path
+                d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"
+                fill="currentColor" class="text-slate-50 dark:text-slate-950" />
+        </svg>
+    </div>
+</div>
+
+<!-- Popular Categories Section -->
+<div class="bg-slate-50 dark:bg-slate-950 py-20 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">{% trans "Популярные категории" %}</h2>
+            <p class="text-lg text-slate-600 dark:text-slate-400">{% trans "Выберите категорию услуг" %}</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <!-- Repair Category -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=repair"
+                class="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white dark:bg-slate-800 hover:bg-gradient-to-br hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-900/20 dark:hover:to-orange-800/20 transition-all duration-300 cursor-pointer no-underline border border-slate-100 dark:border-slate-700 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-xl transform hover:-translate-y-1">
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center bg-orange-100 text-orange-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-orange-900/30 dark:text-orange-400">
+                    <i class="bi bi-hammer text-3xl"></i>
+                </div>
+                <span
+                    class="text-sm font-semibold text-slate-700 group-hover:text-orange-600 dark:text-slate-300 dark:group-hover:text-orange-400 text-center">
+                    {% trans "Ремонт" %}
+                </span>
+            </a>
+
+            <!-- Education Category -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=education"
+                class="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white dark:bg-slate-800 hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 transition-all duration-300 cursor-pointer no-underline border border-slate-100 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transform hover:-translate-y-1">
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center bg-blue-100 text-blue-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-blue-900/30 dark:text-blue-400">
+                    <i class="bi bi-book text-3xl"></i>
+                </div>
+                <span
+                    class="text-sm font-semibold text-slate-700 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400 text-center">
+                    {% trans "Обучение" %}
+                </span>
+            </a>
+
+            <!-- Beauty Category -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=beauty"
+                class="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white dark:bg-slate-800 hover:bg-gradient-to-br hover:from-pink-50 hover:to-pink-100 dark:hover:from-pink-900/20 dark:hover:to-pink-800/20 transition-all duration-300 cursor-pointer no-underline border border-slate-100 dark:border-slate-700 hover:border-pink-300 dark:hover:border-pink-700 hover:shadow-xl transform hover:-translate-y-1">
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center bg-pink-100 text-pink-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-pink-900/30 dark:text-pink-400">
+                    <i class="bi bi-stars text-3xl"></i>
+                </div>
+                <span
+                    class="text-sm font-semibold text-slate-700 group-hover:text-pink-600 dark:text-slate-300 dark:group-hover:text-pink-400 text-center">
+                    {% trans "Красота" %}
+                </span>
+            </a>
+
+            <!-- Transport Category -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=transport"
+                class="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white dark:bg-slate-800 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 dark:hover:from-green-900/20 dark:hover:to-green-800/20 transition-all duration-300 cursor-pointer no-underline border border-slate-100 dark:border-slate-700 hover:border-green-300 dark:hover:border-green-700 hover:shadow-xl transform hover:-translate-y-1">
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center bg-green-100 text-green-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-green-900/30 dark:text-green-400">
+                    <i class="bi bi-truck text-3xl"></i>
+                </div>
+                <span
+                    class="text-sm font-semibold text-slate-700 group-hover:text-green-600 dark:text-slate-300 dark:group-hover:text-green-400 text-center">
+                    {% trans "Перевозки" %}
+                </span>
+            </a>
+
+            <!-- IT Category -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=it"
+                class="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white dark:bg-slate-800 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/20 dark:hover:to-purple-800/20 transition-all duration-300 cursor-pointer no-underline border border-slate-100 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-xl transform hover:-translate-y-1">
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center bg-purple-100 text-purple-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-purple-900/30 dark:text-purple-400">
+                    <i class="bi bi-display text-3xl"></i>
+                </div>
+                <span
+                    class="text-sm font-semibold text-slate-700 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400 text-center">
+                    {% trans "IT услуги" %}
+                </span>
+            </a>
+
+            <!-- All Categories -->
+            <a href="{% url 'marketplace:tasks_list' %}"
+                class="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-white dark:bg-slate-800 hover:bg-gradient-to-br hover:from-slate-50 hover:to-slate-100 dark:hover:from-slate-700 dark:hover:to-slate-600 transition-all duration-300 cursor-pointer no-underline border border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500 hover:shadow-xl transform hover:-translate-y-1">
+                <div
+                    class="w-16 h-16 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-600 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-300">
+                    <i class="bi bi-grid text-3xl"></i>
+                </div>
+                <span
+                    class="text-sm font-semibold text-slate-700 group-hover:text-slate-900 dark:text-slate-300 dark:group-hover:text-white text-center">
+                    {% trans "Все категории" %}
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Specialists Section with Carousel -->
+<div class="bg-white dark:bg-slate-900 py-20 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">{% trans "Рекомендуемые специалисты"
+                    %}</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400">{% trans "Профессионалы с высоким рейтингом и
+                    отзывами" %}</p>
+            </div>
+            <a href="{% url 'marketplace:tasks_list' %}"
+                class="hidden md:flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold hover:gap-3 transition-all no-underline group">
+                {% trans "Все специалисты" %}
+                <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        {% if specialists %}
+        <!-- Swiper Carousel -->
+        <div class="swiper specialistsSwiper">
+            <div class="swiper-wrapper pb-12">
+                {% for specialist in specialists %}
+                <div class="swiper-slide">
+                    {% include 'marketplace/components/specialist_card.html' with specialist=specialist %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Navigation -->
+            <div
+                class="swiper-button-next !w-12 !h-12 !bg-white dark:!bg-slate-800 !rounded-full !shadow-lg after:!text-sm !text-indigo-600 dark:!text-indigo-400">
+            </div>
+            <div
+                class="swiper-button-prev !w-12 !h-12 !bg-white dark:!bg-slate-800 !rounded-full !shadow-lg after:!text-sm !text-indigo-600 dark:!text-indigo-400">
+            </div>
+
+            <!-- Pagination -->
+            <div class="swiper-pagination !bottom-0"></div>
+        </div>
+        {% else %}
+        <div class="text-center py-20">
+            <div
+                class="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="bi bi-people text-4xl text-slate-400"></i>
+            </div>
+            <p class="text-lg text-slate-500 dark:text-slate-400">{% trans "Специалисты появятся скоро" %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div
+    class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-24 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">{% trans "Как это работает" %}</h2>
+            <p class="text-lg text-slate-600 dark:text-slate-400">
+                {% trans "Всего 3 простых шага, чтобы решить вашу задачу" %}
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+            <!-- Step 1 -->
+            <div class="relative group">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white shadow-lg group-hover:scale-110 transition-transform">
+                        1
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 text-center">
+                        {% trans "Создайте задачу" %}
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-center">
+                        {% trans "Опишите, что нужно сделать. Это бесплатно и займет пару минут." %}
+                    </p>
+                </div>
+                <!-- Connector Arrow (hidden on mobile) -->
+                <div
+                    class="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 text-indigo-300 dark:text-indigo-700">
+                    <i class="bi bi-arrow-right text-3xl"></i>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="relative group">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white shadow-lg group-hover:scale-110 transition-transform">
+                        2
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 text-center">
+                        {% trans "Получите отклики" %}
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-center">
+                        {% trans "Специалисты предложат свои услуги и цены. Выберите лучшего." %}
+                    </p>
+                </div>
+                <!-- Connector Arrow (hidden on mobile) -->
+                <div
+                    class="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 text-indigo-300 dark:text-indigo-700">
+                    <i class="bi bi-arrow-right text-3xl"></i>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="group">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white shadow-lg group-hover:scale-110 transition-transform">
+                        3
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 text-center">
+                        {% trans "Договоритесь о работе" %}
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-center">
+                        {% trans "Обсудите детали в чате и выберите исполнителя." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="text-center mt-12">
+            <a href="{% url 'marketplace:task_create' %}"
+                class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl no-underline">
+                {% trans "Создать задачу бесплатно" %}
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Trust & Safety Section -->
+<div class="bg-white dark:bg-slate-900 py-20 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-12 md:p-16 shadow-2xl">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                        {% trans "Безопасные сделки" %}
+                    </h2>
+                    <p class="text-lg text-white/90 mb-8">
+                        {% trans "Escrow система защиты платежей гарантирует безопасность ваших средств. Деньги
+                        переводятся специалисту только после выполнения работы." %}
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="bi bi-shield-check text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-1">{% trans "Защита платежей" %}</h4>
+                                <p class="text-white/80 text-sm">{% trans "Средства блокируются до завершения работы" %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="bi bi-chat-dots text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-1">{% trans "Поддержка 24/7" %}</h4>
+                                <p class="text-white/80 text-sm">{% trans "Помощь в решении споров" %}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="bi bi-star text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-1">{% trans "Система отзывов" %}</h4>
+                                <p class="text-white/80 text-sm">{% trans "Честные отзывы от реальных клиентов" %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="relative">
+                        <div
+                            class="w-full h-80 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                            <i class="bi bi-shield-fill-check text-white text-9xl opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize Swiper for specialists carousel
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.specialistsSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 24,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                },
+            },
+        });
+    });
+</script>
+{% endblock %}
