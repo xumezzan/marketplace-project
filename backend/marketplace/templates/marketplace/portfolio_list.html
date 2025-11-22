@@ -9,55 +9,111 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Мое портфолио</h1>
-                <p class="mt-2 text-slate-500 dark:text-slate-400">Управляйте примерами своих работ, чтобы привлечь больше клиентов</p>
+                <p class="mt-2 text-slate-500 dark:text-slate-400">Управляйте примерами своих работ, чтобы привлечь
+                    больше клиентов</p>
             </div>
-            <a href="{% url 'marketplace:portfolio_add' %}" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow-lg shadow-indigo-200">
-                <i class="bi bi-plus-lg mr-2"></i> Добавить работу
-            </a>
+            <div class="flex gap-3">
+                <button id="bulk-upload-btn"
+                    class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition shadow-lg">
+                    <i class="bi bi-cloud-upload mr-2"></i> Загрузить несколько
+                </button>
+                <a href="{% url 'marketplace:portfolio_add' %}"
+                    class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow-lg">
+                    <i class="bi bi-plus-lg mr-2"></i> Добавить работу
+                </a>
+            </div>
+        </div>
+
+        <!-- Bulk Upload Modal -->
+        <div id="upload-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-2xl w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Загрузить изображения</h2>
+                    <button id="close-modal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                        <i class="bi bi-x-lg text-2xl"></i>
+                    </button>
+                </div>
+
+                <div id="drop-zone"
+                    class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-12 text-center hover:border-indigo-500 transition cursor-pointer">
+                    <i class="bi bi-cloud-upload text-5xl text-slate-400 mb-4 block"></i>
+                    <p class="text-lg text-slate-600 dark:text-slate-300 mb-2">Перетащите изображения сюда</p>
+                    <p class="text-sm text-slate-400">или нажмите для выбора файлов</p>
+                    <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+                </div>
+
+                <div id="preview-container" class="mt-4 grid grid-cols-3 gap-4 hidden"></div>
+
+                <div id="upload-progress" class="mt-4 hidden">
+                    <div class="bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                        <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all" style="width: 0%">
+                        </div>
+                    </div>
+                    <p id="progress-text" class="text-sm text-slate-600 dark:text-slate-400 mt-2 text-center"></p>
+                </div>
+
+                <button id="upload-btn"
+                    class="hidden w-full mt-4 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition">
+                    Загрузить
+                </button>
+            </div>
         </div>
 
         {% if portfolio_items %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for item in portfolio_items %}
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow duration-300 dark:bg-slate-800 dark:border-slate-700">
-                    <div class="relative aspect-video bg-slate-100 dark:bg-slate-700">
-                        {% if item.image %}
-                            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
-                        {% else %}
-                            <div class="flex items-center justify-center h-full text-slate-400">
-                                <i class="bi bi-image text-4xl"></i>
-                            </div>
-                        {% endif %}
-                        <div class="absolute top-2 right-2 flex gap-2">
-                            <a href="{% url 'marketplace:portfolio_edit' item.pk %}" class="p-2 bg-white/90 rounded-lg text-slate-600 hover:text-indigo-600 transition shadow-sm backdrop-blur-sm">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a href="{% url 'marketplace:portfolio_delete' item.pk %}" class="p-2 bg-white/90 rounded-lg text-slate-600 hover:text-red-600 transition shadow-sm backdrop-blur-sm">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </div>
+        <div id="portfolio-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in portfolio_items %}
+            <div class="portfolio-item bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow duration-300 dark:bg-slate-800 dark:border-slate-700 cursor-move"
+                data-id="{{ item.id }}" data-order="{{ item.order }}">
+                <div class="relative aspect-video bg-slate-100 dark:bg-slate-700">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="flex items-center justify-center h-full text-slate-400">
+                        <i class="bi bi-image text-4xl"></i>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 dark:text-white">{{ item.title }}</h3>
-                        {% if item.description %}
-                            <p class="text-slate-600 text-sm line-clamp-2 dark:text-slate-400">{{ item.description }}</p>
-                        {% endif %}
+                    {% endif %}
+                    <div
+                        class="absolute top-2 left-2 bg-white/90 dark:bg-slate-800/90 px-2 py-1 rounded text-xs font-medium text-slate-600 dark:text-slate-300">
+                        <i class="bi bi-grip-vertical"></i>
+                    </div>
+                    <div class="absolute top-2 right-2 flex gap-2">
+                        <a href="{% url 'marketplace:portfolio_edit' item.pk %}"
+                            class="p-2 bg-white/90 rounded-lg text-slate-600 hover:text-indigo-600 transition shadow-sm backdrop-blur-sm">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'marketplace:portfolio_delete' item.pk %}"
+                            class="p-2 bg-white/90 rounded-lg text-slate-600 hover:text-red-600 transition shadow-sm backdrop-blur-sm">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </div>
                 </div>
-                {% endfor %}
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 dark:text-white">{{ item.title }}</h3>
+                    {% if item.description %}
+                    <p class="text-slate-600 text-sm line-clamp-2 dark:text-slate-400">{{ item.description }}</p>
+                    {% endif %}
+                </div>
             </div>
+            {% endfor %}
+        </div>
         {% else %}
-            <div class="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 dark:bg-slate-800 dark:border-slate-700">
-                <div class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-indigo-900/30">
-                    <i class="bi bi-images text-2xl text-indigo-600 dark:text-indigo-400"></i>
-                </div>
-                <h3 class="text-lg font-medium text-slate-900 mb-1 dark:text-white">Портфолио пусто</h3>
-                <p class="text-slate-500 mb-6 dark:text-slate-400">Добавьте примеры своих лучших работ</p>
-                <a href="{% url 'marketplace:portfolio_add' %}" class="text-indigo-600 font-medium hover:text-indigo-700 dark:text-indigo-400">
-                    Добавить первую работу &rarr;
-                </a>
+        <div
+            class="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 dark:bg-slate-800 dark:border-slate-700">
+            <div
+                class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-indigo-900/30">
+                <i class="bi bi-images text-2xl text-indigo-600 dark:text-indigo-400"></i>
             </div>
+            <h3 class="text-lg font-medium text-slate-900 mb-1 dark:text-white">Портфолио пусто</h3>
+            <p class="text-slate-500 mb-6 dark:text-slate-400">Добавьте примеры своих лучших работ</p>
+            <a href="{% url 'marketplace:portfolio_add' %}"
+                class="text-indigo-600 font-medium hover:text-indigo-700 dark:text-indigo-400">
+                Добавить первую работу &rarr;
+            </a>
+        </div>
         {% endif %}
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{% static 'js/portfolio-manager.js' %}"></script>
 {% endblock %}

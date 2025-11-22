@@ -15,6 +15,7 @@ from .views import (
 )
 from .api.search import search_suggestions
 from .api.booking import get_availability, create_booking
+from .api.portfolio import reorder_portfolio, bulk_upload_portfolio
 
 app_name = 'marketplace'
 
@@ -51,6 +52,8 @@ urlpatterns = [
     path('api/search/suggestions/', search_suggestions, name='search_suggestions'),
     path('api/specialist/<int:specialist_id>/availability/', get_availability, name='get_availability'),
     path('api/bookings/create/', create_booking, name='create_booking'),
+    path('api/portfolio/reorder/', reorder_portfolio, name='reorder_portfolio'),
+    path('api/portfolio/bulk-upload/', bulk_upload_portfolio, name='bulk_upload_portfolio'),
     # Статические страницы
     path('safe-deal/', safe_deal_view, name='safe_deal'),
     path('how-it-works/', how_it_works_view, name='how_it_works'),
