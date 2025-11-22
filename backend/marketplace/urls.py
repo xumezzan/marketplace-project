@@ -10,6 +10,7 @@ from .views import (
     get_specialist_data, SpecialistDetailView,
     BookingListView, UpdateBookingStatusView,
     ConversationListView, ConversationDetailView, start_conversation,
+    AnalyticsDashboardView, analytics_data,
     safe_deal_view, how_it_works_view, pricing_view, help_view,
     privacy_policy_view, terms_of_service_view
 )
@@ -54,6 +55,9 @@ urlpatterns = [
     path('api/bookings/create/', create_booking, name='create_booking'),
     path('api/portfolio/reorder/', reorder_portfolio, name='reorder_portfolio'),
     path('api/portfolio/bulk-upload/', bulk_upload_portfolio, name='bulk_upload_portfolio'),
+    path('api/analytics/data/', analytics_data, name='analytics_data'),
+    # Аналитика
+    path('analytics/', AnalyticsDashboardView.as_view(), name='analytics_dashboard'),
     # Статические страницы
     path('safe-deal/', safe_deal_view, name='safe_deal'),
     path('how-it-works/', how_it_works_view, name='how_it_works'),

@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Аналитика" %} - Marketplace{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Аналитика" %}</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-1">{% trans "Отслеживайте свою производительность" %}
+                </p>
+            </div>
+            <select id="period-selector"
+                class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-800 dark:text-white">
+                <option value="7" {% if period==7 %}selected{% endif %}>7 дней</option>
+                <option value="30" {% if period==30 %}selected{% endif %}>30 дней</option>
+                <option value="90" {% if period==90 %}selected{% endif %}>90 дней</option>
+            </select>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Всего бронирований" %}</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ stats.total_bookings }}</p>
+                    </div>
+                    <div
+                        class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                        <i class="bi bi-calendar-check text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Доход" %}</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{
+                            stats.total_revenue|floatformat:0 }} ₽</p>
+                    </div>
+                    <div
+                        class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                        <i class="bi bi-currency-dollar text-green-600 dark:text-green-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Средний рейтинг" %}</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ stats.avg_rating }}</p>
+                    </div>
+                    <div
+                        class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
+                        <i class="bi bi-star-fill text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Клиентов" %}</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ stats.total_clients }}</p>
+                    </div>
+                    <div
+                        class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                        <i class="bi bi-people text-purple-600 dark:text-purple-400 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Динамика бронирований" %}
+                </h3>
+                <canvas id="bookings-chart"></canvas>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Динамика дохода" %}</h3>
+                <canvas id="revenue-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Clients & Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Топ клиенты" %}</h3>
+                {% if top_clients %}
+                <div class="space-y-3">
+                    {% for client in top_clients %}
+                    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
+                                <span class="text-indigo-600 dark:text-indigo-400 font-bold">{{
+                                    client.name|slice:":1"|upper }}</span>
+                            </div>
+                            <span class="font-medium text-slate-900 dark:text-white">{{ client.name }}</span>
+                        </div>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">{{ client.booking_count }} {% trans
+                            "бронирований" %}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-slate-500 dark:text-slate-400 text-center py-8">{% trans "Нет данных" %}</p>
+                {% endif %}
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Недавняя активность" %}</h3>
+                {% if recent_activity %}
+                <div class="space-y-3">
+                    {% for activity in recent_activity %}
+                    <div class="flex gap-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-10 h-10 bg-{% if activity.type == 'booking' %}indigo{% else %}yellow{% endif %}-100 dark:bg-{% if activity.type == 'booking' %}indigo{% else %}yellow{% endif %}-900/30 rounded-full flex items-center justify-center">
+                                <i
+                                    class="bi bi-{% if activity.type == 'booking' %}calendar-check{% else %}star-fill{% endif %} text-{% if activity.type == 'booking' %}indigo{% else %}yellow{% endif %}-600 dark:text-{% if activity.type == 'booking' %}indigo{% else %}yellow{% endif %}-400"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-slate-900 dark:text-white">{{ activity.title }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ activity.date|date:"d.m.Y H:i"
+                                }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-slate-500 dark:text-slate-400 text-center py-8">{% trans "Нет активности" %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    // Chart configuration
+    const bookingData = {{ booking_trends.data| safe }};
+    const bookingLabels = {{ booking_trends.labels| safe }};
+    const revenueData = {{ revenue_data.data| safe }};
+    const revenueLabels = {{ revenue_data.labels| safe }};
+
+    // Bookings Chart
+    const bookingsCtx = document.getElementById('bookings-chart').getContext('2d');
+    new Chart(bookingsCtx, {
+        type: 'line',
+        data: {
+            labels: bookingLabels,
+            datasets: [{
+                label: 'Бронирования',
+                data: bookingData,
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Revenue Chart
+    const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: revenueLabels,
+            datasets: [{
+                label: 'Доход (₽)',
+                data: revenueData,
+                backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                borderColor: 'rgb(34, 197, 94)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Period selector
+    document.getElementById('period-selector').addEventListener('change', function () {
+        window.location.href = '?period=' + this.value;
+    });
+</script>
+{% endblock %}

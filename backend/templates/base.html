@@ -161,6 +161,11 @@
                             <a href="{% url 'marketplace:conversation_list' %}"
                                 class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
                                 trans "Сообщения" %}</a>
+                            {% if user.is_specialist %}
+                            <a href="{% url 'marketplace:analytics_dashboard' %}"
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
+                                trans "Аналитика" %}</a>
+                            {% endif %}
                             <a href="{% url 'marketplace:booking_list' %}"
                                 class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 no-underline dark:text-slate-300 dark:hover:bg-slate-700">{%
                                 trans "Мои бронирования" %}</a>

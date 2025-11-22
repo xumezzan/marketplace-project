@@ -2,7 +2,7 @@
 Views для marketplace приложения.
 """
 import logging
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
 
 logger = logging.getLogger(__name__)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -981,3 +981,62 @@ def start_conversation(request, specialist_id):
         messages.success(request, f'Переписка с {specialist.get_full_name() or specialist.username} создана.')
     
     return redirect('marketplace:conversation_detail', pk=conversation.id)
+
+
+class AnalyticsDashboardView(LoginRequiredMixin, TemplateView):
+    """
+    Analytics dashboard for specialists to view their performance metrics.
+    """
+    template_name = 'marketplace/analytics_dashboard.html'
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_specialist:
+            messages.error(request, 'Только специалисты имеют доступ к аналитике.')
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from .analytics import (
+            get_specialist_stats,
+            get_booking_trends,
+            get_revenue_data,
+            get_top_clients,
+            get_recent_activity
+        )
+        
+        specialist = self.request.user
+        period = int(self.request.GET.get('period', 30))
+        
+        context['stats'] = get_specialist_stats(specialist)
+        context['booking_trends'] = get_booking_trends(specialist, period)
+        context['revenue_data'] = get_revenue_data(specialist, period)
+        context['top_clients'] = get_top_clients(specialist)
+        context['recent_activity'] = get_recent_activity(specialist)
+        context['period'] = period
+        
+        return context
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def analytics_data(request):
+    """
+    API endpoint for analytics chart data.
+    """
+    if not request.user.is_specialist:
+        return Response({'error': 'Unauthorized'}, status=403)
+    
+    from .analytics import get_booking_trends, get_revenue_data
+    
+    period = int(request.GET.get('period', 30))
+    data_type = request.GET.get('type', 'bookings')
+    
+    if data_type == 'bookings':
+        data = get_booking_trends(request.user, period)
+    elif data_type == 'revenue':
+        data = get_revenue_data(request.user, period)
+    else:
+        return Response({'error': 'Invalid type'}, status=400)
+    
+    return Response(data)
