@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 09:04+0000\n"
+"POT-Creation-Date: 2025-11-22 09:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,118 +32,179 @@ msgstr "Mutaxassislarni toping"
 msgid "для любой задачи"
 msgstr "har qanday vazifa uchun"
 
-#: marketplace/templates/marketplace/home.html:31
+#: marketplace/templates/marketplace/home.html:20
+msgid ""
+"Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, "
+"красота, IT и многое другое. Быстро, безопасно и качественно."
+msgstr ""
+"Minglab tasdiqlangan mutaxassislar sizga yordam berishga tayyor. Ta'mirlash, "
+"ta'lim, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
+
+#: marketplace/templates/marketplace/home.html:30
 msgid "Что нужно сделать?"
 msgstr "Nima qilish kerak?"
 
-#: marketplace/templates/marketplace/home.html:35
+#: marketplace/templates/marketplace/home.html:34
 msgid "Найти"
 msgstr "Topish"
 
-#: marketplace/templates/marketplace/home.html:43
+#: marketplace/templates/marketplace/home.html:42
 msgid "Проверенные профили"
 msgstr "Tasdiqlangan profillar"
 
-#: marketplace/templates/marketplace/home.html:47
+#: marketplace/templates/marketplace/home.html:46
 msgid "Честные отзывы"
 msgstr "Haqiqiy sharhlar"
 
-#: marketplace/templates/marketplace/home.html:51
+#: marketplace/templates/marketplace/home.html:50
 msgid "специалистов"
 msgstr "mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:81
+#: marketplace/templates/marketplace/home.html:80
 #, fuzzy
 #| msgid "специалистов"
 msgid "Специалистов"
 msgstr "mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:101
+#: marketplace/templates/marketplace/home.html:100
 msgid "Активных задач"
 msgstr "Faol vazifalar"
 
-#: marketplace/templates/marketplace/home.html:120
+#: marketplace/templates/marketplace/home.html:119
 msgid "Средний рейтинг"
 msgstr "O'rtacha reyting"
 
-#: marketplace/templates/marketplace/home.html:135
+#: marketplace/templates/marketplace/home.html:134
 msgid "Безопасные сделки"
 msgstr "Xavfsiz bitimlar"
 
-#: marketplace/templates/marketplace/home.html:136
+#: marketplace/templates/marketplace/home.html:135
 msgid "Escrow система защиты платежей"
 msgstr "To'lovlarni himoya qilish Escrow tizimi"
 
-#: marketplace/templates/marketplace/home.html:148
+#: marketplace/templates/marketplace/home.html:147
 msgid "Популярные категории"
 msgstr "Ommabop toifalar"
 
-#: marketplace/templates/marketplace/home.html:224
+#: marketplace/templates/marketplace/home.html:157
+msgid "Ремонт"
+msgstr "Ta'mirlash"
+
+#: marketplace/templates/marketplace/home.html:167
+msgid "Обучение"
+msgstr "Ta'lim"
+
+#: marketplace/templates/marketplace/home.html:177
+msgid "Красота"
+msgstr "Go'zallik"
+
+#: marketplace/templates/marketplace/home.html:187
+msgid "Перевозки"
+msgstr "Tashish"
+
+#: marketplace/templates/marketplace/home.html:197
+msgid "IT услуги"
+msgstr "IT xizmatlari"
+
+#: marketplace/templates/marketplace/home.html:207
+msgid "Все категории"
+msgstr "Barcha toifalar"
+
+#: marketplace/templates/marketplace/home.html:217
 msgid "Рекомендуемые специалисты"
 msgstr "Tavsiya etilgan mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:252
-msgid "Специалист"
-msgstr "Mutaxassis"
+#: marketplace/templates/marketplace/home.html:218
+msgid "Профессионалы с высоким рейтингом и отзывами"
+msgstr "Yuqori reyting va sharhlarga ega professionallar"
 
-#: marketplace/templates/marketplace/home.html:266
-msgid "Опытный специалист"
-msgstr "Tajribali mutaxassis"
-
-#: marketplace/templates/marketplace/home.html:275
-msgid "работ"
-msgstr "ishlar"
-
-#: marketplace/templates/marketplace/home.html:282
-msgid "от"
-msgstr "dan"
-
-#: marketplace/templates/marketplace/home.html:282
-msgid "₽/час"
-msgstr "so'm/soat"
-
-#: marketplace/templates/marketplace/home.html:284
-msgid "По договоренности"
-msgstr "Kelishuv bo'yicha"
-
-#: marketplace/templates/marketplace/home.html:289
-msgid "Профиль"
-msgstr "Profil"
-
-#: marketplace/templates/marketplace/home.html:290
-msgid "Открыть"
-msgstr "Ochish"
-
-#: marketplace/templates/marketplace/home.html:296
-msgid "Специалисты появятся скоро"
-msgstr "Mutaxassislar tez orada paydo bo'ladi"
-
-#: marketplace/templates/marketplace/home.html:301
+#: marketplace/templates/marketplace/home.html:220
+#: marketplace/templates/marketplace/home.html:291
 msgid "Все специалисты"
 msgstr "Barcha mutaxassislar"
 
-#: marketplace/templates/marketplace/home.html:310
+#: marketplace/templates/marketplace/home.html:243
+msgid "Специалист"
+msgstr "Mutaxassis"
+
+#: marketplace/templates/marketplace/home.html:251
+msgid "отзывов"
+msgstr "sharhlar"
+
+#: marketplace/templates/marketplace/home.html:256
+msgid "Опытный специалист"
+msgstr "Tajribali mutaxassis"
+
+#: marketplace/templates/marketplace/home.html:265
+msgid "работ"
+msgstr "ishlar"
+
+#: marketplace/templates/marketplace/home.html:272
+msgid "от"
+msgstr "dan"
+
+#: marketplace/templates/marketplace/home.html:272
+msgid "₽/час"
+msgstr "so'm/soat"
+
+#: marketplace/templates/marketplace/home.html:274
+msgid "По договоренности"
+msgstr "Kelishuv bo'yicha"
+
+#: marketplace/templates/marketplace/home.html:279 templates/base.html:141
+msgid "Профиль"
+msgstr "Profil"
+
+#: marketplace/templates/marketplace/home.html:280
+msgid "Открыть"
+msgstr "Ochish"
+
+#: marketplace/templates/marketplace/home.html:286
+msgid "Специалисты появятся скоро"
+msgstr "Mutaxassislar tez orada paydo bo'ladi"
+
+#: marketplace/templates/marketplace/home.html:300
 #: marketplace/templates/marketplace/static/how_it_works.html:4
 #: marketplace/templates/marketplace/static/how_it_works.html:10
 #: marketplace/templates/marketplace/static/safe_deal.html:21
-#: templates/base.html:268
+#: templates/base.html:258
 msgid "Как это работает"
 msgstr "Bu qanday ishlaydi"
 
-#: marketplace/templates/marketplace/home.html:321
+#: marketplace/templates/marketplace/home.html:301
+msgid "Всего 3 простых шага, чтобы решить вашу задачу"
+msgstr "Vazifangizni hal qilish uchun atigi 3 oddiy qadam"
+
+#: marketplace/templates/marketplace/home.html:310
 msgid "Создайте задачу"
 msgstr "Vazifa yarating"
 
-#: marketplace/templates/marketplace/home.html:329
+#: marketplace/templates/marketplace/home.html:311
+msgid "Опишите, что нужно сделать. Это бесплатно и займет пару минут."
+msgstr ""
+"Nima qilish kerakligini tasvirlab bering. Bu bepul va bir necha daqiqa vaqt "
+"oladi."
+
+#: marketplace/templates/marketplace/home.html:317
 #: marketplace/templates/marketplace/static/how_it_works.html:34
 msgid "Получите отклики"
 msgstr "Takliflarni qabul qiling"
 
-#: marketplace/templates/marketplace/home.html:337
+#: marketplace/templates/marketplace/home.html:318
+msgid "Специалисты предложат свои услуги и цены. Выберите лучшего."
+msgstr ""
+"Mutaxassislar o'z xizmatlari va narxlarini taklif qilishadi. Eng yaxshisini "
+"tanlang."
+
+#: marketplace/templates/marketplace/home.html:324
 msgid "Договоритесь о работе"
 msgstr "Ish haqida kelishib oling"
 
-#: marketplace/templates/marketplace/static/help.html:4 templates/base.html:279
+#: marketplace/templates/marketplace/home.html:326
+msgid "Обсудите детали в чате и выберите исполнителя."
+msgstr "Chatda tafsilotlarni muhokama qiling va ijrochini tanlang."
+
+#: marketplace/templates/marketplace/static/help.html:4 templates/base.html:269
 msgid "Помощь"
 msgstr "Yordam"
 
@@ -334,7 +395,7 @@ msgstr ""
 
 #: marketplace/templates/marketplace/static/pricing.html:4
 #: marketplace/templates/marketplace/static/pricing.html:10
-#: templates/base.html:278
+#: templates/base.html:268
 msgid "Тарифы"
 msgstr "Tariflar"
 
@@ -398,7 +459,7 @@ msgstr ""
 
 #: marketplace/templates/marketplace/static/privacy_policy.html:4
 #: marketplace/templates/marketplace/static/privacy_policy.html:10
-#: templates/base.html:314
+#: templates/base.html:304
 msgid "Политика конфиденциальности"
 msgstr "Maxfiylik siyosati"
 
@@ -513,7 +574,7 @@ msgstr "Maxfiylik masalalari bo'yicha murojaat qiling:"
 
 #: marketplace/templates/marketplace/static/safe_deal.html:4
 #: marketplace/templates/marketplace/static/safe_deal.html:10
-#: templates/base.html:267
+#: templates/base.html:257
 msgid "Безопасная сделка"
 msgstr "Xavfsiz bitim"
 
@@ -579,7 +640,7 @@ msgstr ""
 
 #: marketplace/templates/marketplace/static/terms_of_service.html:4
 #: marketplace/templates/marketplace/static/terms_of_service.html:10
-#: templates/base.html:316
+#: templates/base.html:306
 msgid "Условия использования"
 msgstr "Foydalanish shartlari"
 
@@ -680,94 +741,50 @@ msgstr "7. Kontaktlar"
 msgid "По вопросам использования платформы обращайтесь:"
 msgstr "Platformadan foydalanish masalalari bo'yicha murojaat qiling:"
 
-#: templates/base.html:128 templates/base.html:265
-msgid "Создать заказ"
-msgstr "Buyurtma yaratish"
-
-#: templates/base.html:191
-msgid "Язык"
-msgstr "Til"
-
-#: templates/base.html:263
-msgid "Клиентам"
-msgstr "Mijozlarga"
-
-#: templates/base.html:266
+#: templates/base.html:85 templates/base.html:170 templates/base.html:256
 msgid "Найти специалиста"
 msgstr "Mutaxassis topish"
 
-#: templates/base.html:274
-msgid "Специалистам"
-msgstr "Mutaxassislarga"
+#: templates/base.html:88 templates/base.html:173
+msgid "Мои заказы"
+msgstr "Mening buyurtmalarim"
 
-#: templates/base.html:276
-msgid "База заказов"
-msgstr "Buyurtmalar bazasi"
-
-#: templates/base.html:277
+#: templates/base.html:91 templates/base.html:176 templates/base.html:267
 msgid "Стать специалистом"
 msgstr "Mutaxassis bo'lish"
 
-#: templates/base.html:285
+#: templates/base.html:125 templates/base.html:179 templates/base.html:255
+msgid "Создать заказ"
+msgstr "Buyurtma yaratish"
+
+#: templates/base.html:143
+msgid "Выйти"
+msgstr "Chiqish"
+
+#: templates/base.html:182
+msgid "Язык"
+msgstr "Til"
+
+#: templates/base.html:234
+msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
+msgstr "Mutaxassislarni qidirish bo'yicha №1 xizmat. Ishonchli, tez, qulay."
+
+#: templates/base.html:253
+msgid "Клиентам"
+msgstr "Mijozlarga"
+
+#: templates/base.html:264
+msgid "Специалистам"
+msgstr "Mutaxassislarga"
+
+#: templates/base.html:266
+msgid "База заказов"
+msgstr "Buyurtmalar bazasi"
+
+#: templates/base.html:275
 msgid "Контакты"
 msgstr "Kontaktlar"
 
-#: templates/base.html:311
+#: templates/base.html:301
 msgid "Все права защищены."
 msgstr "Barcha huquqlar himoyalangan."
-
-#~ msgid ""
-#~ "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, "
-#~ "красота, IT и многое другое. Быстро, безопасно и качественно."
-#~ msgstr ""
-#~ "Minglab tasdiqlangan mutaxassislar sizga yordam berishga tayyor. "
-#~ "Ta'mirlash, ta'lim, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
-
-#~ msgid "Ремонт"
-#~ msgstr "Ta'mirlash"
-
-#~ msgid "Обучение"
-#~ msgstr "Ta'lim"
-
-#~ msgid "Красота"
-#~ msgstr "Go'zallik"
-
-#~ msgid "Перевозки"
-#~ msgstr "Tashish"
-
-#~ msgid "IT услуги"
-#~ msgstr "IT xizmatlari"
-
-#~ msgid "Все категории"
-#~ msgstr "Barcha toifalar"
-
-#~ msgid "Профессионалы с высоким рейтингом и отзывами"
-#~ msgstr "Yuqori reyting va sharhlarga ega professionallar"
-
-#~ msgid "Всего 3 простых шага, чтобы решить вашу задачу"
-#~ msgstr "Vazifangizni hal qilish uchun atigi 3 oddiy qadam"
-
-#~ msgid "Опишите, что нужно сделать. Это бесплатно и займет пару минут."
-#~ msgstr ""
-#~ "Nima qilish kerakligini tasvirlab bering. Bu bepul va bir necha daqiqa "
-#~ "vaqt oladi."
-
-#~ msgid "Специалисты предложат свои услуги и цены. Выберите лучшего."
-#~ msgstr ""
-#~ "Mutaxassislar o'z xizmatlari va narxlarini taklif qilishadi. Eng "
-#~ "yaxshisini tanlang."
-
-#~ msgid "Обсудите детали в чате и выберите исполнителя."
-#~ msgstr "Chatda tafsilotlarni muhokama qiling va ijrochini tanlang."
-
-#~ msgid "Мои заказы"
-#~ msgstr "Mening buyurtmalarim"
-
-#~ msgid "Выйти"
-#~ msgstr "Chiqish"
-
-#~ msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
-#~ msgstr "Mutaxassislarni qidirish bo'yicha №1 xizmat. Ishonchli, tez, qulay."
-
-#~ msgid "отзывов"
-#~ msgstr "sharhlar"
