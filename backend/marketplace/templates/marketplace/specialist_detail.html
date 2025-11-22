@@ -324,6 +324,13 @@
                         </div>
                     </div>
 
+                    {% if user.is_authenticated and user != specialist %}
+                    <a href="{% url 'marketplace:start_conversation' specialist.id %}"
+                        class="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg no-underline mb-3">
+                        <i class="bi bi-chat-dots mr-2"></i>{% trans "Написать сообщение" %}
+                    </a>
+                    {% endif %}
+
                     <a href="#contact"
                         class="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg no-underline">
                         {% trans "Связаться" %}

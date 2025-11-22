@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Мои бронирования" %} - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Мои бронирования" %}</h1>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mb-6 border-b border-slate-200 dark:border-slate-700" x-data="{ activeTab: 'upcoming' }">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="bookingTabs" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+                    :class="{ 'text-indigo-600 border-indigo-600 dark:text-indigo-500 dark:border-indigo-500': activeTab === 'upcoming', 'border-transparent': activeTab !== 'upcoming' }"
+                    @click="activeTab = 'upcoming'" type="button" role="tab">
+                    {% trans "Предстоящие" %}
+                    {% if upcoming_bookings %}
+                    <span
+                        class="ml-2 bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">{{
+                        upcoming_bookings.count }}</span>
+                    {% endif %}
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button
+                    class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+                    :class="{ 'text-indigo-600 border-indigo-600 dark:text-indigo-500 dark:border-indigo-500': activeTab === 'past', 'border-transparent': activeTab !== 'past' }"
+                    @click="activeTab = 'past'" type="button" role="tab">
+                    {% trans "История" %}
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Contents -->
+        <div id="bookingTabContent">
+            <!-- Upcoming Bookings -->
+            <div x-show="activeTab === 'upcoming'" class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800" role="tabpanel">
+                {% if upcoming_bookings %}
+                <div class="grid gap-6">
+                    {% for booking in upcoming_bookings %}
+                    {% include "marketplace/components/booking_card.html" with booking=booking
+                    is_specialist=is_specialist %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <div
+                        class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-alt text-2xl text-slate-400"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">{% trans "Нет предстоящих
+                        бронирований" %}</h3>
+                    <p class="text-slate-500 dark:text-slate-400">{% trans "Здесь будут отображаться ваши активные
+                        записи." %}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Past Bookings -->
+            <div x-show="activeTab === 'past'" class="hidden p-4 rounded-lg bg-slate-50 dark:bg-slate-800"
+                role="tabpanel" :class="{ 'hidden': activeTab !== 'past' }">
+                {% if past_bookings %}
+                <div class="grid gap-6">
+                    {% for booking in past_bookings %}
+                    {% include "marketplace/components/booking_card.html" with booking=booking
+                    is_specialist=is_specialist %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <p class="text-slate-500 dark:text-slate-400">{% trans "История бронирований пуста." %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

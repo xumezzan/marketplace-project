@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from .models import Task, Offer, Deal, Category, Review, PortfolioItem
+from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message
 from .forms import TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm
 
 User = get_user_model()
@@ -582,7 +582,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .services.ai_service import analyze_task_description
-from .models import PortfolioItem, Escrow
+from .models import PortfolioItem, Escrow, Booking
 
 
 @api_view(['POST'])
@@ -798,16 +798,186 @@ class SpecialistDetailView(DetailView):
         context['portfolio_items'] = portfolio_items
         
         # Получаем отзывы
-        reviews = specialist.reviews_received.all().select_related('client', 'task').order_by('-created_at')
+        reviews = Review.objects.filter(specialist=specialist).select_related('task', 'client').order_by('-created_at')
         context['reviews'] = reviews
         
-        # Статистика отзывов
-        from django.db.models import Count
-        rating_stats = reviews.values('rating').annotate(count=Count('rating')).order_by('-rating')
-        context['rating_stats'] = {item['rating']: item['count'] for item in rating_stats}
+        # Статистика оценок
+        rating_stats = {
+            '5': reviews.filter(rating=5).count(),
+            '4': reviews.filter(rating=4).count(),
+            '3': reviews.filter(rating=3).count(),
+            '2': reviews.filter(rating=2).count(),
+            '1': reviews.filter(rating=1).count(),
+        }
+        context['rating_stats'] = rating_stats
         
-        # Категории
-        if context['profile']:
+        # Получаем категории специалиста для отображения
+        if 'profile' in context and context['profile']:
             context['categories'] = context['profile'].categories.all()
+        else:
+            context['categories'] = []
+            
+        return context
+
+
+class BookingListView(LoginRequiredMixin, ListView):
+    """
+    Список бронирований для клиентов и специалистов.
+    """
+    model = Booking
+    template_name = 'marketplace/booking_list.html'
+    context_object_name = 'bookings'
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_client:
+            return Booking.objects.filter(client=user).select_related('specialist', 'task').order_by('-scheduled_date', '-scheduled_time')
+        elif user.is_specialist:
+            return Booking.objects.filter(specialist=user).select_related('client', 'task').order_by('-scheduled_date', '-scheduled_time')
+        return Booking.objects.none()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        bookings = self.get_queryset()
+        
+        from django.utils import timezone
+        now = timezone.now().date()
+        
+        context['upcoming_bookings'] = bookings.filter(scheduled_date__gte=now).exclude(status__in=[Booking.Status.CANCELLED, Booking.Status.COMPLETED])
+        context['past_bookings'] = bookings.filter(scheduled_date__lt=now) | bookings.filter(status__in=[Booking.Status.CANCELLED, Booking.Status.COMPLETED])
+        context['is_specialist'] = user.is_specialist
         
         return context
+
+
+class UpdateBookingStatusView(LoginRequiredMixin, View):
+    """
+    Обновление статуса бронирования (Подтвердить, Отменить, Завершить).
+    """
+    def post(self, request, pk):
+        booking = get_object_or_404(Booking, pk=pk)
+        action = request.POST.get('action')
+        user = request.user
+        
+        # Проверка прав
+        if user != booking.client and user != booking.specialist:
+            messages.error(request, 'У вас нет прав на изменение этого бронирования.')
+            return redirect('marketplace:booking_list')
+            
+        if action == 'confirm':
+            if user == booking.specialist and booking.status == Booking.Status.PENDING:
+                booking.status = Booking.Status.CONFIRMED
+                booking.save()
+                messages.success(request, 'Бронирование подтверждено.')
+            else:
+                messages.error(request, 'Невозможно подтвердить бронирование.')
+                
+        elif action == 'reject':
+            if user == booking.specialist and booking.status == Booking.Status.PENDING:
+                booking.status = Booking.Status.CANCELLED
+                booking.save()
+                messages.success(request, 'Бронирование отклонено.')
+            else:
+                messages.error(request, 'Невозможно отклонить бронирование.')
+                
+        elif action == 'cancel':
+            if booking.status in [Booking.Status.PENDING, Booking.Status.CONFIRMED]:
+                booking.status = Booking.Status.CANCELLED
+                booking.save()
+                messages.success(request, 'Бронирование отменено.')
+            else:
+                messages.error(request, 'Невозможно отменить это бронирование.')
+                
+        elif action == 'complete':
+            if booking.status == Booking.Status.CONFIRMED:
+                booking.status = Booking.Status.COMPLETED
+                booking.save()
+                messages.success(request, 'Бронирование завершено.')
+            else:
+                messages.error(request, 'Невозможно завершить это бронирование.')
+                
+        return redirect('marketplace:booking_list')
+
+
+class ConversationListView(LoginRequiredMixin, ListView):
+    """
+    Список всех переписок пользователя.
+    """
+    model = Conversation
+    template_name = 'marketplace/conversation_list.html'
+    context_object_name = 'conversations'
+    
+    def get_queryset(self):
+        user = self.request.user
+        from django.db.models import Q
+        return Conversation.objects.filter(
+            Q(participant1=user) | Q(participant2=user)
+        ).select_related('participant1', 'participant2').prefetch_related('messages').order_by('-updated_at')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add other participant and last message for each conversation
+        conversations_with_data = []
+        for conv in context['conversations']:
+            conversations_with_data.append({
+                'conversation': conv,
+                'other_participant': conv.get_other_participant(self.request.user),
+                'last_message': conv.get_last_message(),
+                'unread_count': conv.get_unread_count(self.request.user),
+            })
+        context['conversations_with_data'] = conversations_with_data
+        return context
+
+
+class ConversationDetailView(LoginRequiredMixin, DetailView):
+    """
+    Детальный вид переписки с сообщениями.
+    """
+    model = Conversation
+    template_name = 'marketplace/conversation_detail.html'
+    context_object_name = 'conversation'
+    
+    def get_queryset(self):
+        user = self.request.user
+        from django.db.models import Q
+        return Conversation.objects.filter(
+            Q(participant1=user) | Q(participant2=user)
+        ).select_related('participant1', 'participant2')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        conversation = self.get_object()
+        context['other_participant'] = conversation.get_other_participant(self.request.user)
+        context['messages'] = conversation.messages.select_related('sender').order_by('created_at')
+        return context
+
+
+@login_required
+def start_conversation(request, specialist_id):
+    """
+    Создать или получить существующую переписку со специалистом.
+    """
+    specialist = get_object_or_404(User, id=specialist_id, is_specialist=True)
+    user = request.user
+    
+    if user == specialist:
+        messages.error(request, 'Вы не можете начать переписку с самим собой.')
+        return redirect('marketplace:specialist_detail', pk=specialist_id)
+    
+    from django.db.models import Q
+    # Try to find existing conversation
+    conversation = Conversation.objects.filter(
+        Q(participant1=user, participant2=specialist) |
+        Q(participant1=specialist, participant2=user)
+    ).first()
+    
+    if not conversation:
+        # Create new conversation
+        conversation = Conversation.objects.create(
+            participant1=user,
+            participant2=specialist
+        )
+        messages.success(request, f'Переписка с {specialist.get_full_name() or specialist.username} создана.')
+    
+    return redirect('marketplace:conversation_detail', pk=conversation.id)

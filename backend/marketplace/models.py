@@ -1089,3 +1089,85 @@ class AIRequest(models.Model):
     def __str__(self) -> str:
         user_str = self.user.username if self.user else 'Анонимный'
         return f"{self.get_request_type_display()} - {user_str} ({self.created_at.strftime('%Y-%m-%d %H:%M')})"
+
+
+class Conversation(models.Model):
+    """
+    Модель для хранения переписки между двумя пользователями.
+    """
+    from django.conf import settings
+    
+    participant1 = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='conversations_as_participant1',
+        verbose_name='участник 1'
+    )
+    participant2 = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='conversations_as_participant2',
+        verbose_name='участник 2'
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+    
+    class Meta:
+        db_table = 'conversations'
+        verbose_name = 'переписка'
+        verbose_name_plural = 'переписки'
+        ordering = ['-updated_at']
+        unique_together = [['participant1', 'participant2']]
+        indexes = [
+            models.Index(fields=['participant1', 'participant2']),
+            models.Index(fields=['-updated_at']),
+        ]
+    
+    def __str__(self):
+        return f"Conversation between {self.participant1.username} and {self.participant2.username}"
+    
+    def get_other_participant(self, user):
+        """Возвращает другого участника переписки."""
+        return self.participant2 if self.participant1 == user else self.participant1
+    
+    def get_last_message(self):
+        """Возвращает последнее сообщение в переписке."""
+        return self.messages.order_by('-created_at').first()
+    
+    def get_unread_count(self, user):
+        """Возвращает количество непрочитанных сообщений для пользователя."""
+        return self.messages.filter(is_read=False).exclude(sender=user).count()
+
+
+class Message(models.Model):
+    """
+    Модель для хранения отдельного сообщения в переписке.
+    """
+    conversation = models.ForeignKey(
+        Conversation,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        verbose_name='переписка'
+    )
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='marketplace_sent_messages',
+        verbose_name='отправитель'
+    )
+    content = models.TextField('содержание')
+    is_read = models.BooleanField('прочитано', default=False)
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    
+    class Meta:
+        db_table = 'messages'
+        verbose_name = 'сообщение'
+        verbose_name_plural = 'сообщения'
+        ordering = ['created_at']
+        indexes = [
+            models.Index(fields=['conversation', 'created_at']),
+            models.Index(fields=['sender', 'created_at']),
+        ]
+    
+    def __str__(self):
+        return f"Message from {self.sender.username} at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
