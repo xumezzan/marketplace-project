@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 21:42+0000\n"
+"POT-Creation-Date: 2025-11-22 09:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,132 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: marketplace/templates/marketplace/static/help.html:4
+#: marketplace/templates/marketplace/home.html:4
+#, fuzzy
+#| msgid "Для специалистов"
+msgid "Поиск специалистов"
+msgstr "Mutaxassislar uchun"
+
+#: marketplace/templates/marketplace/home.html:16
+msgid "Найдите профи"
+msgstr "Mutaxassislarni toping"
+
+#: marketplace/templates/marketplace/home.html:16
+msgid "для любой задачи"
+msgstr "har qanday vazifa uchun"
+
+#: marketplace/templates/marketplace/home.html:31
+msgid "Что нужно сделать?"
+msgstr "Nima qilish kerak?"
+
+#: marketplace/templates/marketplace/home.html:35
+msgid "Найти"
+msgstr "Topish"
+
+#: marketplace/templates/marketplace/home.html:43
+msgid "Проверенные профили"
+msgstr "Tasdiqlangan profillar"
+
+#: marketplace/templates/marketplace/home.html:47
+msgid "Честные отзывы"
+msgstr "Haqiqiy sharhlar"
+
+#: marketplace/templates/marketplace/home.html:51
+msgid "специалистов"
+msgstr "mutaxassislar"
+
+#: marketplace/templates/marketplace/home.html:81
+#, fuzzy
+#| msgid "специалистов"
+msgid "Специалистов"
+msgstr "mutaxassislar"
+
+#: marketplace/templates/marketplace/home.html:101
+msgid "Активных задач"
+msgstr "Faol vazifalar"
+
+#: marketplace/templates/marketplace/home.html:120
+msgid "Средний рейтинг"
+msgstr "O'rtacha reyting"
+
+#: marketplace/templates/marketplace/home.html:135
+msgid "Безопасные сделки"
+msgstr "Xavfsiz bitimlar"
+
+#: marketplace/templates/marketplace/home.html:136
+msgid "Escrow система защиты платежей"
+msgstr "To'lovlarni himoya qilish Escrow tizimi"
+
+#: marketplace/templates/marketplace/home.html:148
+msgid "Популярные категории"
+msgstr "Ommabop toifalar"
+
+#: marketplace/templates/marketplace/home.html:224
+msgid "Рекомендуемые специалисты"
+msgstr "Tavsiya etilgan mutaxassislar"
+
+#: marketplace/templates/marketplace/home.html:252
+msgid "Специалист"
+msgstr "Mutaxassis"
+
+#: marketplace/templates/marketplace/home.html:266
+msgid "Опытный специалист"
+msgstr "Tajribali mutaxassis"
+
+#: marketplace/templates/marketplace/home.html:275
+msgid "работ"
+msgstr "ishlar"
+
+#: marketplace/templates/marketplace/home.html:282
+msgid "от"
+msgstr "dan"
+
+#: marketplace/templates/marketplace/home.html:282
+msgid "₽/час"
+msgstr "so'm/soat"
+
+#: marketplace/templates/marketplace/home.html:284
+msgid "По договоренности"
+msgstr "Kelishuv bo'yicha"
+
+#: marketplace/templates/marketplace/home.html:289
+msgid "Профиль"
+msgstr "Profil"
+
+#: marketplace/templates/marketplace/home.html:290
+msgid "Открыть"
+msgstr "Ochish"
+
+#: marketplace/templates/marketplace/home.html:296
+msgid "Специалисты появятся скоро"
+msgstr "Mutaxassislar tez orada paydo bo'ladi"
+
+#: marketplace/templates/marketplace/home.html:301
+msgid "Все специалисты"
+msgstr "Barcha mutaxassislar"
+
+#: marketplace/templates/marketplace/home.html:310
+#: marketplace/templates/marketplace/static/how_it_works.html:4
+#: marketplace/templates/marketplace/static/how_it_works.html:10
+#: marketplace/templates/marketplace/static/safe_deal.html:21
+#: templates/base.html:268
+msgid "Как это работает"
+msgstr "Bu qanday ishlaydi"
+
+#: marketplace/templates/marketplace/home.html:321
+msgid "Создайте задачу"
+msgstr "Vazifa yarating"
+
+#: marketplace/templates/marketplace/home.html:329
+#: marketplace/templates/marketplace/static/how_it_works.html:34
+msgid "Получите отклики"
+msgstr "Takliflarni qabul qiling"
+
+#: marketplace/templates/marketplace/home.html:337
+msgid "Договоритесь о работе"
+msgstr "Ish haqida kelishib oling"
+
+#: marketplace/templates/marketplace/static/help.html:4 templates/base.html:279
 msgid "Помощь"
 msgstr "Yordam"
 
@@ -40,9 +165,9 @@ msgid ""
 "бюджетом и сроками. Вы можете использовать AI-помощник для автоматического "
 "заполнения полей."
 msgstr ""
-"Menyudagi 'Buyurtma yaratish' tugmasini bosing, vazifa tavsifini, byudjet "
-"va muddatlarni to'ldiring. Maydonlarni avtomatik to'ldirish uchun AI-yordamchidan "
-"foydalanishingiz mumkin."
+"Menyudagi 'Buyurtma yaratish' tugmasini bosing, vazifa tavsifini, byudjet va "
+"muddatlarni to'ldiring. Maydonlarni avtomatik to'ldirish uchun AI-"
+"yordamchidan foydalanishingiz mumkin."
 
 #: marketplace/templates/marketplace/static/help.html:31
 msgid "Как стать специалистом?"
@@ -103,12 +228,6 @@ msgstr "Ish vaqti"
 msgid "Пн-Пт: 9:00 - 18:00"
 msgstr "Dush-Jum: 9:00 - 18:00"
 
-#: marketplace/templates/marketplace/static/how_it_works.html:4
-#: marketplace/templates/marketplace/static/how_it_works.html:10
-#: marketplace/templates/marketplace/static/safe_deal.html:21
-msgid "Как это работает"
-msgstr "Bu qanday ishlaydi"
-
 #: marketplace/templates/marketplace/static/how_it_works.html:15
 msgid ""
 "ServiceHub - это удобная платформа для поиска специалистов и выполнения "
@@ -123,6 +242,10 @@ msgid "Для клиентов"
 msgstr "Mijozlar uchun"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:27
+#, fuzzy
+#| msgid "Создать заказ"
+msgid "Создайте заказ"
+msgstr "Buyurtma yaratish"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:28
 msgid ""
@@ -131,10 +254,6 @@ msgid ""
 msgstr ""
 "Vazifani tavsiflang, byudjet va muddatlarni ko'rsating. Shaklni avtomatik "
 "to'ldirish uchun AI-yordamchidan foydalaning."
-
-#: marketplace/templates/marketplace/static/how_it_works.html:34
-msgid "Получите отклики"
-msgstr "Takliflarni qabul qiling"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:35
 msgid ""
@@ -189,7 +308,8 @@ msgstr "Buyurtmalarni toping"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:71
 msgid "Просматривайте доступные заказы в ваших категориях и городе."
-msgstr "Kategoriyalaringiz va shahringizdagi mavjud buyurtmalarni ko'rib chiqing."
+msgstr ""
+"Kategoriyalaringiz va shahringizdagi mavjud buyurtmalarni ko'rib chiqing."
 
 #: marketplace/templates/marketplace/static/how_it_works.html:77
 msgid "Откликнитесь на заказ"
@@ -197,7 +317,8 @@ msgstr "Buyurtmaga javob bering"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:78
 msgid "Предложите свою цену и опишите, как будете выполнять работу."
-msgstr "O'z narxingizni taklif qiling va ishni qanday bajarishingizni tavsiflang."
+msgstr ""
+"O'z narxingizni taklif qiling va ishni qanday bajarishingizni tavsiflang."
 
 #: marketplace/templates/marketplace/static/how_it_works.html:84
 msgid "Выполните работу"
@@ -208,11 +329,12 @@ msgid ""
 "После принятия оффера выполните работу качественно и в срок. Получите оплату "
 "после подтверждения клиентом."
 msgstr ""
-"Taklif qabul qilingandan so'ng, ishni sifatli va o'z vaqtida bajaring. "
-"Mijoz tasdiqlaganidan keyin to'lovni oling."
+"Taklif qabul qilingandan so'ng, ishni sifatli va o'z vaqtida bajaring. Mijoz "
+"tasdiqlaganidan keyin to'lovni oling."
 
 #: marketplace/templates/marketplace/static/pricing.html:4
 #: marketplace/templates/marketplace/static/pricing.html:10
+#: templates/base.html:278
 msgid "Тарифы"
 msgstr "Tariflar"
 
@@ -276,6 +398,7 @@ msgstr ""
 
 #: marketplace/templates/marketplace/static/privacy_policy.html:4
 #: marketplace/templates/marketplace/static/privacy_policy.html:10
+#: templates/base.html:314
 msgid "Политика конфиденциальности"
 msgstr "Maxfiylik siyosati"
 
@@ -293,8 +416,8 @@ msgid ""
 "Настоящая Политика конфиденциальности определяет порядок обработки и защиты "
 "персональных данных пользователей платформы ServiceHub."
 msgstr ""
-"Ushbu Maxfiylik siyosati ServiceHub platformasi foydalanuvchilarining shaxsiy "
-"ma'lumotlarini qayta ishlash va himoya qilish tartibini belgilaydi."
+"Ushbu Maxfiylik siyosati ServiceHub platformasi foydalanuvchilarining "
+"shaxsiy ma'lumotlarini qayta ishlash va himoya qilish tartibini belgilaydi."
 
 #: marketplace/templates/marketplace/static/privacy_policy.html:29
 msgid "2. Собираемая информация"
@@ -390,6 +513,7 @@ msgstr "Maxfiylik masalalari bo'yicha murojaat qiling:"
 
 #: marketplace/templates/marketplace/static/safe_deal.html:4
 #: marketplace/templates/marketplace/static/safe_deal.html:10
+#: templates/base.html:267
 msgid "Безопасная сделка"
 msgstr "Xavfsiz bitim"
 
@@ -455,6 +579,7 @@ msgstr ""
 
 #: marketplace/templates/marketplace/static/terms_of_service.html:4
 #: marketplace/templates/marketplace/static/terms_of_service.html:10
+#: templates/base.html:316
 msgid "Условия использования"
 msgstr "Foydalanish shartlari"
 
@@ -468,9 +593,9 @@ msgid ""
 "использования. Если вы не согласны с условиями, пожалуйста, не используйте "
 "платформу."
 msgstr ""
-"ServiceHub platformasidan foydalangan holda, siz ushbu Foydalanish shartlariga "
-"rozilik bildirasiz. Agar shartlarga rozi bo'lmasangiz, iltimos, platformadan "
-"foydalanmang."
+"ServiceHub platformasidan foydalangan holda, siz ushbu Foydalanish "
+"shartlariga rozilik bildirasiz. Agar shartlarga rozi bo'lmasangiz, iltimos, "
+"platformadan foydalanmang."
 
 #: marketplace/templates/marketplace/static/terms_of_service.html:29
 msgid "2. Описание сервиса"
@@ -555,152 +680,94 @@ msgstr "7. Kontaktlar"
 msgid "По вопросам использования платформы обращайтесь:"
 msgstr "Platformadan foydalanish masalalari bo'yicha murojaat qiling:"
 
-msgid "Найдите профи"
-msgstr "Mutaxassislarni toping"
-
-msgid "для любой задачи"
-msgstr "har qanday vazifa uchun"
-
-msgid "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и многое другое. Быстро, безопасно и качественно."
-msgstr "Minglab tasdiqlangan mutaxassislar sizga yordam berishga tayyor. Ta'mirlash, ta'lim, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
-
-msgid "Что нужно сделать?"
-msgstr "Nima qilish kerak?"
-
-msgid "Найти"
-msgstr "Topish"
-
-msgid "Проверенные профили"
-msgstr "Tasdiqlangan profillar"
-
-msgid "Честные отзывы"
-msgstr "Haqiqiy sharhlar"
-
-msgid "специалистов"
-msgstr "mutaxassislar"
-
-msgid "Активных задач"
-msgstr "Faol vazifalar"
-
-msgid "Средний рейтинг"
-msgstr "O'rtacha reyting"
-
-msgid "Безопасные сделки"
-msgstr "Xavfsiz bitimlar"
-
-msgid "Escrow система защиты платежей"
-msgstr "To'lovlarni himoya qilish Escrow tizimi"
-
-msgid "Популярные категории"
-msgstr "Ommabop toifalar"
-
-msgid "Ремонт"
-msgstr "Ta'mirlash"
-
-msgid "Обучение"
-msgstr "Ta'lim"
-
-msgid "Красота"
-msgstr "Go'zallik"
-
-msgid "Перевозки"
-msgstr "Tashish"
-
-msgid "IT услуги"
-msgstr "IT xizmatlari"
-
-msgid "Все категории"
-msgstr "Barcha toifalar"
-
-msgid "Рекомендуемые специалисты"
-msgstr "Tavsiya etilgan mutaxassislar"
-
-msgid "Профессионалы с высоким рейтингом и отзывами"
-msgstr "Yuqori reyting va sharhlarga ega professionallar"
-
-msgid "Все специалисты"
-msgstr "Barcha mutaxassislar"
-
-msgid "Специалисты появятся скоро"
-msgstr "Mutaxassislar tez orada paydo bo'ladi"
-
-msgid "Всего 3 простых шага, чтобы решить вашу задачу"
-msgstr "Vazifangizni hal qilish uchun atigi 3 oddiy qadam"
-
-msgid "Создайте задачу"
-msgstr "Vazifa yarating"
-
-msgid "Опишите, что нужно сделать. Это бесплатно и займет пару минут."
-msgstr "Nima qilish kerakligini tasvirlab bering. Bu bepul va bir necha daqiqa vaqt oladi."
-
-msgid "Специалисты предложат свои услуги и цены. Выберите лучшего."
-msgstr "Mutaxassislar o'z xizmatlari va narxlarini taklif qilishadi. Eng yaxshisini tanlang."
-
-msgid "Договоритесь о работе"
-msgstr "Ish haqida kelishib oling"
-
-msgid "Обсудите детали в чате и выберите исполнителя."
-msgstr "Chatda tafsilotlarni muhokama qiling va ijrochini tanlang."
-
-msgid "Найти специалиста"
-msgstr "Mutaxassis topish"
-
-msgid "Мои заказы"
-msgstr "Mening buyurtmalarim"
-
-msgid "Стать специалистом"
-msgstr "Mutaxassis bo'lish"
-
+#: templates/base.html:128 templates/base.html:265
 msgid "Создать заказ"
 msgstr "Buyurtma yaratish"
 
-msgid "Профиль"
-msgstr "Profil"
-
-msgid "Выйти"
-msgstr "Chiqish"
-
+#: templates/base.html:191
 msgid "Язык"
 msgstr "Til"
 
-msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
-msgstr "Mutaxassislarni qidirish bo'yicha №1 xizmat. Ishonchli, tez, qulay."
-
+#: templates/base.html:263
 msgid "Клиентам"
 msgstr "Mijozlarga"
 
+#: templates/base.html:266
+msgid "Найти специалиста"
+msgstr "Mutaxassis topish"
+
+#: templates/base.html:274
 msgid "Специалистам"
 msgstr "Mutaxassislarga"
 
+#: templates/base.html:276
 msgid "База заказов"
 msgstr "Buyurtmalar bazasi"
 
+#: templates/base.html:277
+msgid "Стать специалистом"
+msgstr "Mutaxassis bo'lish"
+
+#: templates/base.html:285
 msgid "Контакты"
 msgstr "Kontaktlar"
 
+#: templates/base.html:311
 msgid "Все права защищены."
 msgstr "Barcha huquqlar himoyalangan."
 
-msgid "Специалист"
-msgstr "Mutaxassis"
+#~ msgid ""
+#~ "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, "
+#~ "красота, IT и многое другое. Быстро, безопасно и качественно."
+#~ msgstr ""
+#~ "Minglab tasdiqlangan mutaxassislar sizga yordam berishga tayyor. "
+#~ "Ta'mirlash, ta'lim, go'zallik, IT va boshqalar. Tez, xavfsiz va sifatli."
 
-msgid "отзывов"
-msgstr "sharhlar"
+#~ msgid "Ремонт"
+#~ msgstr "Ta'mirlash"
 
-msgid "Опытный специалист"
-msgstr "Tajribali mutaxassis"
+#~ msgid "Обучение"
+#~ msgstr "Ta'lim"
 
-msgid "работ"
-msgstr "ishlar"
+#~ msgid "Красота"
+#~ msgstr "Go'zallik"
 
-msgid "от"
-msgstr "dan"
+#~ msgid "Перевозки"
+#~ msgstr "Tashish"
 
-msgid "₽/час"
-msgstr "so'm/soat"
+#~ msgid "IT услуги"
+#~ msgstr "IT xizmatlari"
 
-msgid "По договоренности"
-msgstr "Kelishuv bo'yicha"
+#~ msgid "Все категории"
+#~ msgstr "Barcha toifalar"
 
-msgid "Открыть"
-msgstr "Ochish"
+#~ msgid "Профессионалы с высоким рейтингом и отзывами"
+#~ msgstr "Yuqori reyting va sharhlarga ega professionallar"
+
+#~ msgid "Всего 3 простых шага, чтобы решить вашу задачу"
+#~ msgstr "Vazifangizni hal qilish uchun atigi 3 oddiy qadam"
+
+#~ msgid "Опишите, что нужно сделать. Это бесплатно и займет пару минут."
+#~ msgstr ""
+#~ "Nima qilish kerakligini tasvirlab bering. Bu bepul va bir necha daqiqa "
+#~ "vaqt oladi."
+
+#~ msgid "Специалисты предложат свои услуги и цены. Выберите лучшего."
+#~ msgstr ""
+#~ "Mutaxassislar o'z xizmatlari va narxlarini taklif qilishadi. Eng "
+#~ "yaxshisini tanlang."
+
+#~ msgid "Обсудите детали в чате и выберите исполнителя."
+#~ msgstr "Chatda tafsilotlarni muhokama qiling va ijrochini tanlang."
+
+#~ msgid "Мои заказы"
+#~ msgstr "Mening buyurtmalarim"
+
+#~ msgid "Выйти"
+#~ msgstr "Chiqish"
+
+#~ msgid "Сервис поиска специалистов №1. Надежно, быстро, удобно."
+#~ msgstr "Mutaxassislarni qidirish bo'yicha №1 xizmat. Ishonchli, tez, qulay."
+
+#~ msgid "отзывов"
+#~ msgstr "sharhlar"
