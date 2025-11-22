@@ -17,7 +17,8 @@
                     </h1>
                     <p
                         class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 dark:text-slate-400">
-                        {% trans "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и многое другое. Быстро, безопасно и качественно." %}
+                        {% trans "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и
+                        многое другое. Быстро, безопасно и качественно." %}
                     </p>
 
                     <div class="mt-8 flex flex-col sm:flex-row gap-4 sm:justify-center lg:justify-start">
@@ -75,8 +76,7 @@
                                 <i class="bi bi-people-fill text-2xl text-indigo-600 dark:text-indigo-400"></i>
                             </div>
                             <div>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-white">{{
-                                    specialists_count|default:"150" }}+</p>
+                                <p class="text-3xl font-bold text-slate-900 dark:text-white">{{ specialists_count|default:"150" }}+</p>
                                 <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Специалистов" %}</p>
                             </div>
                         </div>
@@ -95,8 +95,7 @@
                                 <i class="bi bi-check-circle-fill text-2xl text-green-600 dark:text-green-400"></i>
                             </div>
                             <div>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-white">{{
-                                    tasks_count|default:"320" }}+</p>
+                                <p class="text-3xl font-bold text-slate-900 dark:text-white">{{ tasks_count|default:"320" }}+</p>
                                 <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Активных задач" %}</p>
                             </div>
                         </div>
@@ -154,7 +153,8 @@
                     <i class="bi bi-hammer text-2xl"></i>
                 </div>
                 <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{% trans "Ремонт" %}</span>
+                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{%
+                    trans "Ремонт" %}</span>
             </a>
 
             <a href="{% url 'marketplace:tasks_list' %}?category=education"
@@ -164,7 +164,8 @@
                     <i class="bi bi-book text-2xl"></i>
                 </div>
                 <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{% trans "Обучение" %}</span>
+                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{%
+                    trans "Обучение" %}</span>
             </a>
 
             <a href="{% url 'marketplace:tasks_list' %}?category=beauty"
@@ -174,7 +175,8 @@
                     <i class="bi bi-stars text-2xl"></i>
                 </div>
                 <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{% trans "Красота" %}</span>
+                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{%
+                    trans "Красота" %}</span>
             </a>
 
             <a href="{% url 'marketplace:tasks_list' %}?category=transport"
@@ -184,7 +186,8 @@
                     <i class="bi bi-truck text-2xl"></i>
                 </div>
                 <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{% trans "Перевозки" %}</span>
+                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{%
+                    trans "Перевозки" %}</span>
             </a>
 
             <a href="{% url 'marketplace:tasks_list' %}?category=it"
@@ -194,7 +197,8 @@
                     <i class="bi bi-display text-2xl"></i>
                 </div>
                 <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{% trans "IT услуги" %}</span>
+                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{%
+                    trans "IT услуги" %}</span>
             </a>
 
             <a href="{% url 'marketplace:tasks_list' %}"
@@ -204,7 +208,8 @@
                     <i class="bi bi-grid text-2xl"></i>
                 </div>
                 <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{% trans "Все категории" %}</span>
+                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-300 dark:group-hover:text-white">{%
+                    trans "Все категории" %}</span>
             </a>
         </div>
     </div>
@@ -215,9 +220,11 @@
     <div class="flex justify-between items-end mb-8">
         <div>
             <h2 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Рекомендуемые специалисты" %}</h2>
-            <p class="text-slate-500 mt-2 dark:text-slate-400">{% trans "Профессионалы с высоким рейтингом и отзывами" %}</p>
+            <p class="text-slate-500 mt-2 dark:text-slate-400">{% trans "Профессионалы с высоким рейтингом и отзывами"
+                %}</p>
         </div>
-        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-700 hidden sm:block no-underline">{% trans "Все специалисты" %} &rarr;</a>
+        <a href="#" class="text-indigo-600 font-medium hover:text-indigo-700 hidden sm:block no-underline">{% trans "Все
+            специалисты" %} &rarr;</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -248,7 +255,8 @@
                     <i class="bi bi-star-fill text-amber-500 text-xs dark:text-amber-400"></i>
                     <span class="font-bold text-slate-900 text-sm dark:text-white">{{ specialist.rating|floatformat:1
                         }}</span>
-                    <span class="text-slate-400 text-xs dark:text-slate-500">({{ specialist.reviews_received.count }} {% trans "отзывов" %})</span>
+                    <span class="text-slate-400 text-xs dark:text-slate-500">({{ specialist.reviews_received.count }} {%
+                        trans "отзывов" %})</span>
                 </div>
                 {% endif %}
 
@@ -298,7 +306,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Как это работает" %}</h2>
-            <p class="mt-4 text-lg text-slate-500 dark:text-slate-400">{% trans "Всего 3 простых шага, чтобы решить вашу задачу" %}
+            <p class="mt-4 text-lg text-slate-500 dark:text-slate-400">{% trans "Всего 3 простых шага, чтобы решить вашу
+                задачу" %}
             </p>
         </div>
 
@@ -308,14 +317,16 @@
                     class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-indigo-600 dark:bg-slate-800 dark:text-indigo-400">
                     1</div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3 dark:text-white">{% trans "Создайте задачу" %}</h3>
-                <p class="text-slate-600 dark:text-slate-400">{% trans "Опишите, что нужно сделать. Это бесплатно и займет пару минут." %}</p>
+                <p class="text-slate-600 dark:text-slate-400">{% trans "Опишите, что нужно сделать. Это бесплатно и
+                    займет пару минут." %}</p>
             </div>
             <div class="text-center">
                 <div
                     class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-indigo-600 dark:bg-slate-800 dark:text-indigo-400">
                     2</div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3 dark:text-white">{% trans "Получите отклики" %}</h3>
-                <p class="text-slate-600 dark:text-slate-400">{% trans "Специалисты предложат свои услуги и цены. Выберите лучшего." %}</p>
+                <p class="text-slate-600 dark:text-slate-400">{% trans "Специалисты предложат свои услуги и цены.
+                    Выберите лучшего." %}</p>
             </div>
             <div class="text-center">
                 <div
@@ -323,7 +334,8 @@
                     3</div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3 dark:text-white">{% trans "Договоритесь о работе" %}
                 </h3>
-                <p class="text-slate-600 dark:text-slate-400">{% trans "Обсудите детали в чате и выберите исполнителя." %}</p>
+                <p class="text-slate-600 dark:text-slate-400">{% trans "Обсудите детали в чате и выберите исполнителя."
+                    %}</p>
             </div>
         </div>
     </div>
