@@ -135,7 +135,7 @@ class ClientProfile(models.Model):
     )
     favorite_specialists = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        related_name='favorited_by',
+        related_name='favorited_by_clients',
         blank=True,
         verbose_name='избранные специалисты',
         help_text="Список избранных специалистов"
@@ -1183,7 +1183,7 @@ class Notification(models.Model):
         SYSTEM = 'system', 'Система'
         REVIEW = 'review', 'Отзыв'
         
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='marketplace_notifications')
     type = models.CharField(max_length=20, choices=Type.choices, default=Type.SYSTEM)
     title = models.CharField(max_length=255)
     message = models.TextField()

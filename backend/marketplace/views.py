@@ -1090,7 +1090,7 @@ class NotificationListView(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['unread_count'] = Notification.objects.filter(user=self.request.user, is_read=False).count()
+        context['unread_count'] = self.request.user.marketplace_notifications.filter(is_read=False).count()
         return context
 
 
@@ -1106,6 +1106,10 @@ def mark_notification_read(request, pk):
     return redirect('marketplace:notification_list')
 
 
+@login_required
+def mark_all_notifications_read(request):
+    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'success': True})
         
