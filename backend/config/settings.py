@@ -327,6 +327,8 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@services-marketplace.com')
+EMAIL_SUBJECT_PREFIX = '[ServiceHub] '
+SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000')
 
 # ============================================================================
 # ЛОГИРОВАНИЕ

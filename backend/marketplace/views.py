@@ -1223,7 +1223,7 @@ class TaskWizardView(LoginRequiredMixin, TemplateView):
 @require_POST
 def api_generate_task_description(request):
     """
-    Generate task description using AI (mocked for now).
+    Generate task description using AI.
     """
     title = request.POST.get('title')
     category_id = request.POST.get('category_id')
@@ -1231,17 +1231,9 @@ def api_generate_task_description(request):
     if not title:
         return JsonResponse({'success': False, 'error': 'Title is required'})
         
-    # In a real implementation, call Gemini API here
-    # For now, return a mocked response based on title
+    from .services.ai_service import AIService
     
-    mock_descriptions = [
-        f"Мне нужно выполнить задачу: {title}. \n\nТребования:\n- Качественное выполнение\n- Соблюдение сроков\n- Аккуратность\n\nЖду ваших предложений с ценами и примерами работ.",
-        f"Ищу специалиста для: {title}. \n\nВажно:\n1. Опыт работы от 3 лет\n2. Наличие инструментов\n3. Гарантия на работу\n\nПриступать можно в ближайшее время.",
-        f"Необходимо {title}. \n\nПодробности:\n- Объем работы средний\n- Материалы мои\n- Бюджет обсуждаем\n\nПишите, если свободны на этой неделе."
-    ]
-    
-    import random
-    description = random.choice(mock_descriptions)
+    description = AIService.generate_description(title, category_id)
     
     return JsonResponse({
         'success': True, 

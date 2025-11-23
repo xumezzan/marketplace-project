@@ -31,8 +31,8 @@ class WalletViewSet(viewsets.ReadOnlyModelViewSet):
         wallet, _ = Wallet.objects.get_or_create(user=self.request.user)
         return wallet
 
-    @action(detail=True, methods=['post'])
-    def deposit(self, request, pk=None):
+    @action(detail=False, methods=['post'])
+    def deposit(self, request):
         """
         Mock-метод для пополнения (для тестов).
         В реале пополнение идет через Payme/Stripe.
@@ -47,10 +47,11 @@ class WalletViewSet(viewsets.ReadOnlyModelViewSet):
         except (ValueError, TypeError, Decimal.InvalidOperation) as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
-    def withdraw(self, request, pk=None):
+    @action(detail=False, methods=['post'])
+    def withdraw(self, request):
         """
-        Mock-метод для вывода.
+        Запрос на вывод средств.
+        В данной версии просто списывает средства с баланса.
         """
         wallet = self.get_object()
         amount = request.data.get('amount')

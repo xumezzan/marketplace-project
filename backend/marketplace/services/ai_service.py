@@ -335,6 +335,82 @@ class AIService:
         return [task_id for task_id, score in scored_tasks]
     
     @staticmethod
+    def generate_description(title: str, category_id: int = None) -> str:
+        """
+        Генерация описания задачи на основе заголовка.
+        
+        Args:
+            title: Заголовок задачи
+            category_id: ID категории (опционально)
+            
+        Returns:
+            str: Сгенерированное описание
+        """
+        if not title:
+            return ""
+            
+        if GEMINI_AVAILABLE:
+            return AIService._generate_description_with_gemini(title, category_id)
+        else:
+            return AIService._generate_description_fallback(title)
+            
+    @staticmethod
+    def _generate_description_with_gemini(title: str, category_id: int = None) -> str:
+        """Генерация описания с использованием Gemini API."""
+        from marketplace.models import Category
+        
+        category_name = ""
+        if category_id:
+            try:
+                category = Category.objects.get(id=category_id)
+                category_name = f"Категория: {category.name}"
+            except:
+                pass
+                
+        prompt = f"""
+Ты - профессиональный помощник для создания заданий на маркетплейсе услуг.
+Пользователь хочет создать задание с заголовком: "{title}".
+{category_name}
+
+Твоя задача - написать подробное, вежливое и структурированное описание для этого задания, которое поможет специалистам лучше понять задачу.
+
+Включи в описание:
+1. Приветствие (кратко)
+2. Суть задачи (разверни заголовок)
+3. Возможные детали, которые обычно важны для таких задач (например, сроки, материалы, условия)
+4. Призыв к специалистам задавать вопросы или предлагать цену
+
+Не используй markdown форматирование (жирный шрифт, списки и т.д.), так как это будет вставлено в текстовое поле. Используй простые переносы строк.
+Текст должен быть от лица заказчика ("Мне нужно...", "Ищу...").
+Длина: 3-5 предложений + список важных деталей.
+"""
+        try:
+            # Логируем запрос
+            AIService._log_request('generate_description', {'title': title, 'category_id': category_id})
+            
+            # Отправляем запрос к Gemini
+            response = model.generate_content(prompt)
+            result_text = response.text.strip()
+            
+            # Убираем markdown блоки если есть (на всякий случай)
+            if result_text.startswith('```'):
+                result_text = result_text.split('```')[1]
+                if result_text.startswith('text'):
+                    result_text = result_text[4:]
+                result_text = result_text.strip()
+                
+            return result_text
+            
+        except Exception as e:
+            logger.error(f"Ошибка при генерации описания с Gemini: {e}")
+            return AIService._generate_description_fallback(title)
+
+    @staticmethod
+    def _generate_description_fallback(title: str) -> str:
+        """Фолбек генерация описания."""
+        return f"Мне нужно выполнить задачу: {title}. \n\nТребования:\n- Качественное выполнение\n- Соблюдение сроков\n- Аккуратность\n\nЖду ваших предложений с ценами и примерами работ."
+
+    @staticmethod
     def _log_request(request_type: str, input_data: Dict, user=None, output_data: Dict = None):
         """Логирование AI запроса в базу данных."""
         try:

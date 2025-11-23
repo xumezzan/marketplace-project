@@ -124,7 +124,8 @@ class PaymeService:
             trans.save()
             
             # !!! ВАЖНО: Обновляем статус сделки !!!
-            trans.deal.status = Deal.Status.IN_PROGRESS # Или IN_PROGRESS
+            # IN_PROGRESS означает "Оплачено, работа идет"
+            trans.deal.status = Deal.Status.IN_PROGRESS 
             trans.deal.save()
             
             return {

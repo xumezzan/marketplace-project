@@ -15,10 +15,20 @@
                         Диалог
                         {% endif %}
                     </h5>
-                    <a href="{% url 'marketplace:my_deals' %}" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> К сделкам
-                    </a>
+                    <div class="d-flex gap-2">
+                        <button id="video-call-btn" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-camera-video"></i> Видеозвонок
+                        </button>
+                        <a href="{% url 'marketplace:my_deals' %}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> К сделкам
+                        </a>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Video Call Container (Hidden by default) -->
+            <div id="video-call-container" class="d-none border-bottom" style="height: 400px;">
+                <!-- Jitsi iframe will be inserted here -->
             </div>
 
             <div class="card-body overflow-auto flex-grow-1 bg-light" id="messages-container">
@@ -46,17 +56,16 @@
                     </div>
                 </div>
                 {% empty %}
-                <div class="text-center py-5 text-muted">
+                <div id="empty-chat-message" class="text-center py-5 text-muted">
                     <p>Начните общение первым!</p>
                 </div>
                 {% endfor %}
             </div>
 
             <div class="card-footer bg-white p-3">
-                <form method="post" class="d-flex gap-2">
-                    {% csrf_token %}
-                    <textarea name="text" class="form-control" rows="1" placeholder="Напишите сообщение..." required
-                        style="resize: none;"></textarea>
+                <form id="chat-form" class="d-flex gap-2">
+                    <textarea id="chat-message-input" class="form-control" rows="1" placeholder="Напишите сообщение..."
+                        required style="resize: none;"></textarea>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-send"></i>
                     </button>
@@ -66,9 +75,116 @@
     </div>
 </div>
 
+<script src="https://meet.jit.si/external_api.js"></script>
 <script>
-    // Прокрутка вниз при загрузке
-    const container = document.getElementById('messages-container');
-    container.scrollTop = container.scrollHeight;
+    const conversationId = {{ conversation.id }};
+    const currentUserId = {{ user.id }};
+    const messagesContainer = document.getElementById('messages-container');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('chat-message-input');
+    const videoCallBtn = document.getElementById('video-call-btn');
+    const videoCallContainer = document.getElementById('video-call-container');
+
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // WebSocket Connection
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + conversationId + '/'
+    );
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        if (data.type === 'chat_message') {
+            appendMessage(data);
+        } else if (data.type === 'video_call_start') {
+            startVideoCall(data.sender_username);
+        }
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    // Send Message
+    chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (message) {
+            chatSocket.send(JSON.stringify({
+                'type': 'chat_message',
+                'message': message
+            }));
+            messageInput.value = '';
+        }
+    });
+
+    // Append Message to UI
+    function appendMessage(data) {
+        const isMe = data.sender_id === currentUserId;
+        const emptyMessage = document.getElementById('empty-chat-message');
+        if (emptyMessage) emptyMessage.remove();
+
+        const messageHtml = `
+            <div class="d-flex mb-3 ${isMe ? 'justify-content-end' : ''}">
+                <div class="card border-0 shadow-sm ${isMe ? 'bg-primary text-white' : 'bg-white'}" style="max-width: 75%;">
+                    <div class="card-body py-2 px-3">
+                        <p class="mb-1">${data.message.replace(/\n/g, '<br>')}</p>
+                        <div class="d-flex align-items-center justify-content-end gap-2">
+                            <small class="${isMe ? 'text-white-50' : 'text-muted'}" style="font-size: 0.7rem;">
+                                ${data.created_at.split(' ')[1]}
+                            </small>
+                            ${isMe ? '<i class="bi bi-check text-white-50" style="font-size: 0.8rem;"></i>' : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Video Call Logic
+    let api = null;
+
+    videoCallBtn.addEventListener('click', function () {
+        // Notify others
+        chatSocket.send(JSON.stringify({
+            'type': 'video_call_start'
+        }));
+    });
+
+    function startVideoCall(initiatorName) {
+        if (api) return; // Already in call
+
+        videoCallContainer.classList.remove('d-none');
+        const domain = 'meet.jit.si';
+        const options = {
+            roomName: 'ServiceHub_Conversation_' + conversationId,
+            width: '100%',
+            height: 400,
+            parentNode: videoCallContainer,
+            lang: 'ru',
+            userInfo: {
+                displayName: '{{ user.username }}'
+            }
+        };
+        api = new JitsiMeetExternalAPI(domain, options);
+
+        api.addEventListeners({
+            videoConferenceLeft: function () {
+                videoCallContainer.classList.add('d-none');
+                api.dispose();
+                api = null;
+            }
+        });
+    }
+
+    {% if conversation.video_call_started %}
+    // If call was already active (reloaded page), show join button or auto-join?
+    // For now, let's just let them click the button again.
+    {% endif %}
 </script>
 {% endblock %}

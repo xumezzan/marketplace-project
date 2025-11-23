@@ -687,6 +687,13 @@ class Deal(models.Model):
         validators=[MinValueValidator(0)],
         help_text="Финальная согласованная цена"
     )
+    commission_amount = models.DecimalField(
+        'комиссия платформы',
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        help_text="Сумма комиссии платформы"
+    )
     status = models.CharField(
         'статус',
         max_length=20,
