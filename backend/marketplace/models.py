@@ -423,6 +423,20 @@ class Task(models.Model):
         default=False,
         help_text="Задача была создана/структурирована с помощью ИИ"
     )
+    
+    class ModerationStatus(models.TextChoices):
+        PENDING = 'pending', 'На модерации'
+        APPROVED = 'approved', 'Одобрено'
+        REJECTED = 'rejected', 'Отклонено'
+
+    moderation_status = models.CharField(
+        'статус модерации',
+        max_length=20,
+        choices=ModerationStatus.choices,
+        default=ModerationStatus.PENDING,
+        help_text="Статус модерации задачи"
+    )
+    
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
     
@@ -591,6 +605,20 @@ class Review(models.Model):
         null=True,
         help_text="Текст отзыва (необязательно)"
     )
+    
+    class ModerationStatus(models.TextChoices):
+        PENDING = 'pending', 'На модерации'
+        APPROVED = 'approved', 'Одобрено'
+        REJECTED = 'rejected', 'Отклонено'
+
+    moderation_status = models.CharField(
+        'статус модерации',
+        max_length=20,
+        choices=ModerationStatus.choices,
+        default=ModerationStatus.PENDING,
+        help_text="Статус модерации отзыва"
+    )
+    
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
     
@@ -1233,3 +1261,70 @@ class Favorite(models.Model):
         
     def __str__(self):
         return f"{self.user} favorites {self.specialist}"
+
+class Dispute(models.Model):
+    """
+    Модель спора (арбитража) по сделке.
+    """
+    class Status(models.TextChoices):
+        OPEN = 'open', 'Открыт'
+        RESOLVED = 'resolved', 'Решен'
+        CLOSED = 'closed', 'Закрыт'
+        
+    class Resolution(models.TextChoices):
+        REFUND_CLIENT = 'refund_client', 'Возврат клиенту'
+        PAY_SPECIALIST = 'pay_specialist', 'Выплата специалисту'
+        SPLIT = 'split', 'Разделение средств' # На будущее
+        NONE = 'none', 'Без решения'
+
+    deal = models.ForeignKey(
+        Deal,
+        on_delete=models.CASCADE,
+        related_name='disputes',
+        verbose_name='сделка'
+    )
+    initiator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='initiated_disputes',
+        verbose_name='инициатор'
+    )
+    reason = models.TextField('причина спора')
+    description = models.TextField('описание ситуации')
+    
+    status = models.CharField(
+        'статус',
+        max_length=20,
+        choices=Status.choices,
+        default=Status.OPEN
+    )
+    resolution = models.CharField(
+        'решение',
+        max_length=20,
+        choices=Resolution.choices,
+        default=Resolution.NONE
+    )
+    resolution_comment = models.TextField(
+        'комментарий решения',
+        blank=True,
+        null=True
+    )
+    resolved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='resolved_disputes',
+        verbose_name='кем решено'
+    )
+    resolved_at = models.DateTimeField('дата решения', null=True, blank=True)
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+
+    class Meta:
+        verbose_name = 'спор'
+        verbose_name_plural = 'споры'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Спор по сделке {self.deal.id} ({self.get_status_display()})"

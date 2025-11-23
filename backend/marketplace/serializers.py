@@ -23,7 +23,7 @@ class TaskSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
     client_username = serializers.CharField(source='client.username', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
-    budget_display = serializers.CharField(source='budget_display', read_only=True)
+    budget_display = serializers.CharField(read_only=True)
     
     class Meta:
         model = Task
@@ -127,7 +127,6 @@ class OfferSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для модели User."""
     
-    role_display = serializers.CharField(source='get_role_display', read_only=True)
     reviews_count = serializers.SerializerMethodField()
     
     class Meta:
@@ -138,8 +137,8 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
-            'role',
-            'role_display',
+            'is_client',
+            'is_specialist',
             'phone',
             'city',
             'rating',

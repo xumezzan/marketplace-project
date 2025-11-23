@@ -4,7 +4,8 @@
 from django.contrib import admin
 from .models import (
     Category, Subcategory, ClientProfile, SpecialistProfile, 
-    Task, Offer, Review, Deal, PortfolioItem, Escrow, AIRequest, TimeSlot
+    Task, Offer, Review, Deal, PortfolioItem, Escrow, AIRequest, TimeSlot,
+    Dispute
 )
 
 
@@ -113,11 +114,12 @@ class TaskAdmin(admin.ModelAdmin):
         'format',
         'city',
         'status',
+        'moderation_status',
         'auto_structured',
         'budget_display',
         'created_at'
     ]
-    list_filter = ['status', 'format', 'auto_structured', 'category', 'city', 'created_at']
+    list_filter = ['status', 'moderation_status', 'format', 'auto_structured', 'category', 'city', 'created_at']
     search_fields = [
         'title',
         'description',
@@ -127,6 +129,7 @@ class TaskAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['created_at', 'updated_at']
     date_hierarchy = 'created_at'
+    actions = ['approve_tasks', 'reject_tasks']
     
     fieldsets = (
         ('Основная информация', {
@@ -145,12 +148,22 @@ class TaskAdmin(admin.ModelAdmin):
             'fields': ('preferred_date', 'preferred_time', 'deadline_date')
         }),
         ('Статус и метаданные', {
-            'fields': ('status', 'auto_structured')
+            'fields': ('status', 'moderation_status', 'auto_structured')
         }),
         ('Временные метки', {
             'fields': ('created_at', 'updated_at')
         }),
     )
+
+    @admin.action(description='Одобрить выбранные задачи')
+    def approve_tasks(self, request, queryset):
+        queryset.update(moderation_status=Task.ModerationStatus.APPROVED)
+        self.message_user(request, f'Одобрено задач: {queryset.count()}')
+
+    @admin.action(description='Отклонить выбранные задачи')
+    def reject_tasks(self, request, queryset):
+        queryset.update(moderation_status=Task.ModerationStatus.REJECTED)
+        self.message_user(request, f'Отклонено задач: {queryset.count()}')
 
 
 @admin.register(Offer)
@@ -190,9 +203,10 @@ class ReviewAdmin(admin.ModelAdmin):
         'client',
         'task',
         'rating',
+        'moderation_status',
         'created_at'
     ]
-    list_filter = ['rating', 'created_at']
+    list_filter = ['rating', 'moderation_status', 'created_at']
     search_fields = [
         'specialist__username',
         'client__username',
@@ -201,18 +215,29 @@ class ReviewAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['created_at', 'updated_at']
     date_hierarchy = 'created_at'
+    actions = ['approve_reviews', 'reject_reviews']
     
     fieldsets = (
         ('Участники', {
             'fields': ('specialist', 'client', 'task')
         }),
         ('Отзыв', {
-            'fields': ('rating', 'text')
+            'fields': ('rating', 'text', 'moderation_status')
         }),
         ('Временные метки', {
             'fields': ('created_at', 'updated_at')
         }),
     )
+
+    @admin.action(description='Одобрить выбранные отзывы')
+    def approve_reviews(self, request, queryset):
+        queryset.update(moderation_status=Review.ModerationStatus.APPROVED)
+        self.message_user(request, f'Одобрено отзывов: {queryset.count()}')
+
+    @admin.action(description='Отклонить выбранные отзывы')
+    def reject_reviews(self, request, queryset):
+        queryset.update(moderation_status=Review.ModerationStatus.REJECTED)
+        self.message_user(request, f'Отклонено отзывов: {queryset.count()}')
 
 
 @admin.register(Deal)
@@ -358,3 +383,50 @@ class TimeSlotAdmin(admin.ModelAdmin):
     ]
     date_hierarchy = 'date'
 
+
+@admin.register(Dispute)
+class DisputeAdmin(admin.ModelAdmin):
+    """Админ-интерфейс для модели Dispute."""
+    list_display = [
+        'id',
+        'deal',
+        'initiator',
+        'status',
+        'resolution',
+        'created_at'
+    ]
+    list_filter = ['status', 'resolution', 'created_at']
+    search_fields = [
+        'deal__task__title',
+        'initiator__username',
+        'reason',
+        'description'
+    ]
+    readonly_fields = ['created_at', 'updated_at', 'resolved_at', 'resolved_by']
+    date_hierarchy = 'created_at'
+    
+    fieldsets = (
+        ('Спор', {
+            'fields': ('deal', 'initiator', 'reason', 'description')
+        }),
+        ('Статус и решение', {
+            'fields': ('status', 'resolution', 'resolution_comment')
+        }),
+        ('Информация о решении', {
+            'fields': ('resolved_by', 'resolved_at')
+        }),
+        ('Временные метки', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+    
+    def save_model(self, request, obj, form, change):
+        if change and 'resolution' in form.changed_data:
+            obj.resolved_by = request.user
+            from django.utils import timezone
+            obj.resolved_at = timezone.now()
+            
+            # TODO: Implement automatic fund release based on resolution
+            # For now, just saving the status
+            
+        super().save_model(request, obj, form, change)

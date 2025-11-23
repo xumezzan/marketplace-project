@@ -1,176 +1,177 @@
-# Services Marketplace MVP
+# Services Marketplace
 
-A marketplace platform for connecting clients with service providers (like TaskRabbit/Profi.ru for local market).
+A full-featured marketplace platform for connecting clients with service providers, similar to TaskRabbit or Profi.ru, tailored for the Uzbekistan market.
+
+## Features
+
+- **User Management**: Dual-role system (Clients & Specialists) with profiles
+- **Task Management**: AI-powered task creation, browsing, and filtering
+- **Real-time Chat**: WebSocket-based messaging with video call integration (Jitsi Meet)
+- **Payments & Escrow**: Payme integration with 10% platform commission
+- **Admin Panel**: Content moderation and dispute resolution
+- **Analytics**: Specialist performance dashboards
+- **API Documentation**: Interactive Swagger/ReDoc interface
 
 ## Tech Stack
 
-- **Backend**: Django 5.2 + Django REST Framework
-- **Database**: PostgreSQL
-- **Frontend**: Server-rendered HTML templates (responsive, mobile-friendly)
-- **Containerization**: Docker & Docker Compose
+- **Backend**: Django 4.2 (LTS) + Django REST Framework
+- **Database**: PostgreSQL (production) / SQLite (development)
+- **Real-time**: Django Channels + Redis
+- **Payments**: Payme (Uzbekistan)
+- **AI**: Google Gemini API
+- **Containerization**: Docker + Docker Compose
+- **Web Server**: Nginx + Gunicorn (production)
 
-## Project Structure
+## Quick Start
 
-```
-services-marketplace/
-├── backend/              # Main Django project
-│   ├── config/           # Project settings (Django config)
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   ├── accounts/         # User model and authentication
-│   ├── marketplace/      # Main marketplace app (tasks, offers, deals, reviews)
-│   ├── templates/        # HTML templates
-│   ├── static/           # Static files (CSS, JS, images)
-│   ├── manage.py
-│   └── requirements.txt
-├── requirements.txt      # Root requirements (for deployment)
-├── Procfile             # For Render.com deployment
-├── render.yaml          # Render.com configuration
-├── Dockerfile
-└── docker-compose.yml
-```
+### Option 1: Docker (Recommended for Production)
 
-## Setup Instructions
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd services-marketplace
+   ```
 
-### Prerequisites
+2. **Create environment file:**
+   ```bash
+   cp backend/.env.prod backend/.env.prod.local
+   # Edit .env.prod.local with your production values
+   ```
 
-- Python 3.12+
-- PostgreSQL (or use Docker)
-- Docker & Docker Compose (optional, for containerized setup)
+3. **Build and run:**
+   ```bash
+   cd backend
+   docker-compose -f docker-compose.prod.yml up --build
+   ```
 
-### Option 1: Local Development (without Docker)
+4. **Create superuser:**
+   ```bash
+   docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+   ```
 
-1. **Create and activate virtual environment:**
+5. **Access the application:**
+   - Web app: http://localhost
+   - Admin panel: http://localhost/admin
+   - API Docs: http://localhost/api/schema/swagger-ui/
+
+### Option 2: Local Development
+
+1. **Prerequisites:**
+   - Python 3.9+
+   - Redis (for Channels)
+   - PostgreSQL (optional, defaults to SQLite)
+
+2. **Create virtual environment:**
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-2. **Install dependencies:**
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set up environment variables:**
-   Copy `.env.example` to `.env` and update values:
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` file with your settings. See `.env.example` for all available options.
-   
-   **Required variables:**
-   - `DJANGO_SECRET_KEY` - Secret key for Django (generate a secure one for production)
-   - `DJANGO_DEBUG=True` - Set to `False` in production
-   - `DJANGO_ALLOWED_HOSTS` - Comma-separated list of allowed hosts
-   
-   **Optional variables:**
-   - `DATABASE_URL` - PostgreSQL connection string (leave empty for SQLite)
-   - `GEMINI_API_KEY` - For AI task analysis feature
-   - `EMAIL_*` - For email notifications
-   - `CACHE_URL` - For Redis/Memcached caching
-
-4. **Create PostgreSQL database:**
-   ```bash
-   createdb marketplace_db
-   ```
-
-5. **Run migrations:**
+4. **Run migrations:**
    ```bash
    cd backend
-   python manage.py makemigrations
    python manage.py migrate
    ```
 
-6. **Create superuser:**
+5. **Create superuser:**
    ```bash
-   cd backend
    python manage.py createsuperuser
    ```
 
-7. **Run development server:**
+6. **Run development server:**
    ```bash
-   cd backend
    python manage.py runserver
    ```
 
-8. **Access the application:**
+7. **Access the application:**
    - Web app: http://localhost:8000
    - Admin panel: http://localhost:8000/admin
+   - API Docs: http://localhost:8000/api/schema/swagger-ui/
 
-### Option 2: Docker Development
+## Environment Variables
 
-1. **Create `.env` file** (same as above)
+### Required (Production)
+- `DJANGO_SECRET_KEY` - Django secret key (generate securely)
+- `DJANGO_ALLOWED_HOSTS` - Comma-separated list of allowed hosts
+- `DATABASE_URL` - PostgreSQL connection string
+- `REDIS_HOST` - Redis host (default: localhost)
+- `REDIS_PORT` - Redis port (default: 6379)
 
-2. **Build and run with Docker Compose:**
-   ```bash
-   docker-compose up --build
-   ```
+### Optional
+- `GEMINI_API_KEY` - Google Gemini API key for AI features
+- `PAYME_KEY` - Payme merchant key for payment processing
+- `EMAIL_HOST` - SMTP server for email notifications
+- `EMAIL_HOST_USER` - SMTP username
+- `EMAIL_HOST_PASSWORD` - SMTP password
 
-3. **Create superuser (in another terminal):**
-   ```bash
-   docker-compose exec web python manage.py createsuperuser
-   ```
+## API Documentation
 
-4. **Access the application:**
-   - Web app: http://localhost:8000
-   - Admin panel: http://localhost:8000/admin
+Interactive API documentation is available at:
+- **Swagger UI**: `/api/schema/swagger-ui/`
+- **ReDoc**: `/api/schema/redoc/`
+- **OpenAPI Schema**: `/api/schema/`
 
-## Database Models
+## Project Structure
 
-### Core Entities
+```
+services-marketplace/
+├── backend/
+│   ├── config/              # Django settings
+│   │   ├── settings/        # Split settings (base, dev, prod)
+│   │   ├── urls.py
+│   │   ├── asgi.py          # ASGI config (Channels)
+│   │   └── wsgi.py
+│   ├── accounts/            # User authentication
+│   ├── marketplace/         # Core marketplace logic
+│   ├── payments/            # Payment & wallet system
+│   ├── chat/                # Real-time chat & video
+│   ├── notifications/       # Notification system
+│   ├── static/              # Static files
+│   ├── templates/           # HTML templates
+│   ├── Dockerfile
+│   ├── docker-compose.prod.yml
+│   └── requirements.txt
+├── .github/
+│   └── workflows/
+│       └── ci.yml           # GitHub Actions CI
+└── README.md
+```
 
-1. **User** - Custom user model with roles (client/specialist)
-2. **Category** - Service categories (Repair, Tutor, Fitness, Beauty, etc.)
-3. **SpecialistProfile** - Specialist-specific information
-4. **Task** - Client service requests
-5. **Offer** - Specialist responses to tasks
-6. **Deal** - Completed agreements (optional for MVP)
+## Development
 
-## Next Steps
-
-After setting up the project:
-
-1. Create initial categories via admin panel
-2. Implement user registration and login views
-3. Create task creation forms
-4. Build task browsing and filtering
-5. Implement offer submission
-6. Add offer acceptance flow
-7. Create responsive frontend templates
-
-## Development Commands
-
+### Running Tests
 ```bash
-# Navigate to backend directory
 cd backend
-
-# Make migrations
-python manage.py makemigrations
-
-# Apply migrations
-python manage.py migrate
-
-# Create superuser
-python manage.py createsuperuser
-
-# Run development server
-python manage.py runserver
-
-# Run tests
 python manage.py test
+```
 
-# Collect static files (for production)
+### Linting
+```bash
+flake8 .
+```
+
+### Collecting Static Files
+```bash
 python manage.py collectstatic --noinput
 ```
 
-## Notes
+## Deployment
 
-- The project uses a custom User model (`accounts.User`)
-- All models are registered in Django admin for easy management
-- REST API endpoints are available at `/api/`
-- Frontend templates use Bootstrap 5 for responsive design
-- The project defaults to SQLite for local development
-- PostgreSQL is used automatically on Render.com via `DATABASE_URL` environment variable
+The project is production-ready with:
+- Docker containerization
+- Nginx reverse proxy
+- Gunicorn WSGI server
+- WhiteNoise for static files
+- PostgreSQL database
+- Redis for Channels
 
+See `backend/docker-compose.prod.yml` for the full production stack.
+
+## License
+
+MIT License

@@ -39,3 +39,37 @@ class PaymentService:
             'payout_amount': payout_amount,
             'commission_amount': commission_amount
         }
+
+    @staticmethod
+    @transaction.atomic
+    def refund_client(deal: Deal):
+        """
+        Refund the full amount to the client's wallet.
+        Used for dispute resolution or cancellation.
+        """
+        if deal.status != Deal.Status.IN_PROGRESS:
+            raise ValueError("Deal must be IN_PROGRESS to refund funds")
+            
+        amount = Decimal(deal.final_price)
+        
+        # 1. Update Deal
+        deal.status = Deal.Status.CANCELED
+        deal.save()
+        
+        # 2. Transfer to Client Wallet
+        client_wallet, _ = Wallet.objects.get_or_create(user=deal.client)
+        client_wallet.deposit(amount)
+        
+        return {
+            'success': True,
+            'refund_amount': amount
+        }
+
+    @staticmethod
+    @transaction.atomic
+    def force_pay_specialist(deal: Deal):
+        """
+        Force release funds to specialist (alias for release_funds).
+        Used for dispute resolution.
+        """
+        return PaymentService.release_funds(deal)

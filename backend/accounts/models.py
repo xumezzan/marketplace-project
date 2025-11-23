@@ -85,6 +85,19 @@ class User(AbstractUser):
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
     
+    class ModerationStatus(models.TextChoices):
+        PENDING = 'pending', 'На модерации'
+        APPROVED = 'approved', 'Одобрено'
+        REJECTED = 'rejected', 'Отклонено'
+
+    moderation_status = models.CharField(
+        'статус модерации',
+        max_length=20,
+        choices=ModerationStatus.choices,
+        default=ModerationStatus.APPROVED, # По умолчанию одобрен, чтобы не блокировать старых юзеров
+        help_text="Статус модерации профиля"
+    )
+    
     class Meta:
         db_table = 'users'
         verbose_name = 'пользователь'
