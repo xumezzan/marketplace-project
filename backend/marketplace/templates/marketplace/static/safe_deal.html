@@ -1,52 +1,51 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Безопасная сделка" %} - ServiceHub{% endblock %}
+{% block title %}Безопасная сделка - ServiceHub{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="bg-white rounded-2xl shadow-lg p-8 dark:bg-slate-800">
         <h1 class="text-4xl font-bold text-slate-900 mb-6 dark:text-white">
-            {% trans "Безопасная сделка" %}
+            Безопасная сделка
         </h1>
         
         <div class="prose prose-lg max-w-none dark:prose-invert">
             <p class="text-slate-600 dark:text-slate-300 mb-6">
-                {% trans "ServiceHub гарантирует безопасность всех сделок через систему Escrow (гарантийного депозита)." %}
+                ServiceHub гарантирует безопасность всех сделок через систему Escrow (гарантийного депозита).
             </p>
 
             <div class="space-y-6">
                 <section>
                     <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                        {% trans "Как это работает" %}
+                        Как это работает
                     </h2>
                     <ol class="list-decimal list-inside space-y-3 text-slate-600 dark:text-slate-300">
-                        <li>{% trans "Клиент создает заказ и указывает бюджет" %}</li>
-                        <li>{% trans "Специалист откликается и предлагает свою цену" %}</li>
-                        <li>{% trans "После принятия оффера средства автоматически резервируются на счету клиента" %}</li>
-                        <li>{% trans "Специалист выполняет работу" %}</li>
-                        <li>{% trans "Клиент подтверждает выполнение и средства переводятся специалисту" %}</li>
+                        <li>Клиент создает заказ и указывает бюджет</li>
+                        <li>Специалист откликается и предлагает свою цену</li>
+                        <li>После принятия оффера средства автоматически резервируются на счету клиента</li>
+                        <li>Специалист выполняет работу</li>
+                        <li>Клиент подтверждает выполнение и средства переводятся специалисту</li>
                     </ol>
                 </section>
 
                 <section>
                     <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                        {% trans "Гарантии безопасности" %}
+                        Гарантии безопасности
                     </h2>
                     <ul class="list-disc list-inside space-y-3 text-slate-600 dark:text-slate-300">
-                        <li>{% trans "Средства защищены до подтверждения выполнения работы" %}</li>
-                        <li>{% trans "Возможность возврата средств при невыполнении обязательств" %}</li>
-                        <li>{% trans "Прозрачная система разрешения споров" %}</li>
-                        <li>{% trans "Все транзакции защищены шифрованием" %}</li>
+                        <li>Средства защищены до подтверждения выполнения работы</li>
+                        <li>Возможность возврата средств при невыполнении обязательств</li>
+                        <li>Прозрачная система разрешения споров</li>
+                        <li>Все транзакции защищены шифрованием</li>
                     </ul>
                 </section>
 
                 <section>
                     <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                        {% trans "Комиссия платформы" %}
+                        Комиссия платформы
                     </h2>
                     <p class="text-slate-600 dark:text-slate-300">
-                        {% trans "Комиссия платформы составляет 10% от суммы сделки и взимается только после успешного завершения работы." %}
+                        Комиссия платформы составляет 10% от суммы сделки и взимается только после успешного завершения работы.
                     </p>
                 </section>
             </div>

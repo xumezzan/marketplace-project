@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 
-{% block title %}{% trans "Активные заявки" %} - ServiceHub{% endblock %}
+{% block title %}Активные заявки - ServiceHub{% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
@@ -10,15 +10,15 @@
         {# Page Header #}
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
-                <h1 class="text-4xl font-bold text-slate-900 dark:text-white">{% trans "Активные заявки" %}</h1>
+                <h1 class="text-4xl font-bold text-slate-900 dark:text-white">Активные заявки</h1>
                 <p class="mt-2 text-lg text-slate-600 dark:text-slate-400">
-                    {% trans "Находите интересные задачи и предлагайте свои услуги" %}
+                    Находите интересные задачи и предлагайте свои услуги
                 </p>
             </div>
             {% if user.is_authenticated and user.is_client %}
             <a href="{% url 'marketplace:task_create' %}"
                 class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg no-underline">
-                <i class="bi bi-plus-circle"></i> {% trans "Создать заявку" %}
+                <i class="bi bi-plus-circle"></i> Создать заявку
             </a>
             {% endif %}
         </div>
@@ -31,10 +31,10 @@
                 <div
                     class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sticky top-24">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">{% trans "Фильтры" %}</h3>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Фильтры</h3>
                         <a href="{% url 'marketplace:tasks_list' %}"
                             class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
-                            {% trans "Сбросить" %}
+                            Сбросить
                         </a>
                     </div>
 
@@ -42,21 +42,21 @@
                         {# Search #}
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                <i class="bi bi-search"></i> {% trans "Поиск" %}
+                                <i class="bi bi-search"></i> Поиск
                             </label>
                             <input type="text" name="q" value="{{ current_query }}"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors"
-                                placeholder="{% trans 'Название или описание...' %}">
+                                placeholder="Название или описание...">
                         </div>
 
                         {# Category #}
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                <i class="bi bi-grid"></i> {% trans "Категория" %}
+                                <i class="bi bi-grid"></i> Категория
                             </label>
                             <select name="category"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors">
-                                <option value="">{% trans "Любая" %}</option>
+                                <option value="">Любая</option>
                                 {% for cat in categories %}
                                 <option value="{{ cat.slug }}" {% if current_category == cat.slug %}selected{% endif %}>
                                     {{ cat.name }}
@@ -68,49 +68,46 @@
                         {# Location #}
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                <i class="bi bi-geo-alt"></i> {% trans "Город" %}
+                                <i class="bi bi-geo-alt"></i> Город
                             </label>
                             <input type="text" name="city" value="{{ current_city }}"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors"
-                                placeholder="{% trans 'Ташкент' %}">
+                                placeholder="Ташкент">
                         </div>
 
                         {# Budget Range #}
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                <i class="bi bi-currency-dollar"></i> {% trans "Бюджет" %}
+                                <i class="bi bi-currency-dollar"></i> Бюджет
                             </label>
                             <div class="flex gap-2">
                                 <input type="number" name="price_min" value="{{ current_price_min|default_if_none:'' }}"
                                     class="w-1/2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors text-sm"
-                                    placeholder="{% trans 'От' %}">
+                                    placeholder="От">
                                 <input type="number" name="price_max" value="{{ current_price_max|default_if_none:'' }}"
                                     class="w-1/2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors text-sm"
-                                    placeholder="{% trans 'До' %}">
+                                    placeholder="До">
                             </div>
                         </div>
 
                         {# Status #}
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                <i class="bi bi-flag"></i> {% trans "Статус" %}
+                                <i class="bi bi-flag"></i> Статус
                             </label>
                             <select name="status"
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white transition-colors">
-                                <option value="">{% trans "Любой" %}</option>
-                                <option value="published" {% if current_status == 'published' %}selected{% endif %}>{%
-                                    trans "Опубликована" %}</option>
-                                <option value="in_progress" {% if current_status == 'in_progress' %}selected{% endif %}>{%
-                                    trans "В работе" %}</option>
-                                <option value="completed" {% if current_status == 'completed' %}selected{% endif %}>{%
-                                    trans "Завершена" %}</option>
+                                <option value="">Любой</option>
+                                <option value="published" {% if current_status == 'published' %}selected{% endif %}>Опубликована</option>
+                                <option value="in_progress" {% if current_status == 'in_progress' %}selected{% endif %}>В работе</option>
+                                <option value="completed" {% if current_status == 'completed' %}selected{% endif %}>Завершена</option>
                             </select>
                         </div>
 
                         {# Apply Button #}
                         <button type="submit"
                             class="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold transition-all shadow-lg">
-                            {% trans "Применить фильтры" %}
+                            Применить фильтры
                         </button>
                     </form>
                 </div>
@@ -123,7 +120,7 @@
                 <div class="lg:hidden mb-6">
                     <button onclick="toggleMobileFilters()"
                         class="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition">
-                        <i class="bi bi-funnel"></i> {% trans "Фильтры" %}
+                        <i class="bi bi-funnel"></i> Фильтры
                     </button>
                 </div>
 
@@ -132,10 +129,10 @@
                     <div>
                         <p class="text-slate-600 dark:text-slate-400">
                             {% if tasks %}
-                            {% trans "Найдено" %} <span class="font-bold text-slate-900 dark:text-white">{{
-                                paginator.count }}</span> {% trans "задач" %}
+                            Найдено <span class="font-bold text-slate-900 dark:text-white">{{
+                                paginator.count }}</span> задач
                             {% else %}
-                            {% trans "Задач не найдено" %}
+                            Задач не найдено
                             {% endif %}
                         </p>
                     </div>
@@ -145,12 +142,9 @@
                         {# Sort Dropdown #}
                         <select name="sort" id="sortSelect" onchange="applySort(this.value)"
                             class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>{% trans "Новые"
-                                %}</option>
-                            <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>{% trans
-                                "Цена: низкая" %}</option>
-                            <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>{% trans
-                                "Цена: высокая" %}</option>
+                            <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Новые</option>
+                            <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Цена: низкая</option>
+                            <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Цена: высокая</option>
                         </select>
 
                         {# View Toggle #}
@@ -238,22 +232,22 @@
                     </div>
                     <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         {% if current_query or current_city or current_category or current_status or current_price_min or current_price_max %}
-                        {% trans "По вашему запросу ничего не найдено" %}
+                        По вашему запросу ничего не найдено
                         {% else %}
-                        {% trans "Задач пока нет" %}
+                        Задач пока нет
                         {% endif %}
                     </h3>
                     <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-8">
                         {% if current_query or current_city or current_category or current_status or current_price_min or current_price_max %}
-                        {% trans "Попробуйте изменить фильтры или параметры поиска." %}
+                        Попробуйте изменить фильтры или параметры поиска.
                         {% else %}
-                        {% trans "В данный момент нет опубликованных задач. Зайдите позже или создайте свою задачу!" %}
+                        В данный момент нет опубликованных задач. Зайдите позже или создайте свою задачу!
                         {% endif %}
                     </p>
                     {% if current_query or current_city or current_category or current_status or current_price_min or current_price_max %}
                     <a href="{% url 'marketplace:tasks_list' %}"
                         class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition no-underline">
-                        <i class="bi bi-arrow-counterclockwise"></i> {% trans "Сбросить фильтры" %}
+                        <i class="bi bi-arrow-counterclockwise"></i> Сбросить фильтры
                     </a>
                     {% endif %}
                 </div>
@@ -268,7 +262,7 @@
     <div
         class="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-800 rounded-t-3xl p-6 max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white">{% trans "Фильтры" %}</h3>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Фильтры</h3>
             <button onclick="toggleMobileFilters()"
                 class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition">
                 <i class="bi bi-x-lg text-xl"></i>
@@ -278,21 +272,20 @@
         <form method="get" class="space-y-4">
             {# Same filters as sidebar #}
             <div>
-                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{% trans "Поиск"
-                    %}</label>
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Поиск</label>
                 <input type="text" name="q" value="{{ current_query }}"
                     class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white"
-                    placeholder="{% trans 'Название или описание...' %}">
+                    placeholder="Название или описание...">
             </div>
 
             <div class="flex gap-3">
                 <button type="button" onclick="toggleMobileFilters()"
                     class="flex-1 px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition">
-                    {% trans "Отмена" %}
+                    Отмена
                 </button>
                 <button type="submit"
                     class="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold transition-all shadow-lg">
-                    {% trans "Применить" %}
+                    Применить
                 </button>
             </div>
         </form>

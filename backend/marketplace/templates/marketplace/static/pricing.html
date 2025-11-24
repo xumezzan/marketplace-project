@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Тарифы" %} - ServiceHub{% endblock %}
+{% block title %}Тарифы - ServiceHub{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="text-center mb-12">
         <h1 class="text-4xl font-bold text-slate-900 mb-4 dark:text-white">
-            {% trans "Тарифы" %}
+            Тарифы
         </h1>
         <p class="text-xl text-slate-600 dark:text-slate-300">
-            {% trans "Прозрачные и справедливые тарифы для всех" %}
+            Прозрачные и справедливые тарифы для всех
         </p>
     </div>
 
@@ -19,28 +18,28 @@
         <div class="bg-white rounded-2xl shadow-lg p-8 dark:bg-slate-800">
             <div class="text-center mb-6">
                 <h2 class="text-2xl font-bold text-slate-900 mb-2 dark:text-white">
-                    {% trans "Для клиентов" %}
+                    Для клиентов
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "Бесплатно создавать заказы" %}
+                    Бесплатно создавать заказы
                 </p>
             </div>
             <ul class="space-y-4">
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Создание заказов - бесплатно" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Создание заказов - бесплатно</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Просмотр профилей специалистов - бесплатно" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Просмотр профилей специалистов - бесплатно</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Безопасная система оплаты Escrow" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Безопасная система оплаты Escrow</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Комиссия платформы: 10% от суммы сделки" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Комиссия платформы: 10% от суммы сделки</span>
                 </li>
             </ul>
         </div>
@@ -49,28 +48,28 @@
         <div class="bg-white rounded-2xl shadow-lg p-8 dark:bg-slate-800">
             <div class="text-center mb-6">
                 <h2 class="text-2xl font-bold text-slate-900 mb-2 dark:text-white">
-                    {% trans "Для специалистов" %}
+                    Для специалистов
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "Регистрация и базовый профиль - бесплатно" %}
+                    Регистрация и базовый профиль - бесплатно
                 </p>
             </div>
             <ul class="space-y-4">
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Регистрация - бесплатно" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Регистрация - бесплатно</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Отклики на заказы - бесплатно" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Отклики на заказы - бесплатно</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Портфолио и профиль - бесплатно" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Портфолио и профиль - бесплатно</span>
                 </li>
                 <li class="flex items-start gap-3">
                     <i class="bi bi-check-circle-fill text-green-500 text-xl mt-0.5"></i>
-                    <span class="text-slate-600 dark:text-slate-300">{% trans "Комиссия платформы: 10% от суммы сделки" %}</span>
+                    <span class="text-slate-600 dark:text-slate-300">Комиссия платформы: 10% от суммы сделки</span>
                 </li>
             </ul>
         </div>
@@ -78,10 +77,10 @@
 
     <div class="mt-12 bg-indigo-50 rounded-2xl p-8 dark:bg-slate-800">
         <h3 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white text-center">
-            {% trans "Комиссия платформы" %}
+            Комиссия платформы
         </h3>
         <p class="text-slate-600 dark:text-slate-300 text-center max-w-2xl mx-auto">
-            {% trans "Комиссия в размере 10% взимается только после успешного завершения сделки. Это покрывает расходы на безопасную обработку платежей, поддержку клиентов и развитие платформы." %}
+            Комиссия в размере 10% взимается только после успешного завершения сделки. Это покрывает расходы на безопасную обработку платежей, поддержку клиентов и развитие платформы.
         </p>
     </div>
 </div>

@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load i18n %}
 
-{% block title %}{% trans "Аналитика" %} - Marketplace{% endblock %}
+{% block title %}Аналитика - Marketplace{% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
@@ -10,8 +9,8 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Аналитика" %}</h1>
-                <p class="text-slate-500 dark:text-slate-400 mt-1">{% trans "Отслеживайте свою производительность" %}
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Аналитика</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-1">Отслеживайте свою производительность
                 </p>
             </div>
             <select id="period-selector"
@@ -28,7 +27,7 @@
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Всего бронирований" %}</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Всего бронирований</p>
                         <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ stats.total_bookings }}</p>
                     </div>
                     <div
@@ -42,7 +41,7 @@
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Доход" %}</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Доход</p>
                         <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{
                             stats.total_revenue|floatformat:0 }} ₽</p>
                     </div>
@@ -57,7 +56,7 @@
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Средний рейтинг" %}</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Средний рейтинг</p>
                         <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ stats.avg_rating }}</p>
                     </div>
                     <div
@@ -71,7 +70,7 @@
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Клиентов" %}</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Клиентов</p>
                         <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ stats.total_clients }}</p>
                     </div>
                     <div
@@ -86,14 +85,14 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Динамика бронирований" %}
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Динамика бронирований
                 </h3>
                 <canvas id="bookings-chart"></canvas>
             </div>
 
             <div
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Динамика дохода" %}</h3>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Динамика дохода</h3>
                 <canvas id="revenue-chart"></canvas>
             </div>
         </div>
@@ -102,7 +101,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Топ клиенты" %}</h3>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Топ клиенты</h3>
                 {% if top_clients %}
                 <div class="space-y-3">
                     {% for client in top_clients %}
@@ -115,19 +114,18 @@
                             </div>
                             <span class="font-medium text-slate-900 dark:text-white">{{ client.name }}</span>
                         </div>
-                        <span class="text-sm text-slate-500 dark:text-slate-400">{{ client.booking_count }} {% trans
-                            "бронирований" %}</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">{{ client.booking_count }} бронирований</span>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-slate-500 dark:text-slate-400 text-center py-8">{% trans "Нет данных" %}</p>
+                <p class="text-slate-500 dark:text-slate-400 text-center py-8">Нет данных</p>
                 {% endif %}
             </div>
 
             <div
                 class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Недавняя активность" %}</h3>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Недавняя активность</h3>
                 {% if recent_activity %}
                 <div class="space-y-3">
                     {% for activity in recent_activity %}
@@ -148,7 +146,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-slate-500 dark:text-slate-400 text-center py-8">{% trans "Нет активности" %}</p>
+                <p class="text-slate-500 dark:text-slate-400 text-center py-8">Нет активности</p>
                 {% endif %}
             </div>
         </div>

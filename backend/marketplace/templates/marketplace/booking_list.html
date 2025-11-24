@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Мои бронирования" %} - Marketplace{% endblock %}
+{% block title %}Мои бронирования - Marketplace{% endblock %}
 
 {% block content %}
 <div class="container py-8">
     <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">{% trans "Мои бронирования" %}</h1>
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Мои бронирования</h1>
     </div>
 
     <!-- Tabs -->
@@ -17,7 +16,7 @@
                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
                     :class="{ 'text-indigo-600 border-indigo-600 dark:text-indigo-500 dark:border-indigo-500': activeTab === 'upcoming', 'border-transparent': activeTab !== 'upcoming' }"
                     @click="activeTab = 'upcoming'" type="button" role="tab">
-                    {% trans "Предстоящие" %}
+                    Предстоящие
                     {% if upcoming_bookings %}
                     <span
                         class="ml-2 bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">{{
@@ -30,7 +29,7 @@
                     class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
                     :class="{ 'text-indigo-600 border-indigo-600 dark:text-indigo-500 dark:border-indigo-500': activeTab === 'past', 'border-transparent': activeTab !== 'past' }"
                     @click="activeTab = 'past'" type="button" role="tab">
-                    {% trans "История" %}
+                    История
                 </button>
             </li>
         </ul>
@@ -52,10 +51,10 @@
                         class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-calendar-alt text-2xl text-slate-400"></i>
                     </div>
-                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">{% trans "Нет предстоящих
-                        бронирований" %}</h3>
-                    <p class="text-slate-500 dark:text-slate-400">{% trans "Здесь будут отображаться ваши активные
-                        записи." %}</p>
+                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">Нет предстоящих
+                        бронирований</h3>
+                    <p class="text-slate-500 dark:text-slate-400">Здесь будут отображаться ваши активные
+                        записи.</p>
                 </div>
                 {% endif %}
             </div>
@@ -72,7 +71,7 @@
                 </div>
                 {% else %}
                 <div class="text-center py-12">
-                    <p class="text-slate-500 dark:text-slate-400">{% trans "История бронирований пуста." %}</p>
+                    <p class="text-slate-500 dark:text-slate-400">История бронирований пуста.</p>
                 </div>
                 {% endif %}
             </div>

@@ -1,89 +1,88 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Политика конфиденциальности" %} - ServiceHub{% endblock %}
+{% block title %}Политика конфиденциальности - ServiceHub{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="bg-white rounded-2xl shadow-lg p-8 dark:bg-slate-800">
         <h1 class="text-4xl font-bold text-slate-900 mb-8 dark:text-white">
-            {% trans "Политика конфиденциальности" %}
+            Политика конфиденциальности
         </h1>
         
         <div class="prose prose-lg max-w-none dark:prose-invert">
             <p class="text-slate-600 dark:text-slate-300 mb-6">
-                <strong>{% trans "Дата вступления в силу:" %}</strong> {% now "d.m.Y" %}
+                <strong>Дата вступления в силу:</strong> {% now "d.m.Y" %}
             </p>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "1. Общие положения" %}
+                    1. Общие положения
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300 mb-4">
-                    {% trans "Настоящая Политика конфиденциальности определяет порядок обработки и защиты персональных данных пользователей платформы ServiceHub." %}
+                    Настоящая Политика конфиденциальности определяет порядок обработки и защиты персональных данных пользователей платформы ServiceHub.
                 </p>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "2. Собираемая информация" %}
+                    2. Собираемая информация
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300 mb-4">
-                    {% trans "Мы собираем следующую информацию:" %}
+                    Мы собираем следующую информацию:
                 </p>
                 <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300">
-                    <li>{% trans "Персональные данные: имя, email, телефон" %}</li>
-                    <li>{% trans "Профильная информация: специализация, опыт работы, портфолио" %}</li>
-                    <li>{% trans "Данные транзакций: история заказов и платежей" %}</li>
-                    <li>{% trans "Технические данные: IP-адрес, тип браузера, cookies" %}</li>
+                    <li>Персональные данные: имя, email, телефон</li>
+                    <li>Профильная информация: специализация, опыт работы, портфолио</li>
+                    <li>Данные транзакций: история заказов и платежей</li>
+                    <li>Технические данные: IP-адрес, тип браузера, cookies</li>
                 </ul>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "3. Использование информации" %}
+                    3. Использование информации
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300 mb-4">
-                    {% trans "Мы используем собранную информацию для:" %}
+                    Мы используем собранную информацию для:
                 </p>
                 <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300">
-                    <li>{% trans "Предоставления услуг платформы" %}</li>
-                    <li>{% trans "Обработки транзакций и платежей" %}</li>
-                    <li>{% trans "Связи с пользователями по вопросам сервиса" %}</li>
-                    <li>{% trans "Улучшения качества платформы" %}</li>
+                    <li>Предоставления услуг платформы</li>
+                    <li>Обработки транзакций и платежей</li>
+                    <li>Связи с пользователями по вопросам сервиса</li>
+                    <li>Улучшения качества платформы</li>
                 </ul>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "4. Защита данных" %}
+                    4. Защита данных
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "Мы применяем современные методы шифрования и защиты данных для обеспечения безопасности вашей информации." %}
+                    Мы применяем современные методы шифрования и защиты данных для обеспечения безопасности вашей информации.
                 </p>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "5. Права пользователей" %}
+                    5. Права пользователей
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300 mb-4">
-                    {% trans "Вы имеете право:" %}
+                    Вы имеете право:
                 </p>
                 <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300">
-                    <li>{% trans "Получать доступ к своим персональным данным" %}</li>
-                    <li>{% trans "Исправлять неточные данные" %}</li>
-                    <li>{% trans "Удалять свои данные" %}</li>
-                    <li>{% trans "Отозвать согласие на обработку данных" %}</li>
+                    <li>Получать доступ к своим персональным данным</li>
+                    <li>Исправлять неточные данные</li>
+                    <li>Удалять свои данные</li>
+                    <li>Отозвать согласие на обработку данных</li>
                 </ul>
             </section>
 
             <section>
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "6. Контакты" %}
+                    6. Контакты
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "По вопросам конфиденциальности обращайтесь:" %}<br>
+                    По вопросам конфиденциальности обращайтесь:<br>
                     <strong>Email:</strong> <a href="mailto:privacy@servicehub.com" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">privacy@servicehub.com</a>
                 </p>
             </section>

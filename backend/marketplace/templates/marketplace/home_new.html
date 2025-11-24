@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load i18n %}
 
-{% block title %}ServiceHub - {% trans "Поиск специалистов" %}{% endblock %}
+{% block title %}ServiceHub - Поиск специалистов{% endblock %}
 
 {% block content %}
 <!-- Hero Section with Enhanced Design -->
@@ -24,17 +23,17 @@
             <!-- Main Heading -->
             <h1
                 class="text-5xl md:text-6xl lg:text-7xl tracking-tight font-extrabold text-slate-900 dark:text-white mb-6 animate__animated animate__fadeInUp">
-                {% trans "Найдите профи" %}
+                Найдите профи
                 <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    {% trans "для любой задачи" %}
+                    для любой задачи
                 </span>
             </h1>
 
             <!-- Subtitle -->
             <p class="mt-6 text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto animate__animated animate__fadeInUp"
                 style="animation-delay: 0.1s">
-                {% trans "Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и многое
-                другое. Быстро, безопасно и качественно." %}
+                Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и многое
+                другое. Быстро, безопасно и качественно.
             </p>
 
             <!-- Search Bar -->
@@ -46,11 +45,11 @@
                         </div>
                         <input type="text" name="search"
                             class="block w-full pl-16 pr-32 py-6 text-lg border-0 rounded-2xl bg-white dark:bg-slate-800 dark:text-white focus:ring-4 focus:ring-indigo-500/50 transition-all"
-                            placeholder="{% trans 'Что нужно сделать?' %}" />
+                            placeholder="Что нужно сделать?" />
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                             <button type="submit"
                                 class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg">
-                                {% trans "Найти" %}
+                                Найти
                             </button>
                         </div>
                     </div>
@@ -65,21 +64,21 @@
                         class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                         <i class="bi bi-shield-check text-green-600 dark:text-green-400 text-lg"></i>
                     </div>
-                    <span class="font-medium">{% trans "Проверенные профили" %}</span>
+                    <span class="font-medium">Проверенные профили</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div
                         class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
                         <i class="bi bi-star-fill text-yellow-600 dark:text-yellow-400 text-lg"></i>
                     </div>
-                    <span class="font-medium">{% trans "Честные отзывы" %}</span>
+                    <span class="font-medium">Честные отзывы</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div
                         class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                         <i class="bi bi-people-fill text-blue-600 dark:text-blue-400 text-lg"></i>
                     </div>
-                    <span class="font-medium">{{ specialists_count|default:"100" }}+ {% trans "специалистов" %}</span>
+                    <span class="font-medium">{{ specialists_count|default:"100" }}+ специалистов</span>
                 </div>
             </div>
         </div>
@@ -99,8 +98,8 @@
 <div class="bg-slate-50 dark:bg-slate-950 py-20 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">{% trans "Популярные категории" %}</h2>
-            <p class="text-lg text-slate-600 dark:text-slate-400">{% trans "Выберите категорию услуг" %}</p>
+            <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Популярные категории</h2>
+            <p class="text-lg text-slate-600 dark:text-slate-400">Выберите категорию услуг</p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -113,7 +112,7 @@
                 </div>
                 <span
                     class="text-sm font-semibold text-slate-700 group-hover:text-orange-600 dark:text-slate-300 dark:group-hover:text-orange-400 text-center">
-                    {% trans "Ремонт" %}
+                    Ремонт
                 </span>
             </a>
 
@@ -126,7 +125,7 @@
                 </div>
                 <span
                     class="text-sm font-semibold text-slate-700 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400 text-center">
-                    {% trans "Обучение" %}
+                    Обучение
                 </span>
             </a>
 
@@ -139,7 +138,7 @@
                 </div>
                 <span
                     class="text-sm font-semibold text-slate-700 group-hover:text-pink-600 dark:text-slate-300 dark:group-hover:text-pink-400 text-center">
-                    {% trans "Красота" %}
+                    Красота
                 </span>
             </a>
 
@@ -152,7 +151,7 @@
                 </div>
                 <span
                     class="text-sm font-semibold text-slate-700 group-hover:text-green-600 dark:text-slate-300 dark:group-hover:text-green-400 text-center">
-                    {% trans "Перевозки" %}
+                    Перевозки
                 </span>
             </a>
 
@@ -165,7 +164,7 @@
                 </div>
                 <span
                     class="text-sm font-semibold text-slate-700 group-hover:text-purple-600 dark:text-slate-300 dark:group-hover:text-purple-400 text-center">
-                    {% trans "IT услуги" %}
+                    IT услуги
                 </span>
             </a>
 
@@ -178,7 +177,7 @@
                 </div>
                 <span
                     class="text-sm font-semibold text-slate-700 group-hover:text-slate-900 dark:text-slate-300 dark:group-hover:text-white text-center">
-                    {% trans "Все категории" %}
+                    Все категории
                 </span>
             </a>
         </div>
@@ -190,14 +189,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-end mb-12">
             <div>
-                <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">{% trans "Рекомендуемые специалисты"
-                    %}</h2>
-                <p class="text-lg text-slate-600 dark:text-slate-400">{% trans "Профессионалы с высоким рейтингом и
-                    отзывами" %}</p>
+                <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">Рекомендуемые специалисты</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400">Профессионалы с высоким рейтингом и
+                    отзывами</p>
             </div>
             <a href="{% url 'marketplace:tasks_list' %}"
                 class="hidden md:flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold hover:gap-3 transition-all no-underline group">
-                {% trans "Все специалисты" %}
+                Все специалисты
                 <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
             </a>
         </div>
@@ -230,7 +228,7 @@
                 class="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="bi bi-people text-4xl text-slate-400"></i>
             </div>
-            <p class="text-lg text-slate-500 dark:text-slate-400">{% trans "Специалисты появятся скоро" %}</p>
+            <p class="text-lg text-slate-500 dark:text-slate-400">Специалисты появятся скоро</p>
         </div>
         {% endif %}
     </div>
@@ -241,9 +239,9 @@
     class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-24 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">{% trans "Как это работает" %}</h2>
+            <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Как это работает</h2>
             <p class="text-lg text-slate-600 dark:text-slate-400">
-                {% trans "Всего 3 простых шага, чтобы решить вашу задачу" %}
+                Всего 3 простых шага, чтобы решить вашу задачу
             </p>
         </div>
 
@@ -257,10 +255,10 @@
                         1
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 text-center">
-                        {% trans "Создайте задачу" %}
+                        Создайте задачу
                     </h3>
                     <p class="text-slate-600 dark:text-slate-400 text-center">
-                        {% trans "Опишите, что нужно сделать. Это бесплатно и займет пару минут." %}
+                        Опишите, что нужно сделать. Это бесплатно и займет пару минут.
                     </p>
                 </div>
                 <!-- Connector Arrow (hidden on mobile) -->
@@ -279,10 +277,10 @@
                         2
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 text-center">
-                        {% trans "Получите отклики" %}
+                        Получите отклики
                     </h3>
                     <p class="text-slate-600 dark:text-slate-400 text-center">
-                        {% trans "Специалисты предложат свои услуги и цены. Выберите лучшего." %}
+                        Специалисты предложат свои услуги и цены. Выберите лучшего.
                     </p>
                 </div>
                 <!-- Connector Arrow (hidden on mobile) -->
@@ -301,10 +299,10 @@
                         3
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 text-center">
-                        {% trans "Договоритесь о работе" %}
+                        Договоритесь о работе
                     </h3>
                     <p class="text-slate-600 dark:text-slate-400 text-center">
-                        {% trans "Обсудите детали в чате и выберите исполнителя." %}
+                        Обсудите детали в чате и выберите исполнителя.
                     </p>
                 </div>
             </div>
@@ -314,7 +312,7 @@
         <div class="text-center mt-12">
             <a href="{% url 'marketplace:task_create' %}"
                 class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl no-underline">
-                {% trans "Создать задачу бесплатно" %}
+                Создать задачу бесплатно
                 <i class="bi bi-arrow-right"></i>
             </a>
         </div>
@@ -328,11 +326,11 @@
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                        {% trans "Безопасные сделки" %}
+                        Безопасные сделки
                     </h2>
                     <p class="text-lg text-white/90 mb-8">
-                        {% trans "Escrow система защиты платежей гарантирует безопасность ваших средств. Деньги
-                        переводятся специалисту только после выполнения работы." %}
+                        Escrow система защиты платежей гарантирует безопасность ваших средств. Деньги
+                        переводятся специалисту только после выполнения работы.
                     </p>
                     <div class="space-y-4">
                         <div class="flex items-start gap-3">
@@ -341,8 +339,8 @@
                                 <i class="bi bi-shield-check text-white"></i>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-white mb-1">{% trans "Защита платежей" %}</h4>
-                                <p class="text-white/80 text-sm">{% trans "Средства блокируются до завершения работы" %}
+                                <h4 class="font-semibold text-white mb-1">Защита платежей</h4>
+                                <p class="text-white/80 text-sm">Средства блокируются до завершения работы
                                 </p>
                             </div>
                         </div>
@@ -352,8 +350,8 @@
                                 <i class="bi bi-chat-dots text-white"></i>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-white mb-1">{% trans "Поддержка 24/7" %}</h4>
-                                <p class="text-white/80 text-sm">{% trans "Помощь в решении споров" %}</p>
+                                <h4 class="font-semibold text-white mb-1">Поддержка 24/7</h4>
+                                <p class="text-white/80 text-sm">Помощь в решении споров</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
@@ -362,8 +360,8 @@
                                 <i class="bi bi-star text-white"></i>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-white mb-1">{% trans "Система отзывов" %}</h4>
-                                <p class="text-white/80 text-sm">{% trans "Честные отзывы от реальных клиентов" %}</p>
+                                <h4 class="font-semibold text-white mb-1">Система отзывов</h4>
+                                <p class="text-white/80 text-sm">Честные отзывы от реальных клиентов</p>
                             </div>
                         </div>
                     </div>

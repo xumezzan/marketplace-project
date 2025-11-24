@@ -1,83 +1,82 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Условия использования" %} - ServiceHub{% endblock %}
+{% block title %}Условия использования - ServiceHub{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="bg-white rounded-2xl shadow-lg p-8 dark:bg-slate-800">
         <h1 class="text-4xl font-bold text-slate-900 mb-8 dark:text-white">
-            {% trans "Условия использования" %}
+            Условия использования
         </h1>
         
         <div class="prose prose-lg max-w-none dark:prose-invert">
             <p class="text-slate-600 dark:text-slate-300 mb-6">
-                <strong>{% trans "Дата вступления в силу:" %}</strong> {% now "d.m.Y" %}
+                <strong>Дата вступления в силу:</strong> {% now "d.m.Y" %}
             </p>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "1. Принятие условий" %}
+                    1. Принятие условий
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "Используя платформу ServiceHub, вы соглашаетесь с настоящими Условиями использования. Если вы не согласны с условиями, пожалуйста, не используйте платформу." %}
+                    Используя платформу ServiceHub, вы соглашаетесь с настоящими Условиями использования. Если вы не согласны с условиями, пожалуйста, не используйте платформу.
                 </p>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "2. Описание сервиса" %}
+                    2. Описание сервиса
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "ServiceHub - это платформа для связи клиентов и специалистов. Мы предоставляем инструменты для создания заказов, поиска специалистов и безопасной обработки платежей." %}
+                    ServiceHub - это платформа для связи клиентов и специалистов. Мы предоставляем инструменты для создания заказов, поиска специалистов и безопасной обработки платежей.
                 </p>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "3. Обязанности пользователей" %}
+                    3. Обязанности пользователей
                 </h2>
                 <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300">
-                    <li>{% trans "Предоставлять достоверную информацию" %}</li>
-                    <li>{% trans "Соблюдать законодательство и этические нормы" %}</li>
-                    <li>{% trans "Не использовать платформу для незаконных целей" %}</li>
-                    <li>{% trans "Уважать права других пользователей" %}</li>
+                    <li>Предоставлять достоверную информацию</li>
+                    <li>Соблюдать законодательство и этические нормы</li>
+                    <li>Не использовать платформу для незаконных целей</li>
+                    <li>Уважать права других пользователей</li>
                 </ul>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "4. Платежи и комиссии" %}
+                    4. Платежи и комиссии
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300 mb-4">
-                    {% trans "Комиссия платформы составляет 10% от суммы каждой успешно завершенной сделки. Комиссия взимается автоматически при переводе средств специалисту." %}
+                    Комиссия платформы составляет 10% от суммы каждой успешно завершенной сделки. Комиссия взимается автоматически при переводе средств специалисту.
                 </p>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "5. Ответственность" %}
+                    5. Ответственность
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "ServiceHub выступает посредником между клиентами и специалистами. Мы не несем ответственности за качество выполненных работ, но предоставляем инструменты для разрешения споров." %}
+                    ServiceHub выступает посредником между клиентами и специалистами. Мы не несем ответственности за качество выполненных работ, но предоставляем инструменты для разрешения споров.
                 </p>
             </section>
 
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "6. Изменение условий" %}
+                    6. Изменение условий
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "Мы оставляем за собой право изменять настоящие Условия использования. О существенных изменениях пользователи будут уведомлены заранее." %}
+                    Мы оставляем за собой право изменять настоящие Условия использования. О существенных изменениях пользователи будут уведомлены заранее.
                 </p>
             </section>
 
             <section>
                 <h2 class="text-2xl font-semibold text-slate-900 mb-4 dark:text-white">
-                    {% trans "7. Контакты" %}
+                    7. Контакты
                 </h2>
                 <p class="text-slate-600 dark:text-slate-300">
-                    {% trans "По вопросам использования платформы обращайтесь:" %}<br>
+                    По вопросам использования платформы обращайтесь:<br>
                     <strong>Email:</strong> <a href="mailto:support@servicehub.com" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">support@servicehub.com</a>
                 </p>
             </section>

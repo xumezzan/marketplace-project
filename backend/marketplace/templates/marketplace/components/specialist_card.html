@@ -19,7 +19,7 @@
     <button
         class="absolute top-14 right-3 z-10 p-2 rounded-full bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 shadow-sm transition-all duration-200 no-card-click compare-btn group"
         data-specialist-id="{{ specialist.id }}" onclick="event.stopPropagation(); toggleCompare({{ specialist.id }})"
-        title="{% trans 'Сравнить' %}">
+        title="Сравнить">
         <i class="bi bi-arrow-left-right text-slate-400 group-hover:text-indigo-600 text-lg transition-colors"></i>
     </button>
 
@@ -85,7 +85,7 @@
             </span>
             <span>•</span>
             <span class="flex items-center gap-1">
-                <i class="bi bi-briefcase"></i> {{ specialist.portfolio_items.count }} {% trans "работ" %}
+                <i class="bi bi-briefcase"></i> {{ specialist.portfolio_items.count }} работ
             </span>
             <span>•</span>
             <span class="flex items-center gap-1">
@@ -98,12 +98,12 @@
     <div
         class="p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-700/50 dark:to-slate-800/50 flex justify-between items-center group-hover:from-indigo-50 group-hover:to-purple-50 dark:group-hover:from-indigo-900/20 dark:group-hover:to-purple-900/20 transition-colors">
         <div class="flex flex-col">
-            <span class="text-xs text-slate-500 dark:text-slate-400">{% trans "Стоимость" %}</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400">Стоимость</span>
             <span class="font-bold text-slate-900 dark:text-white">
                 {% if specialist.specialist_profile.hourly_rate %}
-                {% trans "от" %} {{ specialist.specialist_profile.hourly_rate }} ₽/{% trans "час" %}
+                от {{ specialist.specialist_profile.hourly_rate }} ₽/час
                 {% else %}
-                {% trans "По договоренности" %}
+                По договоренности
                 {% endif %}
             </span>
         </div>

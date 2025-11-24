@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static i18n dict_filters %}
 
-{% block title %}{{ specialist.get_full_name|default:specialist.username }} - {% trans "Специалист" %}{% endblock %}
+{% block title %}{{ specialist.get_full_name|default:specialist.username }} - Специалист{% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-8">
@@ -79,21 +79,20 @@
                                         </div>
                                         <span class="font-bold text-slate-900 dark:text-white ml-1">{{
                                             specialist.rating|floatformat:1 }}</span>
-                                        <span class="text-slate-500 dark:text-slate-400">({{ reviews.count }} {% trans
-                                            "отзывов" %})</span>
+                                        <span class="text-slate-500 dark:text-slate-400">({{ reviews.count }} отзывов)</span>
                                     </div>
 
                                     {% if portfolio_items.count > 0 %}
                                     <div class="flex items-center gap-1 text-slate-600 dark:text-slate-300">
                                         <i class="bi bi-images"></i>
-                                        <span>{{ portfolio_items.count }} {% trans "работ" %}</span>
+                                        <span>{{ portfolio_items.count }} работ</span>
                                     </div>
                                     {% endif %}
 
                                     {% if profile.years_of_experience %}
                                     <div class="flex items-center gap-1 text-slate-600 dark:text-slate-300">
                                         <i class="bi bi-briefcase"></i>
-                                        <span>{{ profile.years_of_experience }} {% trans "лет опыта" %}</span>
+                                        <span>{{ profile.years_of_experience }} лет опыта</span>
                                     </div>
                                     {% endif %}
                                 </div>
@@ -103,11 +102,11 @@
                             <div class="flex flex-col gap-2">
                                 <a href="#contact"
                                     class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg no-underline">
-                                    <i class="bi bi-chat-dots"></i> {% trans "Написать" %}
+                                    <i class="bi bi-chat-dots"></i> Написать
                                 </a>
                                 <button
                                     class="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition">
-                                    <i class="bi bi-heart"></i> {% trans "В избранное" %}
+                                    <i class="bi bi-heart"></i> В избранное
                                 </button>
                             </div>
                         </div>
@@ -129,15 +128,15 @@
                     <div class="flex border-b border-slate-200 dark:border-slate-700 overflow-x-auto">
                         <button onclick="switchTab('about')" id="tab-about"
                             class="tab-button active flex-1 px-6 py-4 font-semibold transition-colors whitespace-nowrap">
-                            <i class="bi bi-person"></i> {% trans "О себе" %}
+                            <i class="bi bi-person"></i> О себе
                         </button>
                         <button onclick="switchTab('portfolio')" id="tab-portfolio"
                             class="tab-button flex-1 px-6 py-4 font-semibold transition-colors whitespace-nowrap">
-                            <i class="bi bi-images"></i> {% trans "Портфолио" %} ({{ portfolio_items.count }})
+                            <i class="bi bi-images"></i> Портфолио ({{ portfolio_items.count }})
                         </button>
                         <button onclick="switchTab('reviews')" id="tab-reviews"
                             class="tab-button flex-1 px-6 py-4 font-semibold transition-colors whitespace-nowrap">
-                            <i class="bi bi-star"></i> {% trans "Отзывы" %} ({{ reviews.count }})
+                            <i class="bi bi-star"></i> Отзывы ({{ reviews.count }})
                         </button>
                     </div>
 
@@ -146,14 +145,14 @@
 
                         {# About Tab #}
                         <div id="content-about" class="tab-content">
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">{% trans "Описание" %}
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Описание
                             </h3>
                             {% if profile.description %}
                             <p class="text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">{{
                                 profile.description }}</p>
                             {% else %}
-                            <p class="text-slate-400 dark:text-slate-500 italic">{% trans "Специалист пока не добавил
-                                описание" %}</p>
+                            <p class="text-slate-400 dark:text-slate-500 italic">Специалист пока не добавил
+                                описание</p>
                             {% endif %}
 
                             {% if profile %}
@@ -165,10 +164,10 @@
                                             class="bi bi-currency-dollar text-indigo-600 dark:text-indigo-400 text-xl"></i>
                                     </div>
                                     <div>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Почасовая
-                                            ставка" %}</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">Почасовая
+                                            ставка</p>
                                         <p class="text-lg font-bold text-slate-900 dark:text-white">{{
-                                            profile.hourly_rate }} ₽/{% trans "час" %}</p>
+                                            profile.hourly_rate }} ₽/час</p>
                                     </div>
                                 </div>
                                 {% endif %}
@@ -179,8 +178,8 @@
                                         <i class="bi bi-cash-stack text-purple-600 dark:text-purple-400 text-xl"></i>
                                     </div>
                                     <div>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "Типичный
-                                            диапазон цен" %}</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">Типичный
+                                            диапазон цен</p>
                                         <p class="text-lg font-bold text-slate-900 dark:text-white">
                                             {{ profile.typical_price_range_min }}-{{ profile.typical_price_range_max }}
                                             ₽
@@ -226,7 +225,7 @@
                             {% else %}
                             <div class="text-center py-12">
                                 <i class="bi bi-images text-slate-300 dark:text-slate-600 text-6xl mb-4"></i>
-                                <p class="text-slate-500 dark:text-slate-400">{% trans "Портфолио пока пусто" %}</p>
+                                <p class="text-slate-500 dark:text-slate-400">Портфолио пока пусто</p>
                             </div>
                             {% endif %}
                         </div>
@@ -267,7 +266,7 @@
                                             {% endif %}
                                             {% if review.task %}
                                             <p class="text-sm text-slate-400 dark:text-slate-500 mt-2">
-                                                {% trans "Задача:" %} <a
+                                                Задача: <a
                                                     href="{% url 'marketplace:task_detail' review.task.id %}"
                                                     class="text-indigo-600 dark:text-indigo-400 hover:underline">{{
                                                     review.task.title }}</a>
@@ -281,7 +280,7 @@
                             {% else %}
                             <div class="text-center py-12">
                                 <i class="bi bi-star text-slate-300 dark:text-slate-600 text-6xl mb-4"></i>
-                                <p class="text-slate-500 dark:text-slate-400">{% trans "Отзывов пока нет" %}</p>
+                                <p class="text-slate-500 dark:text-slate-400">Отзывов пока нет</p>
                             </div>
                             {% endif %}
                         </div>
@@ -295,45 +294,45 @@
                 {# Pricing Card #}
                 <div
                     class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6 sticky top-24">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Стоимость услуг" %}</h3>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Стоимость услуг</h3>
 
                     {% if profile.hourly_rate %}
                     <div
                         class="text-center py-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl mb-4">
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-1">{% trans "От" %}</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-1">От</p>
                         <p
                             class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                             {{ profile.hourly_rate }} ₽
                         </p>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">{% trans "за час" %}</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">за час</p>
                     </div>
                     {% endif %}
 
                     <div class="space-y-3 mb-6">
                         <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                             <i class="bi bi-check-circle-fill text-green-500"></i>
-                            <span>{% trans "Безопасная сделка" %}</span>
+                            <span>Безопасная сделка</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                             <i class="bi bi-check-circle-fill text-green-500"></i>
-                            <span>{% trans "Гарантия возврата" %}</span>
+                            <span>Гарантия возврата</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
                             <i class="bi bi-check-circle-fill text-green-500"></i>
-                            <span>{% trans "Поддержка 24/7" %}</span>
+                            <span>Поддержка 24/7</span>
                         </div>
                     </div>
 
                     {% if user.is_authenticated and user != specialist %}
                     <a href="{% url 'marketplace:start_conversation' specialist.id %}"
                         class="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg no-underline mb-3">
-                        <i class="bi bi-chat-dots mr-2"></i>{% trans "Написать сообщение" %}
+                        <i class="bi bi-chat-dots mr-2"></i>Написать сообщение
                     </a>
                     {% endif %}
 
                     <a href="#contact"
                         class="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg no-underline">
-                        {% trans "Связаться" %}
+                        Связаться
                     </a>
                 </div>
 
@@ -341,7 +340,7 @@
                 {% if rating_stats %}
                 <div
                     class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Рейтинг" %}</h3>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Рейтинг</h3>
 
                     <div class="space-y-2">
                         {% for rating in "54321" %}
@@ -372,38 +371,33 @@
             {# Booking Form (shown after slot selection) #}
             <form id="bookingForm"
                 class="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 hidden">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{% trans "Подтверждение бронирования"
-                    %}</h3>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Подтверждение бронирования</h3>
                 <div class="mb-4">
                     <p class="text-slate-600 dark:text-slate-300">
-                        {% trans "Вы выбрали:" %} <span id="bookingDateDisplay" class="font-bold"></span> {% trans "в"
-                        %} <span id="bookingTimeDisplay" class="font-bold"></span>
+                        Вы выбрали: <span id="bookingDateDisplay" class="font-bold"></span> в <span id="bookingTimeDisplay" class="font-bold"></span>
                     </p>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{% trans "Задача"
-                        %}</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Задача</label>
                     <select name="task_id" id="bookingTask"
                         class="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 outline-none">
-                        <option value="">{% trans "Выберите задачу..." %}</option>
+                        <option value="">Выберите задачу...</option>
                         {% for task in user.client_profile.tasks.all %}
                         <option value="{{ task.id }}">{{ task.title }}</option>
                         {% endfor %}
                     </select>
-                    <p class="text-xs text-slate-500 mt-1">{% trans "Или" %} <a
-                            href="{% url 'marketplace:task_create' %}" class="text-indigo-600 hover:underline">{% trans
-                            "создайте новую задачу" %}</a></p>
+                    <p class="text-xs text-slate-500 mt-1">Или <a
+                            href="{% url 'marketplace:task_create' %}" class="text-indigo-600 hover:underline">создайте новую задачу</a></p>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{% trans
-                        "Комментарий" %}</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Комментарий</label>
                     <textarea name="notes" id="bookingNotes" rows="3"
                         class="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 outline-none"
-                        placeholder="{% trans 'Дополнительные детали...' %}"></textarea>
+                        placeholder="Дополнительные детали..."></textarea>
                 </div>
                 <button type="button" id="confirmBookingBtn"
                     class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-lg">
-                    {% trans "Забронировать" %}
+                    Забронировать
                 </button>
             </form>
         </div>

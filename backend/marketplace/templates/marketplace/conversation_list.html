@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Сообщения" %} - Marketplace{% endblock %}
+{% block title %}Сообщения - Marketplace{% endblock %}
 
 {% block content %}
 <div class="container py-8">
-    <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">{% trans "Сообщения" %}</h1>
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">Сообщения</h1>
 
     {% if conversations_with_data %}
     <div class="grid gap-4">
@@ -49,7 +48,7 @@
     </div>
     {% else %}
     <div class="text-center py-12">
-        <p class="text-slate-500 dark:text-slate-400">{% trans "У вас пока нет сообщений." %}</p>
+        <p class="text-slate-500 dark:text-slate-400">У вас пока нет сообщений.</p>
     </div>
     {% endif %}
 </div>

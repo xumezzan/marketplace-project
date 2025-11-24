@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Чат" %} - Marketplace{% endblock %}
+{% block title %}Чат - Marketplace{% endblock %}
 
 {% block content %}
 <div class="container py-8 max-w-4xl">
@@ -15,7 +14,7 @@
                 <div>
                     <h2 class="font-bold">{{ other_participant.get_full_name|default:other_participant.username }}</h2>
                     <p class="text-xs text-indigo-200">
-                        {% if other_participant.is_specialist %}{% trans "Специалист" %}{% else %}{% trans "Клиент" %}{%
+                        {% if other_participant.is_specialist %}Специалист{% else %}Клиент{%
                         endif %}
                     </p>
                 </div>
@@ -44,10 +43,10 @@
             <div class="flex gap-2">
                 <input type="text" id="message-input"
                     class="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white"
-                    placeholder="{% trans 'Введите сообщение...' %}" autocomplete="off">
+                    placeholder="Введите сообщение..." autocomplete="off">
                 <button id="send-button"
                     class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
-                    {% trans "Отправить" %}
+                    Отправить
                 </button>
             </div>
         </div>
