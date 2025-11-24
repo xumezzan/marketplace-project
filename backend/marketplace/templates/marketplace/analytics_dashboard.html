@@ -155,13 +155,18 @@
     </div>
 </div>
 
+{{ booking_trends.data|json_script:"booking-data" }}
+{{ booking_trends.labels|json_script:"booking-labels" }}
+{{ revenue_data.data|json_script:"revenue-data" }}
+{{ revenue_data.labels|json_script:"revenue-labels" }}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
     // Chart configuration
-    const bookingData = {{ booking_trends.data| safe }};
-    const bookingLabels = {{ booking_trends.labels| safe }};
-    const revenueData = {{ revenue_data.data| safe }};
-    const revenueLabels = {{ revenue_data.labels| safe }};
+    const bookingData = JSON.parse(document.getElementById('booking-data').textContent);
+    const bookingLabels = JSON.parse(document.getElementById('booking-labels').textContent);
+    const revenueData = JSON.parse(document.getElementById('revenue-data').textContent);
+    const revenueLabels = JSON.parse(document.getElementById('revenue-labels').textContent);
 
     // Bookings Chart
     const bookingsCtx = document.getElementById('bookings-chart').getContext('2d');

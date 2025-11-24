@@ -1,6 +1,6 @@
 import json
 import base64
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from marketplace.models import Deal, Task, Category, SpecialistProfile, ClientProfile, Offer
@@ -8,6 +8,7 @@ from payments.models import PaymeTransaction
 
 User = get_user_model()
 
+@override_settings(PAYME_LOGIN='Paycom', PAYME_KEY='password')
 class PaymeIntegrationTest(TestCase):
     def setUp(self):
         self.client = Client()

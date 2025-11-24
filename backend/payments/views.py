@@ -1,6 +1,6 @@
 import json
 import base64
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -44,7 +44,7 @@ class WalletViewSet(viewsets.ReadOnlyModelViewSet):
             amount = Decimal(amount)
             wallet.deposit(amount)
             return Response({'status': 'ok', 'balance': wallet.balance})
-        except (ValueError, TypeError, Decimal.InvalidOperation) as e:
+        except (ValueError, TypeError, InvalidOperation) as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'])
@@ -60,7 +60,7 @@ class WalletViewSet(viewsets.ReadOnlyModelViewSet):
             amount = Decimal(amount)
             wallet.withdraw(amount)
             return Response({'status': 'ok', 'balance': wallet.balance})
-        except (ValueError, TypeError, Decimal.InvalidOperation) as e:
+        except (ValueError, TypeError, InvalidOperation) as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
