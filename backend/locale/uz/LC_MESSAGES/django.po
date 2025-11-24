@@ -19,10 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: marketplace/templates/marketplace/home.html:4
-#, fuzzy
-#| msgid "Для специалистов"
 msgid "Поиск специалистов"
-msgstr "Mutaxassislar uchun"
+msgstr "Mutaxassislarni qidirish"
 
 #: marketplace/templates/marketplace/home.html:16
 msgid "Найдите профи"
@@ -61,10 +59,8 @@ msgid "специалистов"
 msgstr "mutaxassislar"
 
 #: marketplace/templates/marketplace/home.html:79
-#, fuzzy
-#| msgid "специалистов"
 msgid "Специалистов"
-msgstr "mutaxassislar"
+msgstr "Mutaxassislar"
 
 #: marketplace/templates/marketplace/home.html:98
 msgid "Активных задач"
@@ -303,10 +299,8 @@ msgid "Для клиентов"
 msgstr "Mijozlar uchun"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:27
-#, fuzzy
-#| msgid "Создать заказ"
 msgid "Создайте заказ"
-msgstr "Buyurtma yaratish"
+msgstr "Buyurtma yarating"
 
 #: marketplace/templates/marketplace/static/how_it_works.html:28
 msgid ""
