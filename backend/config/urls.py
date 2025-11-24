@@ -22,14 +22,10 @@ from django.views.i18n import set_language
 from marketplace import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
+from django.conf.urls.i18n import i18n_patterns
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('i18n/setlang/', set_language, name='set_language'),
-    path('', views.home, name='home'),
-    path('notifications/', include('notifications.urls')),
-    path('chat/', include('chat.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('', include('marketplace.urls')),
     path('api/', include('marketplace.api_urls')),
     path('api/payments/', include('payments.api_urls')),
     
@@ -38,6 +34,15 @@ urlpatterns = [
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
+
+urlpatterns += i18n_patterns(
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('notifications/', include('notifications.urls')),
+    path('chat/', include('chat.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('', include('marketplace.urls')),
+)
 
 # Поддержка MEDIA файлов в режиме разработки
 if settings.DEBUG:
