@@ -17,6 +17,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from django.db.models import Q
 from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message, Notification, Favorite
 from .forms import (
     TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm,
@@ -340,6 +341,51 @@ class TaskDetailView(DetailView):
                 context['offer_form'] = OfferCreateForm()
         
         return context
+
+    def post(self, request, *args, **kwargs):
+        """Обработка создания предложения."""
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
+            
+        if not request.user.is_specialist:
+            messages.error(request, 'Только специалисты могут оставлять отклики.')
+            return redirect('marketplace:task_detail', pk=self.get_object().id)
+            
+        self.object = self.get_object()
+        task = self.object
+        
+        # Проверка, можно ли оставить отклик
+        has_existing_offer = Offer.objects.filter(task=task, specialist=request.user).exists()
+        if has_existing_offer:
+            messages.error(request, 'Вы уже оставили отклик на эту задачу.')
+            return redirect('marketplace:task_detail', pk=task.id)
+            
+        if not task.can_receive_offers():
+            messages.error(request, 'Эта задача больше не принимает отклики.')
+            return redirect('marketplace:task_detail', pk=task.id)
+            
+        if task.client == request.user:
+            messages.error(request, 'Вы не можете откликнуться на свою задачу.')
+            return redirect('marketplace:task_detail', pk=task.id)
+            
+        from .forms import OfferCreateForm
+        form = OfferCreateForm(request.POST)
+        
+        if form.is_valid():
+            offer = form.save(commit=False)
+            offer.task = task
+            offer.specialist = request.user
+            offer.status = Offer.Status.PENDING
+            offer.save()
+            
+            messages.success(request, 'Ваш отклик успешно отправлен!')
+            return redirect('marketplace:task_detail', pk=task.id)
+        else:
+            messages.error(request, 'Ошибка при отправке отклика. Проверьте данные.')
+            # Re-render with form errors
+            context = self.get_context_data(object=self.object)
+            context['offer_form'] = form
+            return self.render_to_response(context)
 
 
 class AcceptOfferView(LoginRequiredMixin, View):

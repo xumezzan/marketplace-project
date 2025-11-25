@@ -99,7 +99,7 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8">
-                    <a href="{% url 'marketplace:tasks_list' %}"
+                    <a href="{% url 'marketplace:specialist_list' %}"
                         class="text-slate-600 hover:text-indigo-600 font-medium transition no-underline dark:text-slate-300 dark:hover:text-indigo-400">Найти
                         специалиста</a>
                     {% if user.is_authenticated %}
@@ -280,7 +280,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <!-- Brand -->
                 <div>
-                    <h4 class="footer-brand flex items-center gap-2">
+                    <h4 class="footer-brand flex items-center gap-2 mb-4">
                         <i class="bi bi-briefcase-fill"></i> ServiceHub
                     </h4>
                     <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.7);">Сервис поиска
@@ -303,7 +303,7 @@
 
                 <!-- Клиентам -->
                 <div>
-                    <h4 class="footer-heading">Клиентам</h4>
+                    <h4 class="footer-heading mb-4">Клиентам</h4>
                     <ul class="footer-links">
                         <li><a href="{% url 'marketplace:task_create' %}">Создать заказ</a></li>
                         <li><a href="{% url 'marketplace:tasks_list' %}">Найти специалиста</a></li>
@@ -314,7 +314,7 @@
 
                 <!-- Специалистам -->
                 <div>
-                    <h4 class="footer-heading">Специалистам</h4>
+                    <h4 class="footer-heading mb-4">Специалистам</h4>
                     <ul class="footer-links">
                         <li><a href="{% url 'marketplace:tasks_list' %}">База заказов</a></li>
                         <li><a href="{% url 'accounts:register' %}">Стать специалистом</a></li>
@@ -325,7 +325,7 @@
 
                 <!-- Контакты -->
                 <div>
-                    <h4 class="footer-heading">Контакты</h4>
+                    <h4 class="footer-heading mb-4">Контакты</h4>
                     <ul class="footer-links">
                         <li>
                             <a href="mailto:support@servicehub.com" class="flex items-center gap-2">

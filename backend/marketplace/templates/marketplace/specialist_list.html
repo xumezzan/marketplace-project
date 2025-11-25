@@ -29,10 +29,10 @@
                     <form method="get" class="space-y-6">
                         <!-- Search -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Поиск</label>
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Поиск</label>
                             <div class="relative">
-                                <input type="text" name="q" value="{{ request.GET.q }}"
-                                    placeholder="Имя или услуга..."
+                                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Имя или услуга..."
                                     class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white">
                                 <i class="bi bi-search absolute left-3 top-2.5 text-slate-400"></i>
                             </div>
@@ -40,12 +40,12 @@
 
                         <!-- Categories -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Категория</label>
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Категория</label>
                             <div class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
                                 {% for category in categories %}
                                 <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" name="category" value="{{ category.slug }}" {% if
-                                        category.slug in request.GET.category %}checked{% endif %}
+                                    <input type="checkbox" name="category" value="{{ category.slug }}"
                                         class="rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
                                     <span class="text-sm text-slate-600 dark:text-slate-400">{{ category.name }}</span>
                                 </label>
@@ -55,7 +55,8 @@
 
                         <!-- Price Range -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Цена за час</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Цена за
+                                час</label>
                             <div class="flex gap-2">
                                 <input type="number" name="min_price" value="{{ request.GET.min_price }}"
                                     placeholder="От"
@@ -68,27 +69,25 @@
 
                         <!-- Rating -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Рейтинг</label>
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Рейтинг</label>
                             <div class="space-y-2">
                                 <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="radio" name="rating" value="4.5" {% if request.GET.rating=='4.5'
-                                        %}checked{% endif %}
+                                    <input type="radio" name="rating" value="4.5"
                                         class="text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
                                     <span class="flex items-center text-sm text-slate-600 dark:text-slate-400">
                                         <span class="text-yellow-400 mr-1">★★★★★</span> 4.5+
                                     </span>
                                 </label>
                                 <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="radio" name="rating" value="4.0" {% if request.GET.rating=='4.0'
-                                        %}checked{% endif %}
+                                    <input type="radio" name="rating" value="4.0"
                                         class="text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
                                     <span class="flex items-center text-sm text-slate-600 dark:text-slate-400">
                                         <span class="text-yellow-400 mr-1">★★★★☆</span> 4.0+
                                     </span>
                                 </label>
                                 <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="radio" name="rating" value="3.0" {% if request.GET.rating=='3.0'
-                                        %}checked{% endif %}
+                                    <input type="radio" name="rating" value="3.0"
                                         class="text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700">
                                     <span class="flex items-center text-sm text-slate-600 dark:text-slate-400">
                                         <span class="text-yellow-400 mr-1">★★★☆☆</span> 3.0+

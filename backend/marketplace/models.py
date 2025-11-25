@@ -678,6 +678,7 @@ class Deal(models.Model):
     class Status(models.TextChoices):
         """Статусы сделки."""
         PENDING = 'pending', 'Ожидает оплаты'
+        PAID = 'paid', 'Оплачено'
         IN_PROGRESS = 'in_progress', 'В работе'  # Оплачено и выполняется
         COMPLETED = 'completed', 'Завершено'
         CANCELED = 'canceled', 'Отменено'
