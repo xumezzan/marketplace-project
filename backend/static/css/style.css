@@ -927,7 +927,7 @@ footer {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-footer .text-muted {}
+
 
 /* Обновление форм для тёмной темы */
 .dark .form-control,
@@ -974,17 +974,16 @@ footer .text-muted {}
     border-color: var(--border-soft);
 }
 
-.dark .dropdown-item {}
 
-.dark .dropdown-item:hover,
-.dark .dropdown-item:focus {}
+
+
 
 .dark .dropdown-divider {
     border-color: var(--border-soft);
 }
 
 /* Обновление badge для тёмной темы */
-.dark .badge {}
+
 
 /* Обновление пагинации для тёмной темы */
 .dark .page-link {
@@ -1025,12 +1024,6 @@ footer .text-muted {}
     padding: 0.75rem 0;
 }
 
-background: rgba(30, 41, 59, 0.95) !important;
-}
-
-background: rgba(30, 41, 59, 0.98) !important;
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-}
 
 .navbar-brand {
     font-weight: 700;
@@ -1092,8 +1085,6 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     padding: 3rem 0 1.5rem;
 }
 
-background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
 
 .footer-brand {
     font-size: 1.5rem;
@@ -1148,8 +1139,6 @@ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     animation: fadeInUp 0.5s ease;
 }
 
-box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-}
 
 .form-card .card-title {
     font-size: 2rem;
@@ -1282,8 +1271,6 @@ box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
-background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-}
 
 .btn-outline-primary {
     border: 2px solid #667eea;
@@ -1301,13 +1288,6 @@ background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
     box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
-border-color: #818cf8;
-color: #818cf8;
-}
-
-background: #818cf8;
-color: white;
-}
 
 /* Улучшенные карточки задач */
 .task-card {
