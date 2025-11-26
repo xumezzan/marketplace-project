@@ -40,8 +40,6 @@
 
 /* Базовые стили для body */
 body {
-    background-color: var(--bg-body);
-    color: var(--text-main);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -179,8 +177,6 @@ section {
 .card {
     border: none;
     border-radius: 15px;
-    background-color: var(--bg-card);
-    color: var(--text-main);
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -195,8 +191,6 @@ section {
 .offer-card,
 .deal-card,
 .offer-form-card {
-    background-color: var(--bg-card);
-    color: var(--text-main);
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -205,10 +199,7 @@ section {
     transition: background-color 0.3s ease;
 }
 
-/* Текст muted */
-.text-muted {
-    color: var(--text-muted) !important;
-}
+
 
 /* Borders */
 .border-soft {
@@ -264,7 +255,6 @@ section {
 }
 
 .page-header h1 {
-    color: var(--text-main);
     font-weight: 700;
 }
 
@@ -281,7 +271,6 @@ section {
 .filter-card .form-label {
     font-size: 0.95rem;
     margin-bottom: 8px;
-    color: var(--text-main);
     font-weight: 500;
 }
 
@@ -326,7 +315,6 @@ section {
 }
 
 .filter-card .btn-light:hover {
-    background-color: var(--bg-card);
     border-color: var(--border-soft);
     transform: translateY(-2px);
 }
@@ -357,7 +345,6 @@ section {
 }
 
 .task-card-title a {
-    color: var(--text-main);
     transition: color 0.3s ease;
 }
 
@@ -382,12 +369,10 @@ section {
 }
 
 .task-location {
-    color: var(--text-muted);
     font-size: 0.875rem;
 }
 
 .task-card-description {
-    color: var(--text-muted);
     line-height: 1.6;
     margin-bottom: 16px;
     flex-grow: 1;
@@ -395,13 +380,11 @@ section {
 
 .task-card-budget {
     padding: 12px;
-    background-color: var(--bg-body);
     border-radius: 10px;
     margin-bottom: 12px;
 }
 
 .budget-label {
-    color: var(--text-muted);
     font-size: 0.875rem;
     margin-right: 8px;
 }
@@ -420,7 +403,6 @@ section {
 }
 
 .task-info-item {
-    color: var(--text-muted);
     font-size: 0.875rem;
     display: flex;
     align-items: center;
@@ -437,7 +419,6 @@ section {
 }
 
 .task-card-author {
-    color: var(--text-muted);
     font-size: 0.875rem;
     display: flex;
     align-items: center;
@@ -445,7 +426,6 @@ section {
 }
 
 .task-card-date {
-    color: var(--text-muted);
     font-size: 0.875rem;
 }
 
@@ -471,7 +451,6 @@ section {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: var(--text-muted);
     text-decoration: none;
     font-size: 0.95rem;
     transition: color 0.3s ease;
@@ -501,7 +480,6 @@ section {
 .task-detail-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-main);
     margin-bottom: 16px;
     line-height: 1.3;
 }
@@ -574,7 +552,6 @@ section {
 .section-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-main);
     margin-bottom: 16px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--border-soft);
@@ -590,7 +567,6 @@ section {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--text-muted);
     font-size: 0.95rem;
 }
 
@@ -604,13 +580,11 @@ section {
     font-weight: 700;
     color: #28a745;
     padding: 16px;
-    background-color: var(--bg-body);
     border-radius: 12px;
     text-align: center;
 }
 
 .task-description {
-    color: var(--text-muted);
     line-height: 1.8;
     font-size: 1rem;
 }
@@ -626,7 +600,6 @@ section {
     align-items: flex-start;
     gap: 12px;
     padding: 16px;
-    background-color: var(--bg-body);
     border-radius: 12px;
 }
 
@@ -638,14 +611,12 @@ section {
 
 .detail-label {
     font-size: 0.875rem;
-    color: var(--text-muted);
     margin-bottom: 4px;
 }
 
 .detail-value {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--text-main);
 }
 
 /* Карточка сделки */
@@ -670,7 +641,6 @@ section {
 .deal-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-main);
     margin: 0;
     display: flex;
     align-items: center;
@@ -700,7 +670,6 @@ section {
 }
 
 .deal-info-label {
-    color: var(--text-muted);
     font-size: 0.95rem;
 }
 
@@ -728,7 +697,6 @@ section {
 .offer-form-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--text-main);
     margin-bottom: 24px;
     padding-bottom: 16px;
     border-bottom: 2px solid var(--border-soft);
@@ -743,7 +711,6 @@ section {
 
 .offer-form .form-label {
     font-weight: 500;
-    color: var(--text-main);
     margin-bottom: 8px;
     font-size: 0.95rem;
 }
@@ -769,7 +736,6 @@ section {
 }
 
 .form-help {
-    color: var(--text-muted);
     font-size: 0.875rem;
     margin-top: 6px;
 }
@@ -811,7 +777,6 @@ section {
 .offers-sidebar-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-main);
     margin-bottom: 20px;
     padding-bottom: 16px;
     border-bottom: 2px solid var(--border-soft);
@@ -864,7 +829,6 @@ section {
 }
 
 .offer-specialist strong {
-    color: var(--text-main);
     font-size: 1rem;
 }
 
@@ -882,14 +846,12 @@ section {
 }
 
 .offer-message {
-    color: var(--text-muted);
     line-height: 1.6;
     margin-bottom: 12px;
     font-size: 0.95rem;
 }
 
 .offer-date {
-    color: var(--text-muted);
     font-size: 0.875rem;
     display: flex;
     align-items: center;
@@ -904,7 +866,6 @@ section {
 .empty-offers {
     text-align: center;
     padding: 40px 20px;
-    color: var(--text-muted);
 }
 
 /* Пагинация */
@@ -966,30 +927,22 @@ footer {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-footer .text-muted {
-    color: var(--text-muted) !important;
-}
+footer .text-muted {}
 
 /* Обновление форм для тёмной темы */
 .dark .form-control,
 .dark .form-select {
-    background-color: var(--bg-body);
-    color: var(--text-main);
     border-color: var(--border-soft);
 }
 
 .dark .form-control:focus,
 .dark .form-select:focus {
-    background-color: var(--bg-body);
-    color: var(--text-main);
     border-color: var(--accent);
 }
 
 /* Обновление alert для тёмной темы */
 .dark .alert {
-    background-color: var(--bg-card);
     border-color: var(--border-soft);
-    color: var(--text-main);
 }
 
 .dark .alert-info {
@@ -1018,40 +971,28 @@ footer .text-muted {
 
 /* Обновление dropdown для тёмной темы */
 .dark .dropdown-menu {
-    background-color: var(--bg-card);
     border-color: var(--border-soft);
 }
 
-.dark .dropdown-item {
-    color: var(--text-main);
-}
+.dark .dropdown-item {}
 
 .dark .dropdown-item:hover,
-.dark .dropdown-item:focus {
-    background-color: var(--bg-body);
-    color: var(--text-main);
-}
+.dark .dropdown-item:focus {}
 
 .dark .dropdown-divider {
     border-color: var(--border-soft);
 }
 
 /* Обновление badge для тёмной темы */
-.dark .badge {
-    color: var(--text-main);
-}
+.dark .badge {}
 
 /* Обновление пагинации для тёмной темы */
 .dark .page-link {
-    background-color: var(--bg-card);
     border-color: var(--border-soft);
-    color: var(--text-main);
 }
 
 .dark .page-link:hover {
-    background-color: var(--bg-body);
     border-color: var(--border-soft);
-    color: var(--text-main);
 }
 
 .dark .page-item.active .page-link {
@@ -1094,7 +1035,6 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 .navbar-brand {
     font-weight: 700;
     font-size: 1.5rem;
-    color: var(--text-main) !important;
     transition: transform 0.3s ease;
 }
 
@@ -1110,7 +1050,6 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-nav .nav-link {
-    color: var(--text-main) !important;
     font-weight: 500;
     padding: 0.5rem 1rem !important;
     border-radius: 8px;
@@ -1215,14 +1154,12 @@ box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 .form-card .card-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-main);
     margin-bottom: 2rem;
     text-align: center;
 }
 
 .form-card .form-label {
     font-weight: 600;
-    color: var(--text-main);
     margin-bottom: 0.75rem;
     font-size: 0.95rem;
 }
@@ -1234,8 +1171,6 @@ box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     padding: 0.75rem 1rem;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background-color: var(--bg-body);
-    color: var(--text-main);
 }
 
 .form-card .form-control:focus,
