@@ -145,74 +145,54 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-30">
     <div
         class="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 sm:p-10 transition-colors duration-300 dark:bg-slate-800 dark:border-slate-700">
-        <h3 class="text-lg font-semibold text-slate-900 mb-6 dark:text-white">Популярные категории</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-6 dark:text-white">Популярные категории</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <!-- Repair -->
             <a href="{% url 'marketplace:tasks_list' %}?category=repair"
-                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 transition cursor-pointer group no-underline dark:hover:bg-slate-700">
-                <div
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-700 group-hover:scale-110 transition duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-100">
-                    <i class="bi bi-hammer text-2xl"></i>
-                </div>
-                <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-200 dark:group-hover:text-white">Ремонт</span>
+                class="flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-md border border-gray-100 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline">
+                <i
+                    class="bi bi-hammer text-4xl text-gray-700 dark:text-gray-100 mb-3 group-hover:scale-110 transition duration-300"></i>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">Ремонт</span>
             </a>
 
             <!-- Education -->
             <a href="{% url 'marketplace:tasks_list' %}?category=education"
-                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 transition cursor-pointer group no-underline dark:hover:bg-slate-700">
-                <div
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-700 group-hover:scale-110 transition duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-100">
-                    <i class="bi bi-book text-2xl"></i>
-                </div>
-                <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-200 dark:group-hover:text-white">Обучение</span>
+                class="flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-md border border-gray-100 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline">
+                <i
+                    class="bi bi-book text-4xl text-gray-700 dark:text-gray-100 mb-3 group-hover:scale-110 transition duration-300"></i>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">Обучение</span>
             </a>
 
             <!-- Beauty -->
             <a href="{% url 'marketplace:tasks_list' %}?category=beauty"
-                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 transition cursor-pointer group no-underline dark:hover:bg-slate-700">
-                <div
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-700 group-hover:scale-110 transition duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-100">
-                    <i class="bi bi-stars text-2xl"></i>
-                </div>
-                <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-200 dark:group-hover:text-white">Красота</span>
+                class="flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-md border border-gray-100 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline">
+                <i
+                    class="bi bi-stars text-4xl text-gray-700 dark:text-gray-100 mb-3 group-hover:scale-110 transition duration-300"></i>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">Красота</span>
             </a>
 
             <!-- Transport -->
             <a href="{% url 'marketplace:tasks_list' %}?category=transport"
-                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 transition cursor-pointer group no-underline dark:hover:bg-slate-700">
-                <div
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-700 group-hover:scale-110 transition duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-100">
-                    <i class="bi bi-truck text-2xl"></i>
-                </div>
-                <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-200 dark:group-hover:text-white">Перевозки</span>
+                class="flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-md border border-gray-100 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline">
+                <i
+                    class="bi bi-truck text-4xl text-gray-700 dark:text-gray-100 mb-3 group-hover:scale-110 transition duration-300"></i>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">Перевозки</span>
             </a>
 
             <!-- IT -->
             <a href="{% url 'marketplace:tasks_list' %}?category=it"
-                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 transition cursor-pointer group no-underline dark:hover:bg-slate-700">
-                <div
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-700 group-hover:scale-110 transition duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-100">
-                    <i class="bi bi-display text-2xl"></i>
-                </div>
-                <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-200 dark:group-hover:text-white">IT
-                    услуги</span>
+                class="flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-md border border-gray-100 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline">
+                <i
+                    class="bi bi-display text-4xl text-gray-700 dark:text-gray-100 mb-3 group-hover:scale-110 transition duration-300"></i>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">IT услуги</span>
             </a>
 
             <!-- All -->
             <a href="{% url 'marketplace:tasks_list' %}"
-                class="flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-slate-50 transition cursor-pointer group no-underline dark:hover:bg-slate-700">
-                <div
-                    class="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-100 text-slate-700 group-hover:scale-110 transition duration-300 shadow-sm dark:bg-slate-700 dark:text-slate-100">
-                    <i class="bi bi-grid text-2xl"></i>
-                </div>
-                <span
-                    class="text-sm font-medium text-slate-700 group-hover:text-slate-900 text-center dark:text-slate-200 dark:group-hover:text-white">Все
-                    категории</span>
+                class="flex flex-col items-center justify-center rounded-2xl bg-white dark:bg-slate-800 shadow-md border border-gray-100 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline">
+                <i
+                    class="bi bi-grid text-4xl text-gray-700 dark:text-gray-100 mb-3 group-hover:scale-110 transition duration-300"></i>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100 text-center">Все категории</span>
             </a>
         </div>
     </div>
