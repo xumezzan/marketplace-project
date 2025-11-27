@@ -1,10 +1,24 @@
+"""
+Context processors for marketplace app.
+"""
 from .models import Notification
 
-def notifications(request):
+
+def unread_notifications(request):
     """
-    Context processor to add unread notifications count to all templates.
+    Add unread notifications count to template context.
     """
     if request.user.is_authenticated:
-        unread_count = request.user.marketplace_notifications.filter(is_read=False).count()
-        return {'unread_notifications_count': unread_count}
-    return {'unread_notifications_count': 0}
+        try:
+            unread_count = Notification.objects.filter(
+                recipient=request.user,
+                is_read=False
+            ).count()
+        except Exception:
+            unread_count = 0
+    else:
+        unread_count = 0
+    
+    return {
+        'unread_notifications_count': unread_count,
+    }

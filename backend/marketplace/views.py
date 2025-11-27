@@ -89,7 +89,7 @@ def home(request):
         'cities_count': cities_count,
     }
     
-    return render(request, 'marketplace/home_new.html', context)
+    return render(request, 'marketplace/home.html', context)
 
 
 class TaskListView(ListView):
