@@ -3,7 +3,7 @@ services:
     name: services-marketplace
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "cd backend && gunicorn config.wsgi:application --workers 2 --bind 0.0.0.0:$PORT"
+    startCommand: "cd service_market_uz && gunicorn config.wsgi:application --workers 2 --bind 0.0.0.0:$PORT"
     envVars:
       - key: DJANGO_DEBUG
         value: False

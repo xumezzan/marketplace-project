@@ -149,5 +149,6 @@ TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
 RESPONSE_COST = 5000 # UZS
 
 # GDAL Settings
-GDAL_LIBRARY_PATH = '/opt/homebrew/lib/libgdal.dylib'
-GEOS_LIBRARY_PATH = '/opt/homebrew/lib/libgeos_c.dylib'
+if os.path.exists('/opt/homebrew/lib/libgdal.dylib'):
+    GDAL_LIBRARY_PATH = '/opt/homebrew/lib/libgdal.dylib'
+    GEOS_LIBRARY_PATH = '/opt/homebrew/lib/libgeos_c.dylib'
