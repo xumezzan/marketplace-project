@@ -4,199 +4,122 @@
 {% block title %}ServiceHub - Поиск специалистов{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<div class="relative bg-white overflow-hidden transition-colors duration-300 dark:bg-slate-900">
-    <div class="max-w-7xl mx-auto">
-        <div
-            class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300 dark:bg-slate-900">
-            <main class="mt-10 mx-auto max-w-7xl sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
-                <div class="sm:text-center lg:text-left">
-                    <h1
-                        class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl dark:text-white">
-                        Найдите профи <span class="text-indigo-600 dark:text-indigo-400">для любой задачи</span>
-                    </h1>
-                    <p
-                        class="mt-3 text-base text-slate-700 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 dark:text-slate-300">
-                        Тысячи проверенных специалистов готовы помочь вам. Ремонт, обучение, красота, IT и
-                        многое другое. Быстро, безопасно и качественно.
-                    </p>
-
-                    <div class="mt-8 flex flex-col sm:flex-row gap-4 sm:justify-center lg:justify-start">
-                        <div class="relative rounded-md shadow-sm flex-grow max-w-lg">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="bi bi-search text-slate-400 text-lg"></i>
-                            </div>
-                            <input type="text"
-                                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 rounded-xl py-4 bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
-                                placeholder="Что нужно сделать?" />
-                        </div>
-                        <a href="{% url 'marketplace:task_create' %}"
-                            class="flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg shadow-lg shadow-indigo-200 transition transform hover:-translate-y-0.5 no-underline">
-                            Найти
-                        </a>
-                    </div>
-
-                    <div
-                        class="mt-8 flex items-center gap-6 text-sm text-slate-500 sm:justify-center lg:justify-start dark:text-slate-400">
-                        <div class="flex items-center gap-1.5">
-                            <i class="bi bi-shield-check text-green-500 text-lg"></i>
-                            <span>Проверенные профили</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <i class="bi bi-star-fill text-yellow-500 text-lg"></i>
-                            <span>Честные отзывы</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <i class="bi bi-people-fill text-blue-500 text-lg"></i>
-                            <span>{{ specialists_count|default:"100" }}+ специалистов</span>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+<!-- Hero Section - UzbProfi Style -->
+<div class="relative bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-20 right-20 w-72 h-72 bg-purple-400 rounded-full blur-3xl opacity-20"></div>
+        <div class="absolute bottom-20 left-20 w-96 h-96 bg-indigo-400 rounded-full blur-3xl opacity-15"></div>
     </div>
-    <div
-        class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 transition-colors duration-300 flex items-center justify-center p-8 lg:p-12 dark:from-slate-800 dark:via-slate-800 dark:to-slate-900">
-        <!-- Decorative Background Elements -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute top-20 right-20 w-72 h-72 bg-indigo-200 rounded-full blur-3xl opacity-30"></div>
-            <div class="absolute bottom-20 left-20 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20"></div>
-        </div>
 
-        <!-- Content Cards -->
-        <div class="relative z-10 w-full max-w-md space-y-6">
-            <!-- Stats Card 1 -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/50 transform hover:scale-105 transition duration-300 animate-fade-in-up dark:bg-slate-800/80 dark:border-slate-700/50"
-                style="animation-delay: 0.1s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div
-                                class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center dark:bg-indigo-900/50">
-                                <i class="bi bi-people-fill text-2xl text-indigo-600 dark:text-indigo-400"></i>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+        <div class="text-center">
+            <!-- Main Heading -->
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+                Найдите надежного специалиста
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-lg sm:text-xl text-purple-100 mb-10 max-w-3xl mx-auto">
+                От ремонта до репетиторов. Более {{ specialists_count|default:"50,000" }} проверенных мастеров в
+                Ташкенте и регионах.
+            </p>
+
+            <!-- Search Bar -->
+            <div class="max-w-3xl mx-auto">
+                <form action="{% url 'marketplace:tasks_list' %}" method="GET"
+                    class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="relative flex-grow">
+                            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                                <i class="bi bi-search text-gray-400 text-xl"></i>
                             </div>
-                            <div>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-white">{{
-                                    specialists_count|default:"150" }}+</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Специалистов</p>
-                            </div>
+                            <input type="text" name="q" placeholder="Какую услугу вы ищете?"
+                                class="w-full pl-12 pr-4 py-5 text-gray-900 placeholder-gray-500 focus:outline-none text-lg" />
                         </div>
+                        <button type="submit"
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-5 font-semibold text-lg transition-colors duration-200 sm:rounded-r-2xl">
+                            Найти специалиста
+                        </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Stats Card 2 -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/50 transform hover:scale-105 transition duration-300 animate-fade-in-up dark:bg-slate-800/80 dark:border-slate-700/50"
-                style="animation-delay: 0.2s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div
-                                class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center dark:bg-green-900/50">
-                                <i class="bi bi-check-circle-fill text-2xl text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-white">{{
-                                    tasks_count|default:"320" }}+</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Активных задач</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Card 3 -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/50 transform hover:scale-105 transition duration-300 animate-fade-in-up dark:bg-slate-800/80 dark:border-slate-700/50"
-                style="animation-delay: 0.3s">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div
-                                class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center dark:bg-amber-900/50">
-                                <i class="bi bi-star-fill text-2xl text-amber-600 dark:text-amber-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-3xl font-bold text-slate-900 dark:text-white">4.9</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Средний рейтинг</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trust Badge -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition duration-300 animate-fade-in-up"
-                style="animation-delay: 0.4s">
-                <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                        <i class="bi bi-shield-check text-3xl"></i>
-                    </div>
-                    <div>
-                        <p class="font-bold text-lg mb-1">Безопасные сделки</p>
-                        <p class="text-sm text-white/90">Escrow система защиты платежей</p>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Categories Section -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-30">
-    <div
-        class="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 sm:p-10 transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700">
-        <h3 class="text-lg font-semibold text-slate-900 mb-6 dark:text-white">Популярные категории</h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            <!-- Repair -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20 mb-20">
+    <div class="bg-white rounded-2xl shadow-xl p-8 sm:p-12">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center sm:text-left">
+            Категории услуг
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+            <!-- Ремонт и строительство -->
             <a href="{% url 'marketplace:tasks_list' %}?category=repair"
-                class="flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline dark:hover:bg-slate-700/80">
-                <i
-                    class="bi bi-hammer text-4xl text-slate-700 dark:text-white mb-3 group-hover:scale-110 transition duration-300"></i>
-                <span class="text-sm font-medium text-slate-900 dark:text-white text-center">Ремонт</span>
+                class="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+                <div
+                    class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-purple-200 transition-colors">
+                    <i class="bi bi-hammer text-3xl text-purple-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-purple-600">Ремонт и
+                    строительство</span>
             </a>
 
-            <!-- Education -->
+            <!-- Обучение и репетиторы -->
             <a href="{% url 'marketplace:tasks_list' %}?category=education"
-                class="flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline dark:hover:bg-slate-700/80">
-                <i
-                    class="bi bi-book text-4xl text-slate-700 dark:text-white mb-3 group-hover:scale-110 transition duration-300"></i>
-                <span class="text-sm font-medium text-slate-900 dark:text-white text-center">Обучение</span>
+                class="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+                <div
+                    class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
+                    <i class="bi bi-book text-3xl text-blue-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-blue-600">Обучение и репетиторы</span>
             </a>
 
-            <!-- Beauty -->
+            <!-- Уборка и клининг -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=cleaning"
+                class="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+                <div
+                    class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors">
+                    <i class="bi bi-stars text-3xl text-green-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-green-600">Уборка и клининг</span>
+            </a>
+
+            <!-- Красота и здоровье -->
             <a href="{% url 'marketplace:tasks_list' %}?category=beauty"
-                class="flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline dark:hover:bg-slate-700/80">
-                <i
-                    class="bi bi-stars text-4xl text-slate-700 dark:text-white mb-3 group-hover:scale-110 transition duration-300"></i>
-                <span class="text-sm font-medium text-slate-900 dark:text-white text-center">Красота</span>
+                class="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+                <div
+                    class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-pink-200 transition-colors">
+                    <i class="bi bi-heart text-3xl text-pink-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-pink-600">Красота и здоровье</span>
             </a>
 
-            <!-- Transport -->
-            <a href="{% url 'marketplace:tasks_list' %}?category=transport"
-                class="flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline dark:hover:bg-slate-700/80">
-                <i
-                    class="bi bi-truck text-4xl text-slate-700 dark:text-white mb-3 group-hover:scale-110 transition duration-300"></i>
-                <span class="text-sm font-medium text-slate-900 dark:text-white text-center">Перевозки</span>
-            </a>
-
-            <!-- IT -->
+            <!-- IT и фриланс -->
             <a href="{% url 'marketplace:tasks_list' %}?category=it"
-                class="flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline dark:hover:bg-slate-700/80">
-                <i
-                    class="bi bi-display text-4xl text-slate-700 dark:text-white mb-3 group-hover:scale-110 transition duration-300"></i>
-                <span class="text-sm font-medium text-slate-900 dark:text-white text-center">IT услуги</span>
+                class="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+                <div
+                    class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-indigo-200 transition-colors">
+                    <i class="bi bi-laptop text-3xl text-indigo-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-indigo-600">IT и фриланс</span>
             </a>
 
-            <!-- All -->
-            <a href="{% url 'marketplace:tasks_list' %}"
-                class="flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition duration-300 group no-underline dark:hover:bg-slate-700/80">
-                <i
-                    class="bi bi-grid text-4xl text-slate-700 dark:text-white mb-3 group-hover:scale-110 transition duration-300"></i>
-                <span class="text-sm font-medium text-slate-900 dark:text-white text-center">Все категории</span>
+            <!-- Авторемонт -->
+            <a href="{% url 'marketplace:tasks_list' %}?category=auto"
+                class="group flex flex-col items-center text-center hover:scale-105 transition-transform duration-200">
+                <div
+                    class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-gray-200 transition-colors">
+                    <i class="bi bi-car-front text-3xl text-gray-600"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 group-hover:text-gray-600">Авторемонт</span>
             </a>
         </div>
     </div>
 </div>
+
 
 <!-- Specialists Section -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
