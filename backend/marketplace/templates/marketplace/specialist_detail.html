@@ -79,7 +79,8 @@
                                         </div>
                                         <span class="font-bold text-slate-900 dark:text-white ml-1">{{
                                             specialist.rating|floatformat:1 }}</span>
-                                        <span class="text-slate-500 dark:text-slate-400">({{ reviews.count }} отзывов)</span>
+                                        <span class="text-slate-500 dark:text-slate-400">({{ reviews.count }}
+                                            отзывов)</span>
                                     </div>
 
                                     {% if portfolio_items.count > 0 %}
@@ -99,15 +100,15 @@
                             </div>
 
                             {# Action Buttons #}
-                            <div class="flex flex-col gap-2">
-                                <a href="#contact"
-                                    class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg no-underline">
-                                    <i class="bi bi-chat-dots"></i> Написать
+                            <div class="flex flex-col gap-3">
+                                <a href="#booking"
+                                    class="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 shadow-lg no-underline">
+                                    Select Specialist
                                 </a>
-                                <button
-                                    class="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition">
-                                    <i class="bi bi-heart"></i> В избранное
-                                </button>
+                                <a href="{% url 'marketplace:start_conversation' specialist.id %}"
+                                    class="inline-flex items-center justify-center gap-2 bg-white dark:bg-slate-700 border-2 border-purple-600 dark:border-purple-500 text-purple-600 dark:text-purple-400 px-8 py-3 rounded-xl font-semibold hover:bg-purple-50 dark:hover:bg-slate-600 transition no-underline">
+                                    <i class="bi bi-chat-dots"></i> Chat
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -266,8 +267,7 @@
                                             {% endif %}
                                             {% if review.task %}
                                             <p class="text-sm text-slate-400 dark:text-slate-500 mt-2">
-                                                Задача: <a
-                                                    href="{% url 'marketplace:task_detail' review.task.id %}"
+                                                Задача: <a href="{% url 'marketplace:task_detail' review.task.id %}"
                                                     class="text-indigo-600 dark:text-indigo-400 hover:underline">{{
                                                     review.task.title }}</a>
                                             </p>
@@ -374,7 +374,8 @@
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Подтверждение бронирования</h3>
                 <div class="mb-4">
                     <p class="text-slate-600 dark:text-slate-300">
-                        Вы выбрали: <span id="bookingDateDisplay" class="font-bold"></span> в <span id="bookingTimeDisplay" class="font-bold"></span>
+                        Вы выбрали: <span id="bookingDateDisplay" class="font-bold"></span> в <span
+                            id="bookingTimeDisplay" class="font-bold"></span>
                     </p>
                 </div>
                 <div class="mb-4">
@@ -386,11 +387,12 @@
                         <option value="{{ task.id }}">{{ task.title }}</option>
                         {% endfor %}
                     </select>
-                    <p class="text-xs text-slate-500 mt-1">Или <a
-                            href="{% url 'marketplace:task_create' %}" class="text-indigo-600 hover:underline">создайте новую задачу</a></p>
+                    <p class="text-xs text-slate-500 mt-1">Или <a href="{% url 'marketplace:task_create' %}"
+                            class="text-indigo-600 hover:underline">создайте новую задачу</a></p>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Комментарий</label>
+                    <label
+                        class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Комментарий</label>
                     <textarea name="notes" id="bookingNotes" rows="3"
                         class="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 outline-none"
                         placeholder="Дополнительные детали..."></textarea>
