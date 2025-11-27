@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личный кабинет - ServiceHub{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Личный кабинет</h1>
+        <p class="text-gray-600 dark:text-gray-400">Добро пожаловать, {{ user.username }}!</p>
+    </div>
+
+    <!-- Tabs/Navigation -->
+    <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <a href="#"
+                class="border-purple-500 text-purple-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Обзор
+            </a>
+            {% if user.is_client %}
+            <a href="{% url 'marketplace:my_tasks' %}"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Мои задания
+            </a>
+            {% endif %}
+            {% if user.is_specialist %}
+            <a href="{% url 'marketplace:my_offers' %}"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Мои отклики
+            </a>
+            {% endif %}
+            <a href="{% url 'marketplace:conversation_list' %}"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Сообщения
+                {% if unread_notifications_count > 0 %}
+                <span
+                    class="ml-2 bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{
+                    unread_notifications_count }}</span>
+                {% endif %}
+            </a>
+        </nav>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Main Content Area -->
+        <div class="md:col-span-2 space-y-6">
+
+            <!-- Active Deals -->
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Активные сделки</h2>
+                {% if active_deals %}
+                <div class="space-y-4">
+                    {% for deal in active_deals %}
+                    <div
+                        class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-gray-900 dark:text-white">{{ deal.task.title }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    {% if user == deal.client %}
+                                    Специалист: {{ deal.specialist.username }}
+                                    {% else %}
+                                    Клиент: {{ deal.client.username }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                    {% if deal.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                    {% elif deal.status == 'paid' %}bg-green-100 text-green-800
+                                    {% elif deal.status == 'in_progress' %}bg-blue-100 text-blue-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ deal.get_status_display }}
+                            </span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            Цена: {{ deal.final_price }} сум
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 dark:text-gray-400">Нет активных сделок.</p>
+                {% endif %}
+            </div>
+
+            {% if user.is_client %}
+            <!-- Client: Recent Tasks -->
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Последние задания</h2>
+                    <a href="{% url 'marketplace:task_create' %}"
+                        class="text-sm text-purple-600 hover:text-purple-500">Создать новое</a>
+                </div>
+                {% if my_tasks %}
+                <div class="space-y-4">
+                    {% for task in my_tasks %}
+                    <div class="border-b border-gray-200 dark:border-gray-700 last:border-0 pb-4 last:pb-0">
+                        <a href="{% url 'marketplace:task_detail' task.id %}"
+                            class="block hover:bg-gray-50 dark:hover:bg-gray-700 -mx-4 px-4 py-2 rounded transition">
+                            <div class="flex justify-between">
+                                <span class="font-medium text-gray-900 dark:text-white">{{ task.title }}</span>
+                                <span class="text-sm text-gray-500">{{ task.created_at|date:"d.m.Y" }}</span>
+                            </div>
+                            <div class="mt-1 flex justify-between text-sm">
+                                <span class="text-gray-500">{{ task.category.name }}</span>
+                                <span class="
+                                        {% if task.status == 'published' %}text-green-600
+                                        {% elif task.status == 'draft' %}text-gray-500
+                                        {% else %}text-blue-600{% endif %}">
+                                    {{ task.get_status_display }}
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 dark:text-gray-400">Вы еще не создавали заданий.</p>
+                <a href="{% url 'marketplace:task_create' %}"
+                    class="mt-4 inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                    Создать задание
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if user.is_specialist %}
+            <!-- Specialist: Recent Offers -->
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Последние отклики</h2>
+                {% if my_offers %}
+                <div class="space-y-4">
+                    {% for offer in my_offers %}
+                    <div class="border-b border-gray-200 dark:border-gray-700 last:border-0 pb-4 last:pb-0">
+                        <div class="flex justify-between">
+                            <span class="font-medium text-gray-900 dark:text-white">{{ offer.task.title }}</span>
+                            <span class="text-sm font-semibold">{{ offer.proposed_price }} сум</span>
+                        </div>
+                        <div class="mt-1 flex justify-between text-sm">
+                            <span class="text-gray-500">{{ offer.created_at|date:"d.m.Y" }}</span>
+                            <span class="
+                                    {% if offer.status == 'accepted' %}text-green-600
+                                    {% elif offer.status == 'rejected' %}text-red-600
+                                    {% else %}text-yellow-600{% endif %}">
+                                {{ offer.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 dark:text-gray-400">Вы еще не откликались на задания.</p>
+                <a href="{% url 'marketplace:tasks_list' %}"
+                    class="mt-4 inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                    Найти задания
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Profile Summary -->
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <div class="flex items-center space-x-4 mb-4">
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.username }}"
+                        class="h-12 w-12 rounded-full object-cover">
+                    {% else %}
+                    <div
+                        class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-xl">
+                        {{ user.username.0|upper }}
+                    </div>
+                    {% endif %}
+                    <div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">{{ user.username }}</h3>
+                        <p class="text-sm text-gray-500">{{ user.email }}</p>
+                    </div>
+                </div>
+
+                {% if user.is_specialist %}
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-purple-600">{{ completed_tasks_count }}</div>
+                            <div class="text-xs text-gray-500">Выполнено</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-green-600">{{ user.rating }}</div>
+                            <div class="text-xs text-gray-500">Рейтинг</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div class="text-sm text-gray-500">Заработано всего</div>
+                        <div class="text-xl font-bold text-gray-900 dark:text-white">{{ total_earned }} сум</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="mt-6">
+                    <a href="#"
+                        class="block w-full text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600">
+                        Редактировать профиль
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                <h3 class="font-medium text-gray-900 dark:text-white mb-4">Быстрые действия</h3>
+                <div class="space-y-2">
+                    {% if user.is_client %}
+                    <a href="{% url 'marketplace:task_create' %}"
+                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">
+                        + Создать задание
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'marketplace:conversation_list' %}"
+                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">
+                        ✉️ Сообщения
+                    </a>
+                    <a href="#"
+                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">
+                        ⚙️ Настройки
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

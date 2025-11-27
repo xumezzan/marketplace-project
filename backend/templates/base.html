@@ -116,10 +116,13 @@
                 <div class="flex items-center gap-3">
                     <!-- Language Toggle -->
                     <!-- Theme Toggle -->
-                    <button id="theme-toggle" type="button"
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleDarkMode()" type="button"
                         class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-indigo-400 transition-colors mr-2">
                         <i id="theme-toggle-dark-icon" class="bi bi-moon-stars-fill hidden"></i>
                         <i id="theme-toggle-light-icon" class="bi bi-sun-fill hidden"></i>
+                        <!-- Default icon if JS hasn't loaded yet or for initial state -->
+                        <i class="bi bi-circle-half dark:hidden"></i>
                     </button>
 
                     <div class="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 mr-2 dark:bg-slate-700">
@@ -420,6 +423,29 @@
     {% block extra_js %}{% endblock %}
     <script src="{% static 'js/favorites.js' %}"></script>
     <script src="{% static 'js/comparison.js' %}"></script>
+    <!-- Dark Mode Script -->
+    <script>
+        // Check local storage or system preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Toggle function (to be attached to a button)
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        }
+
+        // Expose to window
+        window.toggleDarkMode = toggleDarkMode;
+    </script>
 </body>
 
 </html>

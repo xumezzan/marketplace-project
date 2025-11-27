@@ -17,7 +17,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from django.db.models import Q
+from django.db.models import Q, Sum
 from .models import Task, Offer, Deal, Category, Review, PortfolioItem, Conversation, Message, Notification, Favorite
 from .forms import (
     TaskCreateForm, OfferCreateForm, ReviewCreateForm, PortfolioItemForm,
@@ -1277,11 +1277,67 @@ def api_generate_task_description(request):
     if not title:
         return JsonResponse({'success': False, 'error': 'Title is required'})
         
-    from .services.ai_service import AIService
+    try:
+        from .utils.ai_service import generate_task_description
+        
+        # Get category name
+        category_name = "General"
+        if category_id:
+            try:
+                category = Category.objects.get(id=category_id)
+                category_name = category.name
+            except Category.DoesNotExist:
+                pass
+                
+        description = generate_task_description(title, category_name)
+        
+        return JsonResponse({
+            'success': True, 
+            'description': description
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    """
+    Main dashboard view that renders different content based on user role.
+    """
+    template_name = 'marketplace/dashboard.html'
     
-    description = AIService.generate_description(title, category_id)
-    
-    return JsonResponse({
-        'success': True, 
-        'description': description
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        
+        # Common data
+        context['active_deals'] = Deal.objects.filter(
+            Q(client=user) | Q(specialist=user),
+            status__in=[Deal.Status.PENDING, Deal.Status.PAID, Deal.Status.IN_PROGRESS]
+        ).order_by('-updated_at')[:5]
+        
+        context['unread_notifications_count'] = Notification.objects.filter(
+            user=user, is_read=False
+        ).count()
+        
+        # Client specific data
+        if user.is_client:
+            context['my_tasks'] = Task.objects.filter(
+                client=user
+            ).exclude(status=Task.Status.CANCELLED).order_by('-created_at')[:5]
+            
+        # Specialist specific data
+        if user.is_specialist:
+            context['my_offers'] = Offer.objects.filter(
+                specialist=user
+            ).order_by('-created_at')[:5]
+            
+            # Simple stats
+            context['completed_tasks_count'] = Deal.objects.filter(
+                specialist=user, status=Deal.Status.COMPLETED
+            ).count()
+            
+            context['total_earned'] = Deal.objects.filter(
+                specialist=user, status=Deal.Status.COMPLETED
+            ).aggregate(total=models.Sum('final_price'))['total'] or 0
+            
+        return context

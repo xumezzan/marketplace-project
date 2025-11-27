@@ -10,7 +10,7 @@ from .views import (
     get_specialist_data, SpecialistDetailView, SpecialistListView,
     BookingListView, UpdateBookingStatusView,
     ConversationListView, ConversationDetailView, start_conversation,
-    AnalyticsDashboardView, analytics_data,
+    AnalyticsDashboardView, analytics_data, DashboardView,
     NotificationListView, mark_notification_read, mark_all_notifications_read,
     FavoriteListView, toggle_favorite,
     ComparisonView, toggle_compare,
@@ -71,6 +71,7 @@ urlpatterns = [
     path('api/analytics/data/', analytics_data, name='analytics_data'),
     # Аналитика
     path('analytics/', AnalyticsDashboardView.as_view(), name='analytics_dashboard'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     # Уведомления
     path('notifications/', NotificationListView.as_view(), name='notification_list'),
     path('notifications/<int:pk>/read/', mark_notification_read, name='mark_notification_read'),

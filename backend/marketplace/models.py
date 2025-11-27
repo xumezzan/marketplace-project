@@ -35,6 +35,13 @@ class Category(models.Model):
         null=True,
         help_text="Описание категории"
     )
+    icon_name = models.CharField(
+        'иконка',
+        max_length=50,
+        blank=True,
+        default='bi-star',
+        help_text="Имя класса иконки Bootstrap Icons (например, 'bi-hammer')"
+    )
     created_at = models.DateTimeField('дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('дата обновления', auto_now=True)
     
@@ -285,6 +292,47 @@ class SpecialistProfile(models.Model):
         return "Не указано"
 
 
+class SpecialistService(models.Model):
+    """
+    Конкретная услуга, предоставляемая специалистом.
+    
+    Например: "Установка розетки", "Диагностика проводки".
+    """
+    specialist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='services',
+        verbose_name='специалист'
+    )
+    name = models.CharField(
+        'название услуги',
+        max_length=200,
+        help_text="Название конкретной услуги"
+    )
+    price = models.DecimalField(
+        'цена',
+        max_digits=10,
+        decimal_places=2,
+        help_text="Стоимость услуги"
+    )
+    description = models.TextField(
+        'описание',
+        blank=True,
+        help_text="Описание услуги (что входит в стоимость)"
+    )
+    created_at = models.DateTimeField('дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('дата обновления', auto_now=True)
+
+    class Meta:
+        db_table = 'specialist_services'
+        verbose_name = 'услуга специалиста'
+        verbose_name_plural = 'услуги специалиста'
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name} ({self.price})"
+
+
 class Task(models.Model):
     """
     Модель задачи, представляющая запрос клиента на услугу.
@@ -369,6 +417,12 @@ class Task(models.Model):
         'город',
         max_length=100,
         help_text="Город, где должна быть выполнена задача"
+    )
+    district = models.CharField(
+        'район',
+        max_length=100,
+        blank=True,
+        help_text="Район города (необязательно)"
     )
     preferred_date = models.DateField(
         'предпочтительная дата',
