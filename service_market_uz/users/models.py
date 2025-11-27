@@ -97,3 +97,27 @@ class SpecialistProfile(models.Model):
     
     def __str__(self):
         return f"Specialist: {self.user.phone_number}"
+
+
+class PortfolioItem(models.Model):
+    """
+    Portfolio item for a specialist.
+    """
+    specialist = models.ForeignKey(
+        SpecialistProfile,
+        on_delete=models.CASCADE,
+        related_name='portfolio_items',
+        verbose_name=_('specialist')
+    )
+    title = models.CharField(_('title'), max_length=255)
+    description = models.TextField(_('description'), blank=True)
+    image = models.ImageField(upload_to='portfolio/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = _('portfolio item')
+        verbose_name_plural = _('portfolio items')
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"{self.title} ({self.specialist})"

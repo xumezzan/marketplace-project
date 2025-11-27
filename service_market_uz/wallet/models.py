@@ -29,6 +29,9 @@ class Transaction(models.Model):
         DEPOSIT = 'deposit', _('Deposit')
         WITHDRAWAL = 'withdrawal', _('Withdrawal')
         REFUND = 'refund', _('Refund')
+        ESCROW_LOCK = 'escrow_lock', _('Escrow Lock')
+        ESCROW_RELEASE = 'escrow_release', _('Escrow Release')
+        ESCROW_REFUND = 'escrow_refund', _('Escrow Refund')
 
     wallet = models.ForeignKey(
         Wallet,

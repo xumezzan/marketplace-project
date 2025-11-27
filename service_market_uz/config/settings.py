@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     'unfold.contrib.forms',
     'unfold.contrib.inlines',
     'unfold.contrib.import_export',
-    'unfold.contrib.guardians',
+    'unfold.contrib.guardian',
     'unfold.contrib.simple_history',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'orders',
     'reviews',
     'wallet',
+    'chat',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +147,7 @@ TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
 
 # Billing Settings
 RESPONSE_COST = 5000 # UZS
+
+# GDAL Settings
+GDAL_LIBRARY_PATH = '/opt/homebrew/lib/libgdal.dylib'
+GEOS_LIBRARY_PATH = '/opt/homebrew/lib/libgeos_c.dylib'

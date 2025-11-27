@@ -37,6 +37,7 @@ class Order(models.Model):
         null=True, 
         blank=True
     )
+    is_safe_deal = models.BooleanField(_('is safe deal'), default=False)
     status = models.CharField(
         _('status'),
         max_length=20,

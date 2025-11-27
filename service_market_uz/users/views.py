@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from .models import User, ClientProfile
-from .serializers import UserSerializer
+from .models import User, ClientProfile, PortfolioItem
+from .serializers import UserSerializer, PortfolioItemSerializer
 import redis
 import random
 import logging
@@ -89,3 +89,18 @@ class AuthViewSet(viewsets.ViewSet):
             'user': UserSerializer(user).data,
             'is_new_user': created
         })
+
+class PortfolioItemViewSet(viewsets.ModelViewSet):
+    serializer_class = PortfolioItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        # Return only items for the current specialist
+        if hasattr(self.request.user, 'specialist_profile'):
+            return PortfolioItem.objects.filter(specialist=self.request.user.specialist_profile)
+        return PortfolioItem.objects.none()
+        
+    def perform_create(self, serializer):
+        if not hasattr(self.request.user, 'specialist_profile'):
+            raise permissions.exceptions.PermissionDenied(_("Only specialists can add portfolio items."))
+        serializer.save(specialist=self.request.user.specialist_profile)
