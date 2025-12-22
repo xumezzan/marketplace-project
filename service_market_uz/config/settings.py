@@ -1,5 +1,6 @@
 
 import os
+import sys
 from pathlib import Path
 import environ
 
@@ -148,7 +149,36 @@ TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
 # Billing Settings
 RESPONSE_COST = 5000 # UZS
 
-# GDAL Settings
-if os.path.exists('/opt/homebrew/lib/libgdal.dylib'):
-    GDAL_LIBRARY_PATH = '/opt/homebrew/lib/libgdal.dylib'
-    GEOS_LIBRARY_PATH = '/opt/homebrew/lib/libgeos_c.dylib'
+# GDAL/GEOS Library Configuration
+# Explicitly set paths for macOS to avoid ImproperlyConfigured errors when using PostGIS
+LIB_PATHS = [
+    '/opt/homebrew/lib',  # macOS Apple Silicon
+    '/usr/local/lib',     # macOS Intel
+]
+
+# Common library names on macOS
+GDAL_LIB_NAMES = ['libgdal.dylib', 'libgdal.so']
+GEOS_LIB_NAMES = ['libgeos_c.dylib', 'libgeos_c.so']
+
+for lib_path in LIB_PATHS:
+    if not os.path.exists(lib_path):
+        continue
+        
+    # Check for GDAL
+    for lib_name in GDAL_LIB_NAMES:
+        gdal_candidate = os.path.join(lib_path, lib_name)
+        if os.path.exists(gdal_candidate):
+            GDAL_LIBRARY_PATH = gdal_candidate
+            break
+            
+    # Check for GEOS
+    for lib_name in GEOS_LIB_NAMES:
+        geos_candidate = os.path.join(lib_path, lib_name)
+        if os.path.exists(geos_candidate):
+            GEOS_LIBRARY_PATH = geos_candidate
+            break
+
+    # If we found both, validation is likely sufficient, but we continue check if needed or stop.
+    # Typically if we find them in one prefix (like /opt/homebrew), we are good.
+    if hasattr(sys.modules[__name__], 'GDAL_LIBRARY_PATH') and hasattr(sys.modules[__name__], 'GEOS_LIBRARY_PATH'):
+        break

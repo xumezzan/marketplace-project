@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from .models import User, ClientProfile, PortfolioItem
+from .models import User, ClientProfile, SpecialistProfile, PortfolioItem
 from .serializers import UserSerializer, PortfolioItemSerializer
 import redis
 import random
@@ -100,7 +100,41 @@ class PortfolioItemViewSet(viewsets.ModelViewSet):
             return PortfolioItem.objects.filter(specialist=self.request.user.specialist_profile)
         return PortfolioItem.objects.none()
         
-    def perform_create(self, serializer):
-        if not hasattr(self.request.user, 'specialist_profile'):
-            raise permissions.exceptions.PermissionDenied(_("Only specialists can add portfolio items."))
         serializer.save(specialist=self.request.user.specialist_profile)
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+    
+    @action(detail=False, methods=['get', 'patch'], url_path='me')
+    def me(self, request):
+        user = request.user
+        
+        if request.method == 'PATCH':
+            serializer = self.get_serializer(user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+            
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+        
+    @action(detail=False, methods=['post'], url_path='become-specialist')
+    def become_specialist(self, request):
+        user = request.user
+        
+        if user.role == User.Role.SPECIALIST:
+            return Response({'message': _('Already a specialist')})
+            
+        # Create SpecialistProfile if not exists
+        if not hasattr(user, 'specialist_profile'):
+            SpecialistProfile.objects.create(user=user)
+            
+        # Update role
+        user.role = User.Role.SPECIALIST
+        user.save()
+        
+        return Response(UserSerializer(user).data)
