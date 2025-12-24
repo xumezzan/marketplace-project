@@ -108,7 +108,9 @@ class TaskListView(ListView):
     def get_queryset(self):
         """Возвращает отфильтрованные и отсортированные задачи."""
         # Начальный queryset
-        queryset = Task.objects.select_related('client', 'category').prefetch_related('offers')
+        # Начальный queryset
+        from django.db.models import Count
+        queryset = Task.objects.select_related('client', 'category').annotate(offers_count=Count('offers'))
         
         # Получаем все GET-параметры
         city_filter = self.request.GET.get('city', '').strip()

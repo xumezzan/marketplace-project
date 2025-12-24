@@ -477,6 +477,12 @@ class Task(models.Model):
         default=False,
         help_text="Задача была создана/структурирована с помощью ИИ"
     )
+
+    is_urgent = models.BooleanField(
+        'срочно',
+        default=False,
+        help_text="Флаг срочности задачи"
+    )
     
     class ModerationStatus(models.TextChoices):
         PENDING = 'pending', 'На модерации'
