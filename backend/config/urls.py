@@ -1,51 +1,21 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
-from django.views.i18n import set_language
-from marketplace import views
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
-
-from django.conf.urls.i18n import i18n_patterns
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
-    path('i18n/setlang/', set_language, name='set_language'),
-    path('api/', include('marketplace.api_urls')),
-    path('api/payments/', include('payments.api_urls')),
-    
-    # API Documentation
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-]
-
-urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('notifications/', include('notifications.urls')),
-    path('chat/', include('chat.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('', include('marketplace.urls')),
-)
-
-# Поддержка MEDIA файлов в режиме разработки
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    # В режиме разработки также обслуживаем статические файлы через Django
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # API Schema
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # API endpoints
+    path('api/auth/', include('apps.users.urls')),
+    path('api/catalog/', include('apps.catalog.urls')),
+    path('api/requests/', include('apps.requests.urls')),
+    path('api/wallet/', include('apps.wallet.urls')),
+    path('api/wallet/', include('apps.wallet.urls')),
+    path('api/verification/', include('apps.verification.urls')),
+    path('api/responses/', include('apps.responses.urls')),
+    path('api/deals/', include('apps.deals.urls')),
+    path('api/chats/', include('apps.chat.urls')),
+    path('api/reviews/', include('apps.reviews.urls')),
+]

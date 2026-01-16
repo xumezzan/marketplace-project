@@ -1,0 +1,1440 @@
+/* Custom styles for Marketplace */
+
+/* ============================================
+   CSS Variables для светлой и тёмной темы
+   ============================================ */
+:root {
+    /* Светлая тема (по умолчанию) */
+    --bg-body: #ffffff;
+    --bg-card: #ffffff;
+    --bg-navbar: #ffffff;
+    --text-main: #212529;
+    --text-muted: #6c757d;
+    --border-soft: #e9ecef;
+    --accent: #667eea;
+    --accent-hover: #5568d3;
+    --shadow-sm: rgba(0, 0, 0, 0.08);
+    --shadow-md: rgba(0, 0, 0, 0.12);
+    --shadow-lg: rgba(0, 0, 0, 0.15);
+}
+
+/* Тёмная тема через data-bs-theme */
+[data-bs-theme="dark"] {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --bg-navbar: #1e293b;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border-soft: #334155;
+    --accent: #818cf8;
+    --accent-hover: #6366f1;
+    --shadow-sm: rgba(0, 0, 0, 0.3);
+    --shadow-md: rgba(0, 0, 0, 0.4);
+    --shadow-lg: rgba(0, 0, 0, 0.5);
+}
+
+/* Базовые стили для body */
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================
+   Акцентный цвет (как у Profi.ru)
+   ============================================ */
+:root {
+    --accent-color: var(--accent);
+    --accent-color-hover: var(--accent-hover);
+    --text-muted: var(--text-muted);
+    --border-color: var(--border-soft);
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 0 0 50px 50px;
+    margin-top: -20px;
+    padding-top: 80px !important;
+}
+
+.hero-section h1 {
+    color: white;
+}
+
+.hero-section .lead {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-stats {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(10px);
+    opacity: 0.95;
+}
+
+.stat-item h3 {
+    font-weight: 700;
+}
+
+/* Search form */
+.search-form .input-group {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.search-form .form-control {
+    border: none;
+    padding: 15px 25px;
+    font-size: 1.1rem;
+}
+
+.search-form .btn {
+    border-radius: 0 50px 50px 0;
+    padding: 15px 30px;
+}
+
+/* Feature cards */
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    color: #667eea;
+}
+
+/* Category cards */
+.category-card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 15px;
+}
+
+.hover-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
+.category-icon {
+    color: #667eea;
+}
+
+/* Review cards */
+.review-card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.review-rating {
+    font-size: 1.2rem;
+}
+
+/* CTA section */
+.cta-section {
+    border-radius: 50px 50px 0 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding-top: 40px !important;
+        text-align: center;
+    }
+
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .search-form .input-group {
+        flex-direction: column;
+    }
+
+    .search-form .btn {
+        border-radius: 0 0 50px 50px;
+        width: 100%;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom button styles */
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+}
+
+/* Section spacing */
+section {
+    margin-bottom: 0;
+}
+
+/* Card improvements */
+.card {
+    border: none;
+    border-radius: 15px;
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Обновление всех карточек для использования переменных */
+.hero-stats,
+.feature-card,
+.category-card,
+.review-card,
+.cta-card,
+.filter-card,
+.task-card,
+.task-detail-card,
+.offer-card,
+.deal-card,
+.offer-form-card {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Navbar - используем переменные */
+.navbar {
+    transition: background-color 0.3s ease;
+}
+
+/* Текст muted */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Borders */
+.border-soft {
+    border-color: var(--border-soft) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 2px 8px var(--shadow-sm) !important;
+}
+
+/* Акцентные кнопки */
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-accent:hover {
+    background-color: var(--accent-color-hover);
+    border-color: var(--accent-color-hover);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
+}
+
+.btn-accent-outline {
+    background-color: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-accent-outline:hover {
+    background-color: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Страница списка задач
+   ============================================ */
+
+/* Заголовок страницы */
+.page-header {
+    padding: 20px 0;
+}
+
+.page-header h1 {
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+/* Карточка фильтров */
+.filter-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+    margin-bottom: 30px;
+    border: 1px solid var(--border-soft);
+}
+
+.filter-card .form-label {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.filter-card .form-control,
+.filter-card .form-select {
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.filter-card .form-control:focus,
+.filter-card .form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(255, 85, 85, 0.1);
+    outline: none;
+}
+
+.filter-card .btn-outline-primary {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.filter-card .btn-outline-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.filter-card .btn-light {
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.filter-card .btn-light:hover {
+    background-color: var(--bg-card);
+    border-color: var(--border-soft);
+    transform: translateY(-2px);
+}
+
+/* Карточка задачи */
+.task-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-soft);
+}
+
+.task-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 24px var(--shadow-md);
+}
+
+.task-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.task-card-title a {
+    color: var(--text-main);
+    transition: color 0.3s ease;
+}
+
+.task-card-title a:hover {
+    color: var(--accent-color);
+}
+
+.task-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge-category {
+    background-color: #f0f4ff;
+    color: #4a6cf7;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.task-location {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.task-card-description {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex-grow: 1;
+}
+
+.task-card-budget {
+    padding: 12px;
+    background-color: var(--bg-body);
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.budget-label {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-right: 8px;
+}
+
+.budget-value {
+    color: #28a745;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.task-card-info {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.task-info-item {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.task-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+    margin-top: auto;
+}
+
+.task-card-author {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.task-card-date {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+}
+
+.empty-state-icon {
+    opacity: 0.5;
+}
+
+/* ============================================
+   Детальная страница задачи
+   ============================================ */
+
+/* Кнопка "Назад" */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    padding: 8px 0;
+}
+
+.btn-back:hover {
+    color: var(--accent-color);
+}
+
+/* Карточка детальной информации о задаче */
+.task-detail-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+    margin-bottom: 24px;
+    border: 1px solid var(--border-soft);
+}
+
+.task-detail-header {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-soft);
+}
+
+.task-detail-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 16px;
+    line-height: 1.3;
+}
+
+.task-detail-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge-status {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.badge-status.badge-published {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-status.badge-in_progress {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-status.badge-completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.badge-status.badge-draft {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+.badge-status.badge-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.badge-status.badge-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-status.badge-paid {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.badge-status.badge-completed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.task-detail-body {
+    padding-top: 8px;
+}
+
+.task-detail-section {
+    margin-bottom: 32px;
+}
+
+.task-detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.task-detail-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.meta-item i {
+    color: var(--accent-color);
+    width: 20px;
+}
+
+.budget-display {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #28a745;
+    padding: 16px;
+    background-color: var(--bg-body);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.task-description {
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+.task-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background-color: var(--bg-body);
+    border-radius: 12px;
+}
+
+.detail-item i {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+    margin-top: 4px;
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Карточка сделки */
+.deal-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+    margin-bottom: 24px;
+    border: 2px solid #28a745;
+}
+
+.deal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.deal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.deal-body {
+    padding-top: 8px;
+}
+
+.deal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.deal-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.deal-info-item:last-child {
+    border-bottom: none;
+}
+
+.deal-info-label {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.deal-price {
+    font-size: 1.5rem;
+    color: #28a745;
+    font-weight: 700;
+}
+
+.deal-actions {
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+}
+
+/* Форма отклика */
+.offer-form-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+    margin-bottom: 24px;
+    border: 1px solid var(--border-soft);
+}
+
+.offer-form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.offer-form .form-group {
+    margin-bottom: 24px;
+}
+
+.offer-form .form-label {
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.offer-form .form-control,
+.offer-form textarea {
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+
+.offer-form .form-control:focus,
+.offer-form textarea:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(255, 85, 85, 0.1);
+}
+
+.form-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 6px;
+}
+
+.form-help {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: 6px;
+}
+
+/* Алерты */
+.info-alert,
+.warning-alert {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info-alert {
+    background-color: #e7f3ff;
+    color: #004085;
+    border-left: 4px solid #0d6efd;
+}
+
+.warning-alert {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+/* Боковая панель с откликами */
+.offers-sidebar {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 12px var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+    position: sticky;
+    top: 20px;
+}
+
+.offers-sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.offers-count {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.offers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Карточка отклика */
+.offer-card {
+    background: var(--bg-body);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-soft);
+    transition: all 0.3s ease;
+}
+
+.offer-card:hover {
+    background: var(--bg-card);
+    box-shadow: 0 4px 12px var(--shadow-sm);
+    transform: translateY(-2px);
+}
+
+.offer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.offer-specialist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.offer-specialist strong {
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+.offer-rating {
+    color: #ffc107;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.offer-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #28a745;
+    margin: 12px 0;
+}
+
+.offer-message {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.offer-date {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.offer-actions {
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+}
+
+.empty-offers {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
+/* Пагинация */
+.pagination {
+    margin-top: 40px;
+}
+
+.pagination .page-link {
+    border-radius: 10px;
+    margin: 0 4px;
+    border: 1px solid var(--border-color);
+    color: #5a6c7d;
+    padding: 10px 16px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .task-detail-title {
+        font-size: 1.5rem;
+    }
+
+    .task-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .offers-sidebar {
+        position: static;
+        margin-top: 24px;
+    }
+
+    .filter-form .row {
+        gap: 12px;
+    }
+
+    .task-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* ============================================
+   Кнопка переключения темы
+   ============================================ */
+
+/* Обновление футера для тёмной темы */
+footer {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+footer .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Обновление форм для тёмной темы */
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    border-color: var(--border-soft);
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    border-color: var(--accent);
+}
+
+/* Обновление alert для тёмной темы */
+[data-bs-theme="dark"] .alert {
+    background-color: var(--bg-card);
+    border-color: var(--border-soft);
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] .alert-info {
+    background-color: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+[data-bs-theme="dark"] .alert-warning {
+    background-color: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: #fcd34d;
+}
+
+[data-bs-theme="dark"] .alert-success {
+    background-color: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.3);
+    color: #86efac;
+}
+
+[data-bs-theme="dark"] .alert-danger {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+/* Обновление dropdown для тёмной темы */
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: var(--bg-card);
+    border-color: var(--border-soft);
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] .dropdown-divider {
+    border-color: var(--border-soft);
+}
+
+/* Обновление badge для тёмной темы */
+[data-bs-theme="dark"] .badge {
+    color: var(--text-main);
+}
+
+/* Обновление пагинации для тёмной темы */
+[data-bs-theme="dark"] .pagination .page-link {
+    background-color: var(--bg-card);
+    border-color: var(--border-soft);
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] .pagination .page-link:hover {
+    background-color: var(--bg-body);
+    border-color: var(--border-soft);
+    color: var(--text-main);
+}
+
+[data-bs-theme="dark"] .pagination .page-item.active .page-link {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+/* ============================================
+   СОВРЕМЕННЫЕ СТИЛИ - NAVBAR, FOOTER, ФОРМЫ
+   ============================================ */
+
+/* Шрифт */
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Современная навигация */
+.navbar-modern {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+}
+
+.navbar-modern.navbar-scrolled {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 0;
+}
+
+[data-bs-theme="dark"] .navbar-modern {
+    background: rgba(30, 41, 59, 0.95) !important;
+}
+
+[data-bs-theme="dark"] .navbar-modern.navbar-scrolled {
+    background: rgba(30, 41, 59, 0.98) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-main) !important;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.brand-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-main) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin: 0 0.25rem;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    color: #667eea !important;
+    transform: translateY(-2px);
+}
+
+.btn-nav-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-nav-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    color: white !important;
+}
+
+/* Основной контент */
+.main-content {
+    min-height: calc(100vh - 200px);
+    padding: 2rem 0;
+}
+
+/* Современный футер */
+.footer-modern {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #e4e4e4;
+    margin-top: 4rem;
+    padding: 3rem 0 1.5rem;
+}
+
+[data-bs-theme="dark"] .footer-modern {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.footer-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.footer-heading {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.footer-links a:hover {
+    color: white;
+    transform: translateX(4px);
+}
+
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+    margin: 2rem 0 1rem;
+}
+
+/* Современные формы */
+.form-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-soft);
+    animation: fadeInUp 0.5s ease;
+}
+
+[data-bs-theme="dark"] .form-card {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.form-card .card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-card .form-label {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.form-card .form-control,
+.form-card .form-select {
+    border-radius: 12px;
+    border: 2px solid var(--border-soft);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+}
+
+.form-card .form-control:focus,
+.form-card .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+.form-card .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.form-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Современные алерты */
+.alert-modern {
+    border-radius: 12px;
+    border: none;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: slideInDown 0.4s ease;
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Улучшенные карточки */
+.card-custom,
+.task-card,
+.offer-card,
+.deal-card {
+    animation: fadeInUp 0.5s ease;
+    animation-fill-mode: both;
+}
+
+.card-custom:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card-custom:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card-custom:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.card-custom:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.card-custom:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.card-custom:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+/* Улучшенные кнопки */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+[data-bs-theme="dark"] .btn-primary {
+    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+}
+
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+    border-color: #818cf8;
+    color: #818cf8;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary:hover {
+    background: #818cf8;
+    color: white;
+}
+
+/* Улучшенные карточки задач */
+.task-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 12px 40px var(--shadow-md) !important;
+}
+
+/* Hero section улучшения */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .form-card {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .navbar-modern {
+        padding: 0.5rem 0;
+    }
+
+    .footer-modern {
+        padding: 2rem 0 1rem;
+    }
+
+    .main-content {
+        padding: 1rem 0;
+    }
+}

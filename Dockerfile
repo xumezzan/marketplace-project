@@ -1,33 +1,28 @@
-# Dockerfile for Django marketplace application
 FROM python:3.12-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Set work directory
 WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    postgresql-client \
+    build-essential \
+    libpq-dev \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt /app/
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project
-COPY . /app/
+COPY . .
 
-# Collect static files (will be run during build or startup)
-# RUN python manage.py collectstatic --noinput
+# Adjust python path if needed, though with /app as workdir and code in backend/
+# we might need to be careful. The docker-compose mounts ./backend to /app/backend
+# so here we probably want to COPY . . to get the whole structure or just backend.
+# The user structure has `backend/` as the django project root essentially.
+# Let's assume manage.py is in backend/manage.py based on previous `list_dir`.
+# So we switch WORKDIR to /app/backend to run manage.py easily.
 
-# Expose port
-EXPOSE 8000
-
-# Run migrations and start server
-# Note: For production, use gunicorn instead of runserver
-# CMD ["sh", "-c", "cd backend && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
-CMD ["sh", "-c", "cd backend && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
-
+WORKDIR /app/backend
