@@ -2,8 +2,8 @@
 # exit on error
 set -o errexit
 
-# Navigate to service_market_uz directory
-cd service_market_uz
+# Navigate to backend directory
+cd backend
 
 # Install dependencies
 pip install --upgrade pip

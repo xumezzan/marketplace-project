@@ -26,3 +26,5 @@ COPY . .
 # So we switch WORKDIR to /app/backend to run manage.py easily.
 
 WORKDIR /app/backend
+
+CMD gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
