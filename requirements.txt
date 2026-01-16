@@ -14,3 +14,4 @@ ruff
 pytest
 pytest-django
 dj-database-url
+django-filter>=23.0
